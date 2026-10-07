@@ -55,7 +55,7 @@ tests/                    unit tests, no model calls
 
 ```python
 def check_feed(store_id: str) -> dict:
-    """Check a store's product feed and return disapproved products grouped by issue."""
+    """Check a store's product feed and return its problems grouped by issue type."""
     products = load_feed(store_id)
     issues = [issue for product in products for issue in run_checks(product)]
     return summarize(issues)

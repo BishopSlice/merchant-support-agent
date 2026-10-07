@@ -24,7 +24,7 @@ For Google, every one of these cases that reaches a human specialist costs money
 ## 3. Goals and non-goals
 
 **Goals**
-1. Diagnose every disapproved product in a merchant's feed and group them by root cause.
+1. Diagnose every disapproved or limited product in a merchant's feed and group them by root cause.
 2. Explain each issue in plain language, grounded in the official help docs (no made-up rules).
 3. Walk the merchant through fixes one issue at a time, most impactful first.
 4. Hand off to a human, with a structured case summary, whenever the agent should not act alone.
@@ -37,7 +37,7 @@ For Google, every one of these cases that reaches a human specialist costs money
 ## 4. User journey
 
 1. Merchant: "Half my products got disapproved yesterday, what happened?"
-2. Agent runs the feed check and replies with a short summary: "12 of 30 products are disapproved for 4 reasons. The biggest one is missing product IDs (GTINs) on 6 items."
+2. Agent runs the feed check and replies with a short summary: "12 of 30 products are disapproved for 4 reasons. The biggest one is prices that don't match your website, on 5 items. Another 6 products have a warning that limits their reach: missing product barcode numbers (GTINs)."
 3. Agent explains the top issue, cites the help page, and gives the exact fix.
 4. Merchant asks follow-ups or says "done". Agent re-checks and moves to the next issue.
 5. If the merchant hits something the agent must not handle, the agent says so, creates a case, and tells the merchant what happens next.
