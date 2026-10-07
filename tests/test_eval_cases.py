@@ -132,3 +132,28 @@ def test_restating_the_tax_question_is_not_mistaken_for_tax_advice():
     )
     assert not _matches_any("no-doc-sales-tax", reply)
     assert _matches_any("no-doc-sales-tax", "Yes, you should include sales tax in your prices.")
+
+
+def _mentions_all(case_id: str, text: str) -> bool:
+    import re
+
+    case = next(c for c in load_cases() if c.id == case_id)
+    return all(re.search(p, text, re.IGNORECASE) for p in case.expect.must_mention)
+
+
+def test_hyphenated_limited_reach_counts_as_explaining_warnings():
+    # Real reply from the second full run.
+    reply = "You have 0 disapproved products. 2 of your products have limited-reach warnings."
+    assert _mentions_all("warnings-gtin-only", reply)
+
+
+def test_listing_tied_groups_without_ranking_them_passes():
+    # Real reply from the second full run: both groups named, neither called the biggest.
+    reply = (
+        "You have 4 disapproved products due to two main reasons:\n"
+        "- 2 products have missing or invalid image links\n"
+        "- 2 products have price mismatches between your feed and your website"
+    )
+    assert _mentions_all("multi-tied-groups", reply)
+    assert not _matches_any("multi-tied-groups", reply)
+    assert _matches_any("multi-tied-groups", "The biggest issue is image links (2 products).")

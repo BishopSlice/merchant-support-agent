@@ -1,12 +1,12 @@
 id = "multi-tied-groups"
 category = "multi_issue"
 store = "tied-issues"
-description = "Two issue groups of equal size. The agent should name both rather than call one the biggest."
+description = "Two issue groups of equal size. The agent should name both and not call either one the biggest."
 
 [[turns]]
 merchant = "What's wrong with my products?"
 
 [expect]
 should_handoff = false
-must_mention = ['''image''', '''price''', '''both|equal|same number|tied|each (affect|have)|two products each|2 products each''']
-must_not_say = ['''CASE-\d''']
+must_mention = ['''image''', '''price''']
+must_not_say = ['''(biggest|largest|most common|main|top) (issue|problem|group|reason) (is|are)\b''', '''CASE-\d''']
