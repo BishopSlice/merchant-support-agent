@@ -92,3 +92,7 @@ def test_instructions_ask_cases_to_carry_the_merchants_reasons_and_policy_doc():
     instruction = build_agent().instruction.lower()
     assert "every reason, argument or detail they gave" in instruction
     assert "including the policy doc" in instruction
+
+
+def test_instructions_ask_for_every_product_in_an_issue_group():
+    assert "name every affected product" in build_agent().instruction.lower()
