@@ -5,7 +5,7 @@
 - [x] Checkpoint A: unit tests pass, all planted problems found
 - [x] Task 3: Agent with one tool (terminal chat)
 - [x] Task 4: Help docs and search
-- [ ] Task 5: Handoff
+- [x] Task 5: Handoff
 - [ ] Checkpoint B: full journey in terminal
 - [ ] Task 6: Merchant chat screen
 - [ ] Task 7: Specialist inbox screen
