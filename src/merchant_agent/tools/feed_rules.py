@@ -125,12 +125,27 @@ def check_availability_mismatch(product: Product) -> list[Issue]:
     ]
 
 
+def check_missing_shipping(product: Product) -> list[Issue]:
+    """Flag products with no shipping cost set."""
+    if product.shipping.strip():
+        return []
+    return [
+        Issue(
+            product_id=product.id,
+            issue_type=IssueType.MISSING_SHIPPING,
+            field="shipping",
+            detail="No shipping cost is set for this product.",
+        )
+    ]
+
+
 RULES: list[Rule] = [
     check_missing_gtin,
     check_price_mismatch,
     check_invalid_image,
     check_title_too_long,
     check_availability_mismatch,
+    check_missing_shipping,
 ]
 
 
