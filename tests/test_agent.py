@@ -96,3 +96,10 @@ def test_instructions_ask_cases_to_carry_the_merchants_reasons_and_policy_doc():
 
 def test_instructions_ask_for_every_product_in_an_issue_group():
     assert "name every affected product" in build_agent().instruction.lower()
+
+
+def test_instructions_say_an_approval_question_is_not_an_appeal():
+    # Task 11 follow-up: "can I edit it to get it approved?" was handed off as an appeal.
+    instruction = build_agent().instruction.lower()
+    assert "is not an appeal" in instruction
+    assert "only if the merchant says they want one" in instruction
