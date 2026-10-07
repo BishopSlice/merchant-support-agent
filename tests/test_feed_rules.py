@@ -64,3 +64,11 @@ def test_placeholder_image_is_flagged():
 
 def test_image_link_must_be_a_web_address():
     assert issue_types(clean_product(image_link="mug.jpg")) == [IssueType.INVALID_IMAGE]
+
+
+def test_title_over_150_characters_is_flagged():
+    assert issue_types(clean_product(title="x" * 151)) == [IssueType.TITLE_TOO_LONG]
+
+
+def test_title_of_exactly_150_characters_is_fine():
+    assert issue_types(clean_product(title="x" * 150)) == []

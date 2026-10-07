@@ -86,10 +86,29 @@ def check_invalid_image(product: Product) -> list[Issue]:
     ]
 
 
+MAX_TITLE_LENGTH = 150
+
+
+def check_title_too_long(product: Product) -> list[Issue]:
+    """Flag products whose title is longer than Google's 150 character limit."""
+    length = len(product.title)
+    if length <= MAX_TITLE_LENGTH:
+        return []
+    return [
+        Issue(
+            product_id=product.id,
+            issue_type=IssueType.TITLE_TOO_LONG,
+            field="title",
+            detail=f"Title is {length} characters; the limit is {MAX_TITLE_LENGTH}.",
+        )
+    ]
+
+
 RULES: list[Rule] = [
     check_missing_gtin,
     check_price_mismatch,
     check_invalid_image,
+    check_title_too_long,
 ]
 
 
