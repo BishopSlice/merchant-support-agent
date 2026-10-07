@@ -57,11 +57,19 @@ class IssueType(StrEnum):
     RESTRICTED_PRODUCT = "restricted_product"
 
 
+class Severity(StrEnum):
+    """How badly an issue hurts a product."""
+
+    DISAPPROVED = "disapproved"  # the product can't show at all
+    LIMITED = "limited"  # the product shows, but with reduced reach
+
+
 class Issue(BaseModel):
     """One problem found on one product."""
 
     product_id: str
     issue_type: IssueType
+    severity: Severity
     field: str
     detail: str
 

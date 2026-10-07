@@ -15,7 +15,9 @@ def test_store_defaults_to_active():
 
 
 def test_issue_type_accepts_plain_string():
-    issue = Issue(product_id="SKU-1", issue_type="missing_gtin", field="gtin", detail="x")
+    issue = Issue(
+        product_id="SKU-1", issue_type="missing_gtin", severity="limited", field="gtin", detail="x"
+    )
     assert issue.issue_type is IssueType.MISSING_GTIN
 
 

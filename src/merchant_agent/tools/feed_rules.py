@@ -8,19 +8,20 @@ import re
 from collections.abc import Callable
 from decimal import Decimal, InvalidOperation
 
-from merchant_agent.models import Issue, IssueType, Product
+from merchant_agent.models import Issue, IssueType, Product, Severity
 
 Rule = Callable[[Product], list[Issue]]
 
 
 def check_missing_gtin(product: Product) -> list[Issue]:
-    """Flag products with no GTIN (the barcode number Google uses to identify a product)."""
+    """Warn about products with no GTIN (barcode number); they show with limited reach."""
     if product.gtin.strip():
         return []
     return [
         Issue(
             product_id=product.id,
             issue_type=IssueType.MISSING_GTIN,
+            severity=Severity.LIMITED,
             field="gtin",
             detail="No GTIN (barcode number) is set for this product.",
         )
@@ -48,6 +49,7 @@ def check_price_mismatch(product: Product) -> list[Issue]:
         Issue(
             product_id=product.id,
             issue_type=IssueType.PRICE_MISMATCH,
+            severity=Severity.DISAPPROVED,
             field="price",
             detail=(
                 f"Feed price is {product.price} but the product page shows "
@@ -81,6 +83,7 @@ def check_invalid_image(product: Product) -> list[Issue]:
         Issue(
             product_id=product.id,
             issue_type=IssueType.INVALID_IMAGE,
+            severity=Severity.DISAPPROVED,
             field="image_link",
             detail=problem,
         )
@@ -99,6 +102,7 @@ def check_title_too_long(product: Product) -> list[Issue]:
         Issue(
             product_id=product.id,
             issue_type=IssueType.TITLE_TOO_LONG,
+            severity=Severity.DISAPPROVED,
             field="title",
             detail=f"Title is {length} characters; the limit is {MAX_TITLE_LENGTH}.",
         )
@@ -120,6 +124,7 @@ def check_availability_mismatch(product: Product) -> list[Issue]:
         Issue(
             product_id=product.id,
             issue_type=IssueType.AVAILABILITY_MISMATCH,
+            severity=Severity.DISAPPROVED,
             field="availability",
             detail=f"Feed says {feed} but the product page says {page}.",
         )
@@ -134,6 +139,7 @@ def check_missing_shipping(product: Product) -> list[Issue]:
         Issue(
             product_id=product.id,
             issue_type=IssueType.MISSING_SHIPPING,
+            severity=Severity.DISAPPROVED,
             field="shipping",
             detail="No shipping cost is set for this product.",
         )
@@ -155,6 +161,7 @@ def check_restricted_product(product: Product) -> list[Issue]:
         Issue(
             product_id=product.id,
             issue_type=IssueType.RESTRICTED_PRODUCT,
+            severity=Severity.DISAPPROVED,
             field="product_type",
             detail=f"Mentions {match.group(0)!r}, which is a restricted product category.",
         )

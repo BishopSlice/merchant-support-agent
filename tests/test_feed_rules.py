@@ -100,3 +100,33 @@ def test_restricted_term_in_product_type_is_flagged():
 
 def test_restricted_terms_match_whole_words_only():
     assert issue_types(clean_product(title="ABCD Brand Mug")) == []
+
+
+SEVERITY_BY_TYPE = {
+    IssueType.MISSING_GTIN: "limited",
+    IssueType.PRICE_MISMATCH: "disapproved",
+    IssueType.INVALID_IMAGE: "disapproved",
+    IssueType.TITLE_TOO_LONG: "disapproved",
+    IssueType.AVAILABILITY_MISMATCH: "disapproved",
+    IssueType.MISSING_SHIPPING: "disapproved",
+    IssueType.RESTRICTED_PRODUCT: "disapproved",
+}
+
+
+def test_every_issue_type_has_a_severity():
+    assert set(SEVERITY_BY_TYPE) == set(IssueType)
+
+
+def test_each_rule_sets_the_expected_severity():
+    broken = clean_product(
+        gtin="",
+        price="14.00 USD",
+        landing_page_price="18.00 USD",
+        image_link="",
+        title="CBD " + "x" * 150,
+        availability="in_stock",
+        landing_page_availability="out_of_stock",
+        shipping="",
+    )
+    found = {issue.issue_type: issue.severity for issue in feed_rules.run_checks(broken)}
+    assert found == SEVERITY_BY_TYPE

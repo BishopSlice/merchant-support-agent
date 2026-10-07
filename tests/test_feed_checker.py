@@ -28,10 +28,11 @@ def test_counts_match_product_lists():
         assert group["count"] == len(group["products"])
 
 
-def test_groups_are_sorted_biggest_first():
-    counts = [g["count"] for g in check_feed("sample-store")["issue_groups"]]
-    assert counts == sorted(counts, reverse=True)
-    assert check_feed("sample-store")["issue_groups"][0]["issue_type"] == "missing_gtin"
+def test_groups_of_the_same_severity_are_sorted_biggest_first():
+    groups = check_feed("sample-store")["issue_groups"]
+    for severity in ("disapproved", "limited"):
+        counts = [g["count"] for g in groups if g["severity"] == severity]
+        assert counts == sorted(counts, reverse=True)
 
 
 def test_summary_counts_products_not_issues():
@@ -50,3 +51,19 @@ def test_result_includes_account_status():
 
 def test_unknown_store_returns_an_error_instead_of_raising():
     assert "error" in check_feed("no-such-store")
+
+
+def test_summary_separates_disapproved_from_limited_products():
+    result = check_feed("sample-store")
+    # HG-019 has a missing GTIN (limited) and missing shipping (disapproved),
+    # so it counts once, as disapproved.
+    assert result["disapproved_products"] == 13
+    assert result["limited_products"] == 5
+    assert result["disapproved_products"] + result["limited_products"] == 18
+
+
+def test_disapproval_groups_come_before_limited_groups():
+    groups = check_feed("sample-store")["issue_groups"]
+    severities = [g["severity"] for g in groups]
+    assert severities == sorted(severities, key=lambda s: s != "disapproved")
+    assert groups[-1]["issue_type"] == "missing_gtin"
