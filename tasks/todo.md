@@ -1,6 +1,6 @@
 # Task list
 
-- [ ] Task 1: Data shapes and sample store
+- [x] Task 1: Data shapes and sample store
 - [ ] Task 2: Feed checker
 - [ ] Checkpoint A: unit tests pass, all planted problems found
 - [ ] Task 3: Agent with one tool (terminal chat)
