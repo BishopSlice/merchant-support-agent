@@ -5,6 +5,7 @@ and append it to RULES.
 """
 
 from collections.abc import Callable
+from decimal import Decimal, InvalidOperation
 
 from merchant_agent.models import Issue, IssueType, Product
 
@@ -25,8 +26,39 @@ def check_missing_gtin(product: Product) -> list[Issue]:
     ]
 
 
+def _parse_price(text: str) -> tuple[Decimal, str] | None:
+    """Turn "14.00 USD" into (Decimal("14.00"), "USD"), or None if it can't be read."""
+    parts = text.split()
+    if len(parts) != 2:
+        return None
+    try:
+        return Decimal(parts[0]), parts[1].upper()
+    except InvalidOperation:
+        return None
+
+
+def check_price_mismatch(product: Product) -> list[Issue]:
+    """Flag products whose feed price differs from the price on their landing page."""
+    feed_price = _parse_price(product.price)
+    page_price = _parse_price(product.landing_page_price)
+    if feed_price is None or page_price is None or feed_price == page_price:
+        return []
+    return [
+        Issue(
+            product_id=product.id,
+            issue_type=IssueType.PRICE_MISMATCH,
+            field="price",
+            detail=(
+                f"Feed price is {product.price} but the product page shows "
+                f"{product.landing_page_price}."
+            ),
+        )
+    ]
+
+
 RULES: list[Rule] = [
     check_missing_gtin,
+    check_price_mismatch,
 ]
 
 

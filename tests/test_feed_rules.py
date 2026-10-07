@@ -35,3 +35,19 @@ def test_missing_gtin_is_flagged():
 
 def test_whitespace_gtin_counts_as_missing():
     assert issue_types(clean_product(gtin="  ")) == [IssueType.MISSING_GTIN]
+
+
+def test_feed_price_lower_than_landing_page_is_flagged():
+    product = clean_product(price="14.00 USD", landing_page_price="18.00 USD")
+    assert issue_types(product) == [IssueType.PRICE_MISMATCH]
+
+
+def test_same_price_written_differently_is_not_a_mismatch():
+    product = clean_product(price="14 USD", landing_page_price="14.00 USD")
+    assert issue_types(product) == []
+
+
+def test_price_mismatch_detail_shows_both_prices():
+    product = clean_product(price="14.00 USD", landing_page_price="18.00 USD")
+    detail = feed_rules.check_price_mismatch(product)[0].detail
+    assert "14.00 USD" in detail and "18.00 USD" in detail
