@@ -99,3 +99,13 @@ def test_barcodes_prices_and_product_ids_are_not_mistaken_for_phone_numbers():
         ]
     )
     assert result["status"] == "created"
+
+
+def test_clear_cases_deletes_every_case(runtime_dir):
+    from merchant_agent.tools.handoff import clear_cases
+
+    make_case()
+    make_case()
+    assert clear_cases() == 2
+    assert list_cases() == []
+    assert clear_cases() == 0

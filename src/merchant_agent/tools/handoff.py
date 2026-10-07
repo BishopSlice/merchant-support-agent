@@ -71,3 +71,11 @@ def list_cases() -> list[Case]:
     folder = get_settings().cases_dir
     cases = [Case.model_validate_json(path.read_text()) for path in folder.glob("CASE-*.json")]
     return sorted(cases, key=lambda case: case.created_at, reverse=True)
+
+
+def clear_cases() -> int:
+    """Delete every saved case (used to reset a demo) and return how many were removed."""
+    paths = list(get_settings().cases_dir.glob("CASE-*.json"))
+    for path in paths:
+        path.unlink()
+    return len(paths)
