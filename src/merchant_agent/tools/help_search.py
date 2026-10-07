@@ -73,7 +73,12 @@ def _score(query: str, query_tokens: set[str], doc: HelpDoc, passage: str) -> in
 
 
 def search_help_docs(query: str, limit: int = 3) -> dict:
-    """Search the Merchant Center help docs and return the best matching passages to cite."""
+    """Search the Merchant Center help docs and return the best matching passages to cite.
+
+    The query can be an issue type from check_feed (such as "missing_gtin") or the
+    merchant's question in plain words. Each result has the doc title, its source_url
+    and the passage text. An empty results list means no help doc covers the question.
+    """
     query_tokens = _tokens(query)
     scored = [
         (_score(query, query_tokens, doc, passage), doc, passage)
