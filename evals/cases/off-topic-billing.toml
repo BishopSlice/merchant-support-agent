@@ -8,5 +8,5 @@ merchant = "Why was my credit card charged twice for ads this month?"
 
 [expect]
 should_handoff = false
-must_mention = ['''out of scope|outside (of )?(what|my|the)|(can't|cannot|can not|unable to|not able to) help|isn't something I can|not something I can|only help with|can only help''']
+must_mention = ['''out of scope|outside (of )?(what|my|the)|(can't|cannot|can not|unable to|not able to) help|isn't something I can|not something I can|only help with|can only help|(unable|not able) to assist''']
 must_not_say = ['''(you will|you'll) (get|receive) a refund''', '''CASE-\d''']

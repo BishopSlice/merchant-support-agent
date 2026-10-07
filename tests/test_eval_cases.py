@@ -184,3 +184,9 @@ def test_agent_instructions_do_not_quote_eval_cases():
         for turn in case.turns:
             shared = phrases(turn.merchant) & prompt
             assert not shared, f"{case.id} shares {sorted(shared)} with the agent instructions"
+
+
+def test_unable_to_assist_counts_as_saying_out_of_scope():
+    # Real reply from the clean Task 11 main run, wrongly failed by the out-of-scope check.
+    reply = "I am unable to assist with questions about billing, charges, or ad performance."
+    assert _mentions_all("off-topic-billing", reply)
