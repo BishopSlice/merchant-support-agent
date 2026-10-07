@@ -16,6 +16,7 @@ from pathlib import Path
 from pydantic import BaseModel, Field
 
 from evals.case_format import Category, EvalCase, load_cases
+from evals.grader import CaseGrade, grade_run, summarize_grades
 from evals.records import CaseRun
 from evals.report import render_scorecard
 from evals.runner import run_case
@@ -35,7 +36,7 @@ class RunFile(BaseModel):
     case_filter: list[str] = Field(default_factory=list)
     category_filter: list[str] = Field(default_factory=list)
     runs: dict[str, CaseRun] = Field(default_factory=dict)
-    grades: dict[str, dict] = Field(default_factory=dict)
+    grades: dict[str, CaseGrade] = Field(default_factory=dict)
 
 
 def new_run_path(model: str, now: datetime) -> Path:
@@ -68,12 +69,15 @@ def write_scorecard(run_file: RunFile, cases: list[EvalCase], path: Path) -> str
     by_id = {case.id: case for case in cases}
     runs = [run for case_id, run in run_file.runs.items() if case_id in by_id]
     scores = [score_case(by_id[run.case_id], run) for run in runs]
-    graded = run_file.grades.get("_summary") if run_file.grades else None
+    graded = summarize_grades({k: g for k, g in run_file.grades.items() if k in by_id})
     header = {
         "Run": path.stem,
         "Model": run_file.model,
         "Started": f"{run_file.started_at:%Y-%m-%d %H:%M} UTC",
     }
+    if run_file.grades:
+        grading_cost = sum(grade.cost_usd for grade in run_file.grades.values())
+        header["Grading cost"] = f"${grading_cost:.4f} (same model, not included in total cost)"
     scorecard = render_scorecard(header, summarize(scores, runs), scores, graded)
     path.with_suffix(".md").write_text(scorecard)
     return scorecard
@@ -129,9 +133,7 @@ def main(argv: list[str] | None = None) -> None:
         print(f"[{number}/{len(pending)}] {case.id}: {status} ({record.seconds}s, {cost})")
 
     if not args.no_grade:
-        from evals.grader import grade_run  # imported here so --no-grade needs no grader setup
-
-        grade_run(run_file, cases, lambda: save(run_file, path))
+        grade_run(run_file, save=lambda: save(run_file, path))
     run_file.finished_at = datetime.now(UTC)
     save(run_file, path)
     scorecard = write_scorecard(run_file, cases, path)

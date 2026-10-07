@@ -105,3 +105,25 @@ def test_scorecard_lists_failures_and_prd_targets(results_dir, fake_agent):
     assert "fix-price-mismatch" in scorecard
     assert "did not mention" in scorecard  # the fake reply says only "ok"
     assert "80%" in scorecard  # resolution target from the PRD
+
+
+def test_grading_feeds_the_scorecard(results_dir, fake_agent, monkeypatch):
+    from evals import grader
+    from evals.grader import CompletenessGrade, ReplyVerdict, WrongAdviceGrade
+    from merchant_agent.chat import Usage
+
+    def fake_generate(prompt, schema):
+        usage = Usage(model_calls=1, input_tokens=2000, output_tokens=200)
+        if schema is WrongAdviceGrade:
+            verdict = ReplyVerdict(
+                turn=1, verdict="unsupported", unsupported_claims=["x"], evidence="q"
+            )
+            return WrongAdviceGrade(replies=[verdict]), usage
+        return CompletenessGrade(verdict="complete", evidence="q"), usage
+
+    monkeypatch.setattr(grader, "gemini_generate", lambda model: fake_generate)
+    eval_run.main(["--category", "handoff_human"])
+    scorecard = next(results_dir.glob("*.md")).read_text()
+    assert "| Wrong advice rate (AI graded) | 100% | under 5% | **missed** |" in scorecard
+    assert "| Case completeness (AI graded) | 100% | 90% or higher | met |" in scorecard
+    assert "Grading cost: $" in scorecard
