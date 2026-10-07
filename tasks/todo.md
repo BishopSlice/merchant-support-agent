@@ -11,7 +11,7 @@
 - [x] Task 7: Specialist inbox screen
 - [x] Checkpoint C: browser demo works
 - [x] Task 8: Eval cases
-- [ ] Task 9: Runner and rule-based scores
+- [x] Task 9: Runner and rule-based scores
 - [ ] Task 10: AI grader
 - [ ] Checkpoint D: full scorecard
 - [ ] Task 11: Fix the worst failure

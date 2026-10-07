@@ -1,0 +1,612 @@
+{
+  "model": "gemini-3.6-flash",
+  "started_at": "2026-10-07T11:04:58.259565Z",
+  "finished_at": "2026-10-07T11:05:46.573747Z",
+  "price": {
+    "input_per_million": 0.75,
+    "cached_input_per_million": 0.075,
+    "output_per_million": 3.75
+  },
+  "case_filter": [
+    "fix-missing-shipping",
+    "suspended-why-not-showing",
+    "appeal-cbd-after-diagnosis"
+  ],
+  "category_filter": [],
+  "runs": {
+    "appeal-cbd-after-diagnosis": {
+      "case_id": "appeal-cbd-after-diagnosis",
+      "category": "handoff_appeal",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "What's wrong with my products?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "You have **13 disapproved products** that cannot show on Google Shopping. The main reasons are:\n- Invalid or missing image links (3 products)\n- Price mismatches (3 products)\n- Availability mismatches (2 products)\n- Missing shipping costs (2 products)\n- Titles that are too long (2 products)\n- Restricted product category (1 product)\n\nAdditionally, **5 products have limited-reach warnings** (such as missing product barcode numbers).\n\n---\n\n### 1. Image Issues (3 disapproved products)\n* **Affected products:** `HG-006` (Ceramic Table Lamp), `HG-013` (Walnut Wall Shelf), `HG-027` (Woven Wall Hanging)\n* **What to change:** Every product needs a main image link, and the image must show the actual product. Add valid image links for products missing them, and replace placeholder images with real product photos.\n\nFor more details, see the official guide: [Product image link](https://support.google.com/merchants/answer/6324350).\n\n---\n\nWould you like to move on to the next issue?",
+          "tool_calls": [
+            {
+              "name": "check_feed",
+              "args": {},
+              "response": {
+                "store_id": "sample-store",
+                "store_name": "Hearth & Hollow",
+                "account_status": "active",
+                "suspension_reason": "",
+                "total_products": 30,
+                "products_with_issues": 18,
+                "disapproved_products": 13,
+                "limited_products": 5,
+                "issue_groups": [
+                  {
+                    "issue_type": "invalid_image",
+                    "severity": "disapproved",
+                    "field": "image_link",
+                    "count": 3,
+                    "products": [
+                      {
+                        "id": "HG-006",
+                        "title": "Ceramic Table Lamp, Matte White",
+                        "detail": "No image link is set."
+                      },
+                      {
+                        "id": "HG-013",
+                        "title": "Walnut Wall Shelf, 24 inch",
+                        "detail": "Image link 'https://cdn.hearthandhollow.example/img/placeholder.png' points to a placeholder, not a real product photo."
+                      },
+                      {
+                        "id": "HG-027",
+                        "title": "Woven Wall Hanging, Cream and Rust",
+                        "detail": "No image link is set."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "price_mismatch",
+                    "severity": "disapproved",
+                    "field": "price",
+                    "count": 3,
+                    "products": [
+                      {
+                        "id": "HG-004",
+                        "title": "Waffle Weave Bath Towel, Sage",
+                        "detail": "Feed price is 32.00 USD but the product page shows 36.00 USD."
+                      },
+                      {
+                        "id": "HG-015",
+                        "title": "Pour Over Coffee Set, Glass and Copper",
+                        "detail": "Feed price is 58.00 USD but the product page shows 64.00 USD."
+                      },
+                      {
+                        "id": "HG-021",
+                        "title": "Stainless Steel Kettle, 1.7 L",
+                        "detail": "Feed price is 48.00 USD but the product page shows 44.00 USD."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "availability_mismatch",
+                    "severity": "disapproved",
+                    "field": "availability",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-012",
+                        "title": "Velvet Cushion Cover, 18 x 18, Rust",
+                        "detail": "Feed says in_stock but the product page says out_of_stock."
+                      },
+                      {
+                        "id": "HG-025",
+                        "title": "Linen Duvet Cover, Queen, Terracotta",
+                        "detail": "Feed says in_stock but the product page says preorder."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "missing_shipping",
+                    "severity": "disapproved",
+                    "field": "shipping",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-019",
+                        "title": "Marble Serving Board, White",
+                        "detail": "No shipping cost is set for this product."
+                      },
+                      {
+                        "id": "HG-030",
+                        "title": "Outdoor String Lights, 48 ft",
+                        "detail": "No shipping cost is set for this product."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "title_too_long",
+                    "severity": "disapproved",
+                    "field": "title",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-009",
+                        "title": "Handwoven Seagrass Storage Basket with Leather Handles for Living Room, Bedroom, Nursery, Laundry and Bathroom Organization, Extra Large 16 x 12 x 10 inch, Natural Color",
+                        "detail": "Title is 169 characters; the limit is 150."
+                      },
+                      {
+                        "id": "HG-017",
+                        "title": "Premium Long Staple Egyptian Cotton Sateen Sheet Set, Queen Size, 400 Thread Count, Deep Pocket Fitted Sheet, Flat Sheet and Two Pillowcases, Hotel Quality Bedding in Dove Grey",
+                        "detail": "Title is 176 characters; the limit is 150."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "restricted_product",
+                    "severity": "disapproved",
+                    "field": "product_type",
+                    "count": 1,
+                    "products": [
+                      {
+                        "id": "HG-023",
+                        "title": "CBD Infused Lavender Relaxation Candle, 6 oz",
+                        "detail": "Mentions 'CBD', which is a restricted product category."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "missing_gtin",
+                    "severity": "limited",
+                    "field": "gtin",
+                    "count": 6,
+                    "products": [
+                      {
+                        "id": "HG-002",
+                        "title": "Linen Napkins, Set of 4, Natural",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-007",
+                        "title": "Wool Throw Blanket, Charcoal Herringbone",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-011",
+                        "title": "Enamel Dutch Oven, 5.5 qt, Forest Green",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-019",
+                        "title": "Marble Serving Board, White",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-024",
+                        "title": "Recycled Glass Vase, Amber",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-028",
+                        "title": "Copper Measuring Cups, Set of 4",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "invalid_image"
+              },
+              "response": {
+                "query": "invalid_image",
+                "results": [
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "Every product needs a main image link. Without one the product cannot show.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "The image must show the actual product. Placeholder images, generic images and graphics that do not show the product are not allowed.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "Images must be at least 500 by 500 pixels, and around 1500 by 1500 pixels or larger is recommended. Do not add promotional text, logos, watermarks or other overlays to the main image.",
+                    "score": 8
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 3,
+            "input_tokens": 7843,
+            "cached_tokens": 0,
+            "output_tokens": 1602
+          }
+        },
+        {
+          "merchant": "The CBD candle is just a candle. I think that decision is wrong and I want to appeal it.",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "I have created a support case for you: **CASE-20261007-110516-ba19aa**.\n\nA specialist will review your request. The case already includes everything from our conversation, so you will not need to repeat yourself.\n\nAccording to [Requesting a review or appealing a decision](https://support.google.com/merchants/answer/13585221), you may only get one chance to disagree before a waiting period starts. A specialist will help ensure your appeal is submitted correctly.",
+          "tool_calls": [
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "request review"
+              },
+              "response": {
+                "query": "request review",
+                "results": [
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "When a product or account has an issue, Merchant Center may offer a \"Request review\" option. For product issues it is in the product's details on the Needs attention tab. For account issues it is under View setup and policy issues.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "You may only get one chance to disagree before a waiting period starts, so it is worth getting the request right.",
+                    "score": 5
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "A review can take up to 7 business days. Your ads may not show while the account or products are under review.",
+                    "score": 5
+                  }
+                ]
+              }
+            },
+            {
+              "name": "create_handoff_case",
+              "args": {
+                "cited_doc_ids": [
+                  "request-review"
+                ],
+                "merchant_request": "The merchant disagrees with the restricted product policy disapproval for product HG-023 (CBD Infused Lavender Relaxation Candle) and wants to appeal the decision.",
+                "issues_found": [
+                  "restricted_product: HG-023"
+                ],
+                "suggested_next_step": "Review product HG-023 for policy compliance and assist the merchant with the appeal process.",
+                "already_tried": [
+                  "Checked product feed issues",
+                  "Explained product disapproval summary and image issues",
+                  "Merchant expressed disagreement with the policy disapproval for product HG-023"
+                ],
+                "reason": "policy_appeal"
+              },
+              "response": {
+                "status": "created",
+                "case_id": "CASE-20261007-110516-ba19aa"
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 3,
+            "input_tokens": 15529,
+            "cached_tokens": 0,
+            "output_tokens": 1256
+          }
+        }
+      ],
+      "handoff_cases": [
+        {
+          "case_id": "CASE-20261007-110516-ba19aa",
+          "store_id": "sample-store",
+          "created_at": "2026-10-07T11:05:16.355580Z",
+          "reason": "policy_appeal",
+          "issues_found": [
+            "restricted_product: HG-023"
+          ],
+          "already_tried": [
+            "Checked product feed issues",
+            "Explained product disapproval summary and image issues",
+            "Merchant expressed disagreement with the policy disapproval for product HG-023"
+          ],
+          "merchant_request": "The merchant disagrees with the restricted product policy disapproval for product HG-023 (CBD Infused Lavender Relaxation Candle) and wants to appeal the decision.",
+          "suggested_next_step": "Review product HG-023 for policy compliance and assist the merchant with the appeal process.",
+          "cited_doc_ids": [
+            "request-review"
+          ]
+        }
+      ],
+      "usage": {
+        "model_calls": 6,
+        "input_tokens": 23372,
+        "cached_tokens": 0,
+        "output_tokens": 2858
+      },
+      "cost_usd": 0.0282465,
+      "seconds": 21.3
+    },
+    "fix-missing-shipping": {
+      "case_id": "fix-missing-shipping",
+      "category": "easy_fix",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "My string lights were disapproved. What's the problem?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "You have 1 disapproved product:\n\n* **Missing shipping information:** 1 product (\"Outdoor String Lights, 48 ft\", ID: HG-030)\n\nThere are 0 products with limited-reach warnings.\n\n---\n\n### Disapproval: Missing shipping information\n\nProducts need shipping information, including cost and delivery speed, or they can be disapproved.\n\n**How to fix it:**\nYou can set up shipping settings in your Merchant Center account, which will apply to your products. Alternatively, you can specify the shipping cost directly in your product data to override your account settings for specific products.\n\nFor details, see the official guidance on [Shipping costs](https://support.google.com/merchants/answer/6324484).\n\nWould you like help with anything else, or let me know once you've updated your shipping information so I can re-check your feed!",
+          "tool_calls": [
+            {
+              "name": "check_feed",
+              "args": {},
+              "response": {
+                "store_id": "shipping-only",
+                "store_name": "Eval store: missing shipping only",
+                "account_status": "active",
+                "suspension_reason": "",
+                "total_products": 4,
+                "products_with_issues": 1,
+                "disapproved_products": 1,
+                "limited_products": 0,
+                "issue_groups": [
+                  {
+                    "issue_type": "missing_shipping",
+                    "severity": "disapproved",
+                    "field": "shipping",
+                    "count": 1,
+                    "products": [
+                      {
+                        "id": "HG-030",
+                        "title": "Outdoor String Lights, 48 ft",
+                        "detail": "No shipping cost is set for this product."
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "missing_shipping"
+              },
+              "response": {
+                "query": "missing_shipping",
+                "results": [
+                  {
+                    "doc_id": "shipping",
+                    "title": "Shipping costs",
+                    "source_url": "https://support.google.com/merchants/answer/6324484",
+                    "passage": "In the United States and many other countries, products need shipping information, including cost and delivery speed. Products with missing or wrong shipping information can be disapproved.",
+                    "score": 9
+                  },
+                  {
+                    "doc_id": "shipping",
+                    "title": "Shipping costs",
+                    "source_url": "https://support.google.com/merchants/answer/6324484",
+                    "passage": "The recommended way is to set up shipping in your Merchant Center account settings, which then applies to your products. Use the shipping value in your product data only to override those settings for specific products.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "shipping",
+                    "title": "Shipping costs",
+                    "source_url": "https://support.google.com/merchants/answer/6324484",
+                    "passage": "Delivery speed is made of two parts: handling time, from the order until it is handed to the carrier, and transit time, from the carrier to the customer.",
+                    "score": 7
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 3,
+            "input_tokens": 5601,
+            "cached_tokens": 0,
+            "output_tokens": 1159
+          }
+        },
+        {
+          "merchant": "I added the shipping cost. Can you check again?",
+          "fix": "missing_shipping",
+          "fixed_product_ids": [
+            "HG-030"
+          ],
+          "reply": "I checked your feed again, and the missing shipping issue is now fixed!\n\nYou currently have **0 disapproved products** and **0 limited-reach warnings**. All of your products are ready to show to shoppers. \n\nLet me know if you need help with anything else!",
+          "tool_calls": [
+            {
+              "name": "check_feed",
+              "args": {},
+              "response": {
+                "store_id": "shipping-only",
+                "store_name": "Eval store: missing shipping only",
+                "account_status": "active",
+                "suspension_reason": "",
+                "total_products": 4,
+                "products_with_issues": 0,
+                "disapproved_products": 0,
+                "limited_products": 0,
+                "issue_groups": []
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 2,
+            "input_tokens": 6490,
+            "cached_tokens": 0,
+            "output_tokens": 229
+          }
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 5,
+        "input_tokens": 12091,
+        "cached_tokens": 0,
+        "output_tokens": 1388
+      },
+      "cost_usd": 0.01427325,
+      "seconds": 13.6
+    },
+    "suspended-why-not-showing": {
+      "case_id": "suspended-why-not-showing",
+      "category": "handoff_suspended",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "None of my products are showing on Google. Why?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "Your account is currently suspended for Misrepresentation because your website is missing a return policy and business contact details. When an account is suspended, none of your products can show on Google.\n\nFor details on Google's policy, you can review [Misrepresentation and account suspension](https://support.google.com/merchants/answer/6150127) and [Requesting a review or appealing a decision](https://support.google.com/merchants/answer/13585221).\n\nI have transferred your issue to a human specialist to assist you with resolving this account suspension. \n\n* **Case ID:** CASE-20261007-110542-f3396e\n\nA specialist will review your case. It includes everything from our conversation, so you won't need to repeat yourself.",
+          "tool_calls": [
+            {
+              "name": "check_feed",
+              "args": {},
+              "response": {
+                "store_id": "suspended-store",
+                "store_name": "Pine & Pebble Home",
+                "account_status": "suspended",
+                "suspension_reason": "Misrepresentation: the website is missing a returns policy and business contact details.",
+                "total_products": 3,
+                "products_with_issues": 0,
+                "disapproved_products": 0,
+                "limited_products": 0,
+                "issue_groups": []
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "account suspended misrepresentation"
+              },
+              "response": {
+                "query": "account suspended misrepresentation",
+                "results": [
+                  {
+                    "doc_id": "misrepresentation",
+                    "title": "Misrepresentation and account suspension",
+                    "source_url": "https://support.google.com/merchants/answer/6150127",
+                    "passage": "Most violations start with a warning email that gives the merchant time to fix the problem. Serious violations can lead to the account being suspended straight away, without a warning.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "misrepresentation",
+                    "title": "Misrepresentation and account suspension",
+                    "source_url": "https://support.google.com/merchants/answer/6150127",
+                    "passage": "Google's misrepresentation policy does not allow listings that leave out important information or mislead shoppers about the product or the business. For example, payment terms, shipping costs and what happens after purchase must be shown clearly before the shopper commits to buy.",
+                    "score": 7
+                  },
+                  {
+                    "doc_id": "misrepresentation",
+                    "title": "Misrepresentation and account suspension",
+                    "source_url": "https://support.google.com/merchants/answer/6150127",
+                    "passage": "To fix the problem, update your website and your product data so they follow the policy. After that, you can ask Google to review the account.",
+                    "score": 7
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "request review account suspension"
+              },
+              "response": {
+                "query": "request review account suspension",
+                "results": [
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "When a product or account has an issue, Merchant Center may offer a \"Request review\" option. For product issues it is in the product's details on the Needs attention tab. For account issues it is under View setup and policy issues.",
+                    "score": 7
+                  },
+                  {
+                    "doc_id": "misrepresentation",
+                    "title": "Misrepresentation and account suspension",
+                    "source_url": "https://support.google.com/merchants/answer/6150127",
+                    "passage": "To fix the problem, update your website and your product data so they follow the policy. After that, you can ask Google to review the account.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "A review can take up to 7 business days. Your ads may not show while the account or products are under review.",
+                    "score": 6
+                  }
+                ]
+              }
+            },
+            {
+              "name": "create_handoff_case",
+              "args": {
+                "suggested_next_step": "Assist merchant with resolving account suspension due to Misrepresentation.",
+                "merchant_request": "Merchant wants to know why none of their products are showing on Google.",
+                "cited_doc_ids": [
+                  "misrepresentation",
+                  "request-review"
+                ],
+                "issues_found": [
+                  "Account suspended: Misrepresentation (website missing returns policy and business contact details)"
+                ],
+                "reason": "account_suspended",
+                "already_tried": [
+                  "Checked feed and account status"
+                ]
+              },
+              "response": {
+                "status": "created",
+                "case_id": "CASE-20261007-110542-f3396e"
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 5,
+            "input_tokens": 11341,
+            "cached_tokens": 0,
+            "output_tokens": 1424
+          }
+        }
+      ],
+      "handoff_cases": [
+        {
+          "case_id": "CASE-20261007-110542-f3396e",
+          "store_id": "suspended-store",
+          "created_at": "2026-10-07T11:05:42.483211Z",
+          "reason": "account_suspended",
+          "issues_found": [
+            "Account suspended: Misrepresentation (website missing returns policy and business contact details)"
+          ],
+          "already_tried": [
+            "Checked feed and account status"
+          ],
+          "merchant_request": "Merchant wants to know why none of their products are showing on Google.",
+          "suggested_next_step": "Assist merchant with resolving account suspension due to Misrepresentation.",
+          "cited_doc_ids": [
+            "misrepresentation",
+            "request-review"
+          ]
+        }
+      ],
+      "usage": {
+        "model_calls": 5,
+        "input_tokens": 11341,
+        "cached_tokens": 0,
+        "output_tokens": 1424
+      },
+      "cost_usd": 0.01384575,
+      "seconds": 13.4
+    }
+  },
+  "grades": {}
+}
