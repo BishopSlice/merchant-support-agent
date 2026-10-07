@@ -3,9 +3,11 @@ id: gtin
 title: Product barcode number (GTIN)
 source_url: https://support.google.com/merchants/answer/6324461
 issue_codes: missing_gtin
-keywords: gtin, barcode, upc, ean, jan, isbn, identifier, product id
+keywords: gtin, barcode, visibility, warning, upc, ean, jan, isbn, identifier, product id
 ---
 A GTIN is the barcode number a manufacturer gives a product, such as a UPC in North America or an EAN in Europe. Google recommends sending it for every product that has one.
+
+Products with a missing or wrong GTIN may get limited visibility. If a product does have a GTIN and you leave it out, the product could be disapproved.
 
 Valid GTINs are 8, 12, 13 or 14 digits long. Spaces and dashes are ignored. The last digit is a check digit and must be correct, so copy the number exactly from the packaging or from your supplier.
 
