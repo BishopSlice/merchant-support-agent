@@ -30,24 +30,33 @@ Run evals: uv run python -m evals.run
 
 | Module | Responsibility | Depends on |
 |---|---|---|
-| `models` | Data shapes: Product, Issue, Case | nothing |
-| `feed_checker` | Load a store's feed and run rule checks | models |
-| `help_search` | Load help docs and return the best matching passages | nothing |
-| `handoff` | Create, save and list specialist cases | models |
+| `models` | Data shapes: Store, Product, Issue, Case, HelpDoc | nothing |
+| `config` | Settings from `.env`, data paths, model prices | nothing |
+| `stores` | Load a store's account details and feed from files | models, config |
+| `feed_checker` (+ `feed_rules`) | Run rule checks over a feed and group the issues | models, stores |
+| `help_search` | Load help docs and return the best matching passages | models, config |
+| `handoff` | Create, save, list and fetch specialist cases | models, stores |
 | `agent` | ADK agent: instructions plus the three tools | all tools |
-| `app` | Merchant chat and specialist inbox | agent, handoff |
-| `evals` | Test cases, runner, scorer, saved results | agent |
+| `chat` | Run conversation turns and record tool calls and token usage | agent |
+| `demo` | Resettable demo copy of the data and simulated merchant fixes | stores, feed_rules |
+| `inbox` | Lay out cases for the specialist inbox | models, help_search |
+| `cli` | Terminal chat | chat |
+| `app` | Merchant chat and specialist inbox (Streamlit, layout only) | chat, demo, inbox, handoff |
+| `evals` | Case files, runner, scorers, grader, saved results | chat, demo |
 
 ## Project structure
 
 ```
 data/stores/<store_id>/   store.json (account status) + feed.csv
 data/help_docs/           one markdown file per help topic, with source URL
-src/merchant_agent/       models.py, config.py, agent.py, tools/
-app/                      Streamlit screens
-evals/cases/              one YAML/JSON file per test conversation
+src/merchant_agent/       models.py, config.py, stores.py, agent.py, chat.py, demo.py,
+                          inbox.py, cli.py, tools/ (feed_checker, feed_rules, help_search, handoff)
+app/                      Streamlit app
+scripts/                  scripted end-to-end runs against Gemini
+evals/cases/              one TOML file per test conversation
+evals/stores/             small stores used only by eval cases
 evals/results/            one file per eval run, never overwritten
-runtime/                  cases created while running (gitignored)
+runtime/                  demo data copy and cases created while running (gitignored)
 tests/                    unit tests, no model calls
 ```
 
