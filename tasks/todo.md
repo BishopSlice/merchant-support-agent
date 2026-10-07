@@ -10,7 +10,7 @@
 - [x] Task 6: Merchant chat screen
 - [x] Task 7: Specialist inbox screen
 - [x] Checkpoint C: browser demo works
-- [ ] Task 8: Eval cases
+- [x] Task 8: Eval cases
 - [ ] Task 9: Runner and rule-based scores
 - [ ] Task 10: AI grader
 - [ ] Checkpoint D: full scorecard
