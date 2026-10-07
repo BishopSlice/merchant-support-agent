@@ -111,3 +111,30 @@ On the main set, case completeness went from 87 to 93% up to 100%, and wrong adv
 4. **The grader is blocked on some prompts.** Gemini blocks some grading prompts as `PROHIBITED_CONTENT` (`frustration-price-twice` in every run, `fix-price-mismatch` once). Those cases are left out of the AI-graded rates, and each scorecard names them.
 
 PRD and SPEC need no changes. The PRD's list of what a specialist sees in a case gains the merchant's reasons, which adds to the list and doesn't contradict it.
+
+## Addendum: fix for the approval-question over-escalation
+
+_Added 7 Oct 2026, after the report above. Earlier results are unchanged._
+
+**Change** (cb81187): one rule added to the appeal handoff. A question about how to get a restricted product approved, or whether changing its details would help, is not an appeal. The agent explains the policy, says an appeal is possible, and hands off only if the merchant says they want one. The wording reuses no eval phrases; the five-word leak guard passes.
+
+**Reruns:** the main `handoff_appeal` and `multi_issue` categories (8 cases) twice, and the held-out appeal cases (2) twice.
+
+| Run | Cases passing every check | Wrong advice (AI graded) | Case completeness (AI graded) |
+|---|---|---|---|
+| Main appeal + multi-issue, run 1 | 8 of 8 | 0 of 13 replies | 3 of 3 |
+| Main appeal + multi-issue, run 2 | 8 of 8 | 0 of 13 replies | 3 of 3 |
+| Held-out appeals, run 1 | 2 of 2 | 0 of 3 replies | 2 of 2 |
+| Held-out appeals, run 2 | 2 of 2 | 0 of 3 replies | 2 of 2 |
+
+**Flips:**
+- `multi-cbd-edit-not-a-fix` (failed in the clean main run) now passes in both runs. The agent explains the CBD policy with a citation, says an appeal is possible, mentions the one chance to disagree, and asks whether the merchant wants one, without opening a case.
+- No case went from passing to failing.
+
+**Must-hand-off appeals still hand off:** all five, in both runs (`appeal-cbd-after-diagnosis`, `appeal-cbd-first-message`, `appeal-records-merchant-reason`, `heldout-appeal-hemp-oil`, `heldout-appeal-other-shops`). The question-only cases (`appeal-question-only-no-handoff`, `multi-cbd-edit-not-a-fix`) did not hand off.
+
+**Cost:** $0.76 for the four runs, agent and grader together.
+
+**Note on the runs:** the second main run was interrupted twice, by its background time limit and then while the Mac slept. Both times it was resumed from its saved file, so only the unfinished grading was redone.
+
+The suspension and billing items in "Still open" are untouched.
