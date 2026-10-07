@@ -1,5 +1,6 @@
 """Handoff cases for human specialists: create, save, list and fetch them."""
 
+import logging
 import re
 from datetime import UTC, datetime
 from uuid import uuid4
@@ -11,6 +12,7 @@ from merchant_agent.models import Case
 from merchant_agent.stores import StoreNotFoundError, load_store
 
 _CASE_ID_PATTERN = re.compile(r"^CASE-[0-9A-Za-z-]+$")
+logger = logging.getLogger(__name__)
 
 
 def create_handoff_case(
@@ -67,9 +69,13 @@ def get_case(case_id: str) -> Case | None:
 
 
 def list_cases() -> list[Case]:
-    """Load every saved case, newest first."""
-    folder = get_settings().cases_dir
-    cases = [Case.model_validate_json(path.read_text()) for path in folder.glob("CASE-*.json")]
+    """Load every saved case, newest first. Unreadable files are skipped with a warning."""
+    cases = []
+    for path in get_settings().cases_dir.glob("CASE-*.json"):
+        try:
+            cases.append(Case.model_validate_json(path.read_text()))
+        except ValidationError as error:
+            logger.warning("Skipping unreadable case file %s: %s", path.name, error)
     return sorted(cases, key=lambda case: case.created_at, reverse=True)
 
 

@@ -143,3 +143,10 @@ def test_list_cases_sorts_by_time_not_by_file_name():
     for case_id, hour in [("CASE-a", 9), ("CASE-b", 10), ("CASE-c", 11)]:
         save_case(case(case_id, hour))
     assert [c.case_id for c in list_cases()] == ["CASE-c", "CASE-b", "CASE-a"]
+
+
+def test_a_corrupt_case_file_is_skipped_with_a_warning(runtime_dir, caplog):
+    good = make_case()["case_id"]
+    (runtime_dir / "cases" / "CASE-broken.json").write_text("{not json")
+    assert [case.case_id for case in list_cases()] == [good]
+    assert "CASE-broken.json" in caplog.text
