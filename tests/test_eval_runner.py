@@ -49,6 +49,10 @@ class FakeAgentRunner:
             handoff.create_handoff_case(
                 self.store_id, "policy_appeal", [], [], "Appeal", "Review", []
             )
+        if "human" in text:
+            handoff.create_handoff_case(
+                self.store_id, "merchant_requested_human", [], [], "Person", "Call", []
+            )
         yield Event(
             author="agent",
             content=types.Content(role="model", parts=[types.Part(text=f"Re: {text}")]),
@@ -113,3 +117,12 @@ def test_api_errors_are_recorded_not_raised():
     record = run(make_case([{"merchant": "a"}]), fail=True)
     assert record.status == "error"
     assert "quota exhausted" in record.error
+
+
+def test_handoff_cases_are_recorded_oldest_first():
+    turns = [{"merchant": "I want to appeal"}, {"merchant": "Now get me a human"}]
+    record = run(make_case(turns, store="sample-store"))
+    assert [c["reason"] for c in record.handoff_cases] == [
+        "policy_appeal",
+        "merchant_requested_human",
+    ]
