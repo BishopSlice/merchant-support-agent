@@ -100,25 +100,25 @@ def specialist_inbox_page() -> None:
 st.session_state.setdefault("messages", [])
 page = st.sidebar.radio("Page", ["Merchant chat", "Specialist inbox"], key="page")
 
-if page == "Merchant chat":
-    store_id = st.sidebar.selectbox("Store", list_stores(), key="store")
-    if st.sidebar.button("Reset conversation", key="reset_conversation"):
-        end_conversation()
+# The store is chosen on every page: it is the merchant you chat as, and the store the
+# demo fixes apply to.
+store_id = st.sidebar.selectbox("Store", list_stores(), key="store")
+if page == "Merchant chat" and st.sidebar.button("Reset conversation", key="reset_conversation"):
+    end_conversation()
 
 with st.sidebar.expander("Demo controls", expanded=True):
     st.caption("Stand in for the merchant editing their feed, then tell the agent.")
-    fix_store = st.session_state.get("store", "sample-store")
     issue = st.selectbox(
         "Simulate a fix",
         [issue.value for issue in demo.FIXABLE_ISSUE_TYPES],
         key="fix_issue",
     )
     if st.button("Apply fix", key="apply_fix"):
-        fixed = demo.apply_fix(fix_store, IssueType(issue))
+        fixed = demo.apply_fix(store_id, IssueType(issue))
         if fixed:
-            st.success(f"Fixed {issue} on {', '.join(fixed)} in {fix_store}.")
+            st.success(f"Fixed {issue} on {', '.join(fixed)} in {store_id}.")
         else:
-            st.info(f"No products in {fix_store} have {issue}.")
+            st.info(f"No products in {store_id} have {issue}.")
     if st.button("Reset demo", key="reset_demo", help="Original store data, no cases"):
         demo.prepare_demo_data(reset=True)
         removed = clear_cases()

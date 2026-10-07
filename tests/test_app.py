@@ -132,3 +132,12 @@ def test_simulated_fix_edits_the_demo_copy_and_reset_restores_it():
     app.sidebar.button(key="reset_demo").click().run()
     groups = {g["issue_type"] for g in check_feed("sample-store")["issue_groups"]}
     assert "missing_shipping" in groups
+
+
+def test_demo_fix_uses_the_chosen_store_on_every_page():
+    app = run_app()
+    app.sidebar.selectbox(key="store").set_value("suspended-store").run()
+    go_to(app, "Specialist inbox")
+    app.sidebar.selectbox(key="fix_issue").set_value("missing_shipping")
+    app.sidebar.button(key="apply_fix").click().run()
+    assert "suspended-store" in app.sidebar.info[0].value
