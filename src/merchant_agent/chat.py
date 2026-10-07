@@ -26,11 +26,41 @@ class ToolCall:
 
 
 @dataclass
+class Usage:
+    """Tokens used by model calls. Output includes thinking tokens, which are billed as output."""
+
+    model_calls: int = 0
+    input_tokens: int = 0  # all prompt tokens, including the cached ones
+    cached_tokens: int = 0
+    output_tokens: int = 0
+
+    def __add__(self, other: "Usage") -> "Usage":
+        return Usage(
+            self.model_calls + other.model_calls,
+            self.input_tokens + other.input_tokens,
+            self.cached_tokens + other.cached_tokens,
+            self.output_tokens + other.output_tokens,
+        )
+
+    @classmethod
+    def from_metadata(cls, metadata: types.GenerateContentResponseUsageMetadata) -> "Usage":
+        """Read one model call's token counts."""
+        return cls(
+            model_calls=1,
+            input_tokens=metadata.prompt_token_count or 0,
+            cached_tokens=metadata.cached_content_token_count or 0,
+            output_tokens=(metadata.candidates_token_count or 0)
+            + (metadata.thoughts_token_count or 0),
+        )
+
+
+@dataclass
 class Turn:
     """The agent's reply to one merchant message, plus the tools it used to get there."""
 
     reply: str
     tool_calls: list[ToolCall] = field(default_factory=list)
+    usage: Usage = field(default_factory=Usage)
 
     @property
     def case_ids(self) -> list[str]:
@@ -65,6 +95,8 @@ async def run_turn(runner: Runner, session_id: str, text: str) -> Turn:
     async for event in runner.run_async(
         user_id=USER_ID, session_id=session_id, new_message=message
     ):
+        if event.usage_metadata:
+            turn.usage += Usage.from_metadata(event.usage_metadata)
         for part in (event.content.parts if event.content else None) or []:
             if part.function_call:
                 call = part.function_call

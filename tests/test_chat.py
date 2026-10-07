@@ -3,7 +3,14 @@ import asyncio
 from google.adk import Event
 from google.genai import types
 
-from merchant_agent.chat import ChatSession, ToolCall, Turn, describe_tool_call, run_turn
+from merchant_agent.chat import (
+    ChatSession,
+    ToolCall,
+    Turn,
+    Usage,
+    describe_tool_call,
+    run_turn,
+)
 
 
 class FakeRunner:
@@ -149,3 +156,29 @@ def test_chat_session_runs_turns_from_synchronous_code():
     assert runner.received == ["hi", "again"]
     chat.close()
     assert runner.closed
+
+
+def test_run_turn_adds_up_token_usage_across_model_calls():
+    def with_usage(evt: Event, prompt: int, output: int, thoughts: int, cached: int = 0) -> Event:
+        evt.usage_metadata = types.GenerateContentResponseUsageMetadata(
+            prompt_token_count=prompt,
+            candidates_token_count=output,
+            thoughts_token_count=thoughts,
+            cached_content_token_count=cached,
+        )
+        return evt
+
+    runner = FakeRunner(
+        [
+            with_usage(event(call_part("check_feed", {})), 1000, 20, 50, cached=400),
+            event(response_part("check_feed", {})),
+            with_usage(event(types.Part(text="Done.")), 1500, 200, 100),
+        ]
+    )
+    usage = asyncio.run(run_turn(runner, "session-1", "Hi")).usage
+    assert usage == Usage(model_calls=2, input_tokens=2500, cached_tokens=400, output_tokens=370)
+
+
+def test_usage_adds_together():
+    total = Usage(1, 100, 10, 5) + Usage(2, 200, 0, 7)
+    assert total == Usage(model_calls=3, input_tokens=300, cached_tokens=10, output_tokens=12)
