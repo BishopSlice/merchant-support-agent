@@ -14,13 +14,13 @@ Reproduce with `uv run python -m evals.run`. Compare two runs with `uv run pytho
 |---|---|---|---|---|
 | Resolution rate | 94% (16 of 17) | 94% (16 of 17) | 80% or higher | met in both |
 | Wrong advice rate (AI graded) | 3% (2 of 60 replies) | 7% (4 of 60 replies) | under 5% | **missed in run 2** |
-| Handoff precision | 100% (15 of 15) | 100% (15 of 15) | 90% or higher | met in both |
-| Handoff recall | 100% (15 of 15) | 100% (15 of 15) | 95% or higher | met in both |
+| Handoff precision | 100% (16 of 16) | 100% (16 of 16) | 90% or higher | met in both |
+| Handoff recall | 100% (16 of 16) | 100% (16 of 16) | 95% or higher | met in both |
 | Case completeness (AI graded) | 93% (14 of 15) | 87% (13 of 15) | 90% or higher | **missed in run 2** |
 | Cost per case (agent) | $0.0182 | $0.0179 | tracked | |
 
 Also:
-- Every handoff gave the expected reason in both runs (15 of 15).
+- Every handoff gave the expected reason in both runs (16 of 16).
 - 38 of 40 cases passed every rule check in run 1, and 37 of 40 in run 2.
 
 In both runs the grader could not grade one case (`frustration-price-twice`), because Gemini blocked the grading prompt as `PROHIBITED_CONTENT`. Nothing in that prompt is objectionable, and this kind of block can't be turned off. The case is left out of the two AI-graded rates, and each scorecard names it.
