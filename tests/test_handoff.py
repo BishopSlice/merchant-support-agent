@@ -109,3 +109,37 @@ def test_clear_cases_deletes_every_case(runtime_dir):
     assert clear_cases() == 2
     assert list_cases() == []
     assert clear_cases() == 0
+
+
+def test_get_case_cannot_read_files_outside_the_cases_folder(runtime_dir):
+    (runtime_dir / "secret.json").write_text("{}")
+    make_case()  # creates the cases folder
+    assert get_case("../secret") is None
+
+
+def test_unknown_store_is_rejected_and_nothing_saved():
+    result = make_case(store_id="no-such-store")
+    assert result["status"] == "error"
+    assert list_cases() == []
+
+
+def test_list_cases_sorts_by_time_not_by_file_name():
+    from datetime import UTC, datetime
+
+    from merchant_agent.models import Case
+    from merchant_agent.tools.handoff import save_case
+
+    def case(case_id: str, hour: int) -> Case:
+        return Case(
+            case_id=case_id,
+            store_id="sample-store",
+            created_at=datetime(2026, 10, 7, hour, tzinfo=UTC),
+            reason="merchant_requested_human",
+            merchant_request="Talk to a person",
+            suggested_next_step="Call back",
+        )
+
+    # Alphabetical order is the reverse of time order.
+    for case_id, hour in [("CASE-a", 9), ("CASE-b", 10), ("CASE-c", 11)]:
+        save_case(case(case_id, hour))
+    assert [c.case_id for c in list_cases()] == ["CASE-c", "CASE-b", "CASE-a"]

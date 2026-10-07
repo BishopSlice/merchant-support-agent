@@ -47,6 +47,18 @@ def test_run_turn_collects_reply_and_tool_calls():
     ]
 
 
+def test_run_turn_ignores_thoughts_and_text_from_unfinished_events():
+    thinking = types.Part(text="Let me think about GTINs...", thought=True)
+    partial = Event(
+        author="merchant_support_agent",
+        content=types.Content(role="model", parts=[types.Part(text="Checking")]),
+        partial=True,
+    )
+    runner = FakeRunner([event(thinking), partial, event(types.Part(text="Final answer."))])
+    turn = asyncio.run(run_turn(runner, "session-1", "Hi"))
+    assert turn.reply == "Final answer."
+
+
 def test_turn_lists_created_case_ids():
     turn = Turn(
         reply="Done",

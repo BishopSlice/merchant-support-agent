@@ -130,3 +130,28 @@ def test_each_rule_sets_the_expected_severity():
     )
     found = {issue.issue_type: issue.severity for issue in feed_rules.run_checks(broken)}
     assert found == SEVERITY_BY_TYPE
+
+
+def test_blank_landing_page_price_is_not_a_mismatch():
+    assert issue_types(clean_product(landing_page_price="")) == []
+
+
+def test_price_without_a_currency_is_skipped_rather_than_crashing():
+    assert issue_types(clean_product(price="14.00", landing_page_price="18.00 USD")) == []
+
+
+def test_unreadable_price_amount_is_skipped():
+    assert issue_types(clean_product(price="about 14 USD", landing_page_price="18.00 USD")) == []
+
+
+def test_image_link_must_start_with_a_full_scheme():
+    product = clean_product(image_link="httpcdn.shop.example/mug.jpg")
+    assert issue_types(product) == [IssueType.INVALID_IMAGE]
+
+
+def test_blank_landing_page_availability_is_not_a_mismatch():
+    assert issue_types(clean_product(landing_page_availability="")) == []
+
+
+def test_whitespace_shipping_counts_as_missing():
+    assert issue_types(clean_product(shipping="   ")) == [IssueType.MISSING_SHIPPING]

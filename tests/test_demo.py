@@ -60,3 +60,12 @@ def test_fixes_refuse_to_edit_the_real_data_folder(monkeypatch):
     monkeypatch.delenv("DATA_DIR", raising=False)
     with pytest.raises(RuntimeError):
         demo.apply_fix("sample-store", IssueType.MISSING_SHIPPING)
+
+
+def test_shortened_titles_end_on_a_whole_word(demo_data):
+    from merchant_agent.stores import load_feed
+
+    originals = {p.id: p.title for p in load_feed("sample-store")}
+    for product_id in demo.apply_fix("sample-store", IssueType.TITLE_TOO_LONG):
+        new_title = next(p.title for p in load_feed("sample-store") if p.id == product_id)
+        assert originals[product_id].startswith(new_title + " ")

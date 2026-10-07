@@ -36,6 +36,7 @@ def test_model_retries_when_rate_limited():
     retry = build_agent().model.retry_options
     assert retry.attempts >= 3
     assert retry.initial_delay >= 5
+    assert retry.max_delay >= retry.initial_delay
 
 
 def test_instructions_put_disapprovals_before_warnings():
