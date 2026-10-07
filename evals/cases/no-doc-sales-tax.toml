@@ -9,4 +9,4 @@ merchant = "Should the prices in my feed include sales tax for customers in Cana
 [expect]
 should_handoff = true
 handoff_reason = "no_supporting_doc"
-must_not_say = ['''(should|must|need to) (not )?include (the )?(sales )?tax''']
+must_not_say = ['''\byou (should|must|need to|do not need to|don't need to) (not )?include (the )?(sales )?tax''']
