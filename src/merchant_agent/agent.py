@@ -1,6 +1,8 @@
 """The merchant support agent: Gemini through Google ADK, with feed check and help search tools."""
 
 from google.adk import Agent, Context
+from google.adk.models import Gemini
+from google.genai import types
 
 from merchant_agent.config import get_settings
 from merchant_agent.tools import feed_checker
@@ -53,11 +55,16 @@ def check_feed(tool_context: Context) -> dict:
     return feed_checker.check_feed(tool_context.state["store_id"])
 
 
+# The free tier allows a few requests per minute and one merchant turn can take several,
+# so wait and retry on rate limits (HTTP 429) instead of failing the conversation.
+RETRY_OPTIONS = types.HttpRetryOptions(attempts=5, initial_delay=10, max_delay=60)
+
+
 def build_agent() -> Agent:
     """Create the support agent using the model named in settings."""
     return Agent(
         name="merchant_support_agent",
-        model=get_settings().model_name,
+        model=Gemini(model=get_settings().model_name, retry_options=RETRY_OPTIONS),
         description="Helps Google Shopping merchants fix disapproved products.",
         instruction=INSTRUCTION,
         tools=[check_feed, search_help_docs],
