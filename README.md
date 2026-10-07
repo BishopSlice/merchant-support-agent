@@ -10,7 +10,7 @@ An AI agent that helps online store owners fix rejected Google Shopping products
 merchant-support-agent/
   docs/             PRD, decision records, eval reports (the "PM" side)
   data/
-    feeds/          fake store product feeds with planted problems
+    stores/         simulated stores: account status + product feed with planted problems
     help_docs/      saved policy and help pages the agent can search
   src/merchant_agent/
     models.py       shared data shapes (Product, Issue, Case)
