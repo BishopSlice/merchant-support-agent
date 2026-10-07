@@ -150,3 +150,15 @@ def test_regrade_clears_old_grades_on_resume(results_dir, fake_agent, monkeypatc
     assert calls == []  # already graded
     eval_run.main(["--resume", str(path), "--regrade"])
     assert calls == ["WrongAdviceGrade", "CompletenessGrade"]
+
+
+def test_scorecard_reports_cases_the_grader_could_not_grade(results_dir, fake_agent, monkeypatch):
+    from evals import grader
+
+    def blocked(prompt, schema):
+        raise grader.GradingFailed("no valid WrongAdviceGrade after 3 attempts")
+
+    monkeypatch.setattr(grader, "gemini_generate", lambda model: blocked)
+    eval_run.main(["--case", "human-asks-at-start"])
+    scorecard = next(results_dir.glob("*.md")).read_text()
+    assert "Grading failures: 1 (human-asks-at-start), left out of the AI-graded rates" in scorecard

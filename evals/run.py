@@ -81,6 +81,11 @@ def write_scorecard(run_file: RunFile, cases: list[EvalCase], path: Path) -> str
     if run_file.grades:
         grading_cost = sum(grade.cost_usd for grade in run_file.grades.values())
         header["Grading cost"] = f"${grading_cost:.4f} (same model, not included in total cost)"
+        failed = sorted(case_id for case_id, grade in run_file.grades.items() if grade.error)
+        if failed:
+            header["Grading failures"] = (
+                f"{len(failed)} ({', '.join(failed)}), left out of the AI-graded rates"
+            )
     scorecard = render_scorecard(header, summarize(scores, runs), scores, graded)
     path.with_suffix(".md").write_text(scorecard)
     return scorecard
