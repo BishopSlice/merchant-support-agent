@@ -14,7 +14,7 @@
 - [x] Task 9: Runner and rule-based scores
 - [x] Task 10: AI grader
 - [x] Checkpoint D: full scorecard
-- [ ] Task 11: Fix the worst failure
+- [x] Task 11: Fix the worst failure
 - [ ] Task 12a: Guided landing walkthrough
 - [ ] Task 12: Write-up and demo
 
