@@ -1,0 +1,2805 @@
+{
+  "model": "gemini-3.6-flash",
+  "case_set": "main",
+  "started_at": "2026-10-07T14:14:08.772294Z",
+  "finished_at": "2026-10-07T15:12:24.645116Z",
+  "price": {
+    "input_per_million": 0.75,
+    "cached_input_per_million": 0.075,
+    "output_per_million": 3.75
+  },
+  "case_filter": [],
+  "category_filter": [
+    "handoff_appeal",
+    "multi_issue"
+  ],
+  "runs": {
+    "appeal-cbd-after-diagnosis": {
+      "case_id": "appeal-cbd-after-diagnosis",
+      "category": "handoff_appeal",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "What's wrong with my products?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "You have **13 disapproved products** that cannot show on Google Shopping. The main reasons are:\n- Invalid or missing images (3 products)\n- Price mismatches (3 products)\n- Availability mismatches (2 products)\n- Missing shipping costs (2 products)\n- Titles too long (2 products)\n- Restricted product policy (1 product)\n\nIn addition, **5 products have limited-reach warnings**.\n\n---\n\n### First Issue: Invalid or Missing Product Images (3 products)\n\nAccording to the [Product image link](https://support.google.com/merchants/answer/6324350) help guide, every product needs a link to a main image that shows the actual item. Placeholder images or missing image links are not allowed.\n\nHere are the affected products:\n1. **Ceramic Table Lamp, Matte White** (ID: `HG-006`) – No image link is set.\n2. **Walnut Wall Shelf, 24 inch** (ID: `HG-013`) – The image link points to a placeholder image rather than a photo of the real product.\n3. **Woven Wall Hanging, Cream and Rust** (ID: `HG-027`) – No image link is set.\n\n**How to fix:** Provide a direct URL to a photo showing the actual product for each item.\n\nWould you like to address this first, or would you like to move on to the next issue?",
+          "tool_calls": [
+            {
+              "name": "check_feed",
+              "args": {},
+              "response": {
+                "store_id": "sample-store",
+                "store_name": "Hearth & Hollow",
+                "account_status": "active",
+                "suspension_reason": "",
+                "total_products": 30,
+                "products_with_issues": 18,
+                "disapproved_products": 13,
+                "limited_products": 5,
+                "issue_groups": [
+                  {
+                    "issue_type": "invalid_image",
+                    "severity": "disapproved",
+                    "field": "image_link",
+                    "count": 3,
+                    "products": [
+                      {
+                        "id": "HG-006",
+                        "title": "Ceramic Table Lamp, Matte White",
+                        "detail": "No image link is set."
+                      },
+                      {
+                        "id": "HG-013",
+                        "title": "Walnut Wall Shelf, 24 inch",
+                        "detail": "Image link 'https://cdn.hearthandhollow.example/img/placeholder.png' points to a placeholder, not a real product photo."
+                      },
+                      {
+                        "id": "HG-027",
+                        "title": "Woven Wall Hanging, Cream and Rust",
+                        "detail": "No image link is set."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "price_mismatch",
+                    "severity": "disapproved",
+                    "field": "price",
+                    "count": 3,
+                    "products": [
+                      {
+                        "id": "HG-004",
+                        "title": "Waffle Weave Bath Towel, Sage",
+                        "detail": "Feed price is 32.00 USD but the product page shows 36.00 USD."
+                      },
+                      {
+                        "id": "HG-015",
+                        "title": "Pour Over Coffee Set, Glass and Copper",
+                        "detail": "Feed price is 58.00 USD but the product page shows 64.00 USD."
+                      },
+                      {
+                        "id": "HG-021",
+                        "title": "Stainless Steel Kettle, 1.7 L",
+                        "detail": "Feed price is 48.00 USD but the product page shows 44.00 USD."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "availability_mismatch",
+                    "severity": "disapproved",
+                    "field": "availability",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-012",
+                        "title": "Velvet Cushion Cover, 18 x 18, Rust",
+                        "detail": "Feed says in_stock but the product page says out_of_stock."
+                      },
+                      {
+                        "id": "HG-025",
+                        "title": "Linen Duvet Cover, Queen, Terracotta",
+                        "detail": "Feed says in_stock but the product page says preorder."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "missing_shipping",
+                    "severity": "disapproved",
+                    "field": "shipping",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-019",
+                        "title": "Marble Serving Board, White",
+                        "detail": "No shipping cost is set for this product."
+                      },
+                      {
+                        "id": "HG-030",
+                        "title": "Outdoor String Lights, 48 ft",
+                        "detail": "No shipping cost is set for this product."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "title_too_long",
+                    "severity": "disapproved",
+                    "field": "title",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-009",
+                        "title": "Handwoven Seagrass Storage Basket with Leather Handles for Living Room, Bedroom, Nursery, Laundry and Bathroom Organization, Extra Large 16 x 12 x 10 inch, Natural Color",
+                        "detail": "Title is 169 characters; the limit is 150."
+                      },
+                      {
+                        "id": "HG-017",
+                        "title": "Premium Long Staple Egyptian Cotton Sateen Sheet Set, Queen Size, 400 Thread Count, Deep Pocket Fitted Sheet, Flat Sheet and Two Pillowcases, Hotel Quality Bedding in Dove Grey",
+                        "detail": "Title is 176 characters; the limit is 150."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "restricted_product",
+                    "severity": "disapproved",
+                    "field": "product_type",
+                    "count": 1,
+                    "products": [
+                      {
+                        "id": "HG-023",
+                        "title": "CBD Infused Lavender Relaxation Candle, 6 oz",
+                        "detail": "Mentions 'CBD', which is a restricted product category."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "missing_gtin",
+                    "severity": "limited",
+                    "field": "gtin",
+                    "count": 6,
+                    "products": [
+                      {
+                        "id": "HG-002",
+                        "title": "Linen Napkins, Set of 4, Natural",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-007",
+                        "title": "Wool Throw Blanket, Charcoal Herringbone",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-011",
+                        "title": "Enamel Dutch Oven, 5.5 qt, Forest Green",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-019",
+                        "title": "Marble Serving Board, White",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-024",
+                        "title": "Recycled Glass Vase, Amber",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-028",
+                        "title": "Copper Measuring Cups, Set of 4",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "invalid_image"
+              },
+              "response": {
+                "query": "invalid_image",
+                "results": [
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "Every product needs a main image link. Without one the product cannot show.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "The image must show the actual product. Placeholder images, generic images and graphics that do not show the product are not allowed.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "Images must be at least 500 by 500 pixels, and around 1500 by 1500 pixels or larger is recommended. Do not add promotional text, logos, watermarks or other overlays to the main image.",
+                    "score": 8
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 3,
+            "input_tokens": 8981,
+            "cached_tokens": 0,
+            "output_tokens": 1908
+          }
+        },
+        {
+          "merchant": "The CBD candle is just a candle. I think that decision is wrong and I want to appeal it.",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "Under [CBD and other unapproved substances](https://support.google.com/merchants/answer/6165956), Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD). Products on this list are not allowed in Shopping ads or free listings. This is a policy decision rather than a data issue, so it cannot be fixed by editing product details. Whether a specific product is allowed is decided under the healthcare and medicines policy.\n\nAs noted in [Requesting a review or appealing a decision](https://support.google.com/merchants/answer/13585221), you may only get one chance to disagree before a waiting period starts.\n\nBecause you'd like to appeal this policy decision, this needs a specialist, so I've passed it on. \n\nYour case number is **CASE-20261007-141434-288c89**. A specialist will review your request. The case already includes all the details from this conversation, so you won't need to repeat yourself.",
+          "tool_calls": [
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "restricted_product"
+              },
+              "response": {
+                "query": "restricted_product",
+                "results": [
+                  {
+                    "doc_id": "cbd-unapproved-substances",
+                    "title": "CBD and other unapproved substances",
+                    "source_url": "https://support.google.com/merchants/answer/6165956",
+                    "passage": "Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD). Products on this list are not allowed in Shopping ads or free listings.",
+                    "score": 7
+                  },
+                  {
+                    "doc_id": "cbd-unapproved-substances",
+                    "title": "CBD and other unapproved substances",
+                    "source_url": "https://support.google.com/merchants/answer/6165956",
+                    "passage": "This is a policy decision, not a data problem, so it cannot be fixed by editing product details. Whether a specific product is allowed is decided by Google's policy team under the healthcare and medicines policy.",
+                    "score": 7
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "request review appeal"
+              },
+              "response": {
+                "query": "request review appeal",
+                "results": [
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "When a product or account has an issue, Merchant Center may offer a \"Request review\" option. For product issues it is in the product's details on the Needs attention tab. For account issues it is under View setup and policy issues.",
+                    "score": 13
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "You may only get one chance to disagree before a waiting period starts, so it is worth getting the request right.",
+                    "score": 12
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "A review can take up to 7 business days. Your ads may not show while the account or products are under review.",
+                    "score": 12
+                  }
+                ]
+              }
+            },
+            {
+              "name": "create_handoff_case",
+              "args": {
+                "suggested_next_step": "Review the policy appeal request for product HG-023 under the healthcare and medicines policy.",
+                "cited_doc_ids": [
+                  "cbd-unapproved-substances",
+                  "request-review"
+                ],
+                "merchant_request": "Merchant wants to appeal the product disapproval for the CBD Infused Lavender Relaxation Candle (HG-023).",
+                "issues_found": [
+                  "restricted_product: HG-023"
+                ],
+                "reason": "policy_appeal",
+                "already_tried": [
+                  "Checked feed and listed disapproved product groups.",
+                  "Merchant asked to appeal disapproval for CBD Infused Lavender Relaxation Candle (HG-023)."
+                ],
+                "merchant_reasons": [
+                  "Says the CBD candle is just a candle",
+                  "Thinks the decision is wrong and wants to appeal it"
+                ]
+              },
+              "response": {
+                "status": "created",
+                "case_id": "CASE-20261007-141434-288c89"
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 4,
+            "input_tokens": 24469,
+            "cached_tokens": 0,
+            "output_tokens": 2216
+          }
+        }
+      ],
+      "handoff_cases": [
+        {
+          "case_id": "CASE-20261007-141434-288c89",
+          "store_id": "sample-store",
+          "created_at": "2026-10-07T14:14:34.706650Z",
+          "reason": "policy_appeal",
+          "issues_found": [
+            "restricted_product: HG-023"
+          ],
+          "already_tried": [
+            "Checked feed and listed disapproved product groups.",
+            "Merchant asked to appeal disapproval for CBD Infused Lavender Relaxation Candle (HG-023)."
+          ],
+          "merchant_request": "Merchant wants to appeal the product disapproval for the CBD Infused Lavender Relaxation Candle (HG-023).",
+          "merchant_reasons": [
+            "Says the CBD candle is just a candle",
+            "Thinks the decision is wrong and wants to appeal it"
+          ],
+          "suggested_next_step": "Review the policy appeal request for product HG-023 under the healthcare and medicines policy.",
+          "cited_doc_ids": [
+            "cbd-unapproved-substances",
+            "request-review"
+          ]
+        }
+      ],
+      "usage": {
+        "model_calls": 7,
+        "input_tokens": 33450,
+        "cached_tokens": 0,
+        "output_tokens": 4124
+      },
+      "cost_usd": 0.0405525,
+      "seconds": 32.8
+    },
+    "appeal-cbd-first-message": {
+      "case_id": "appeal-cbd-first-message",
+      "category": "handoff_appeal",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Google rejected my CBD lavender candle. I disagree with that and want to appeal.",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD), and products on this list are not allowed in Shopping ads or free listings. This is a policy decision and not a data problem, so it cannot be fixed by editing product details. Whether a specific product is allowed is decided by Google's policy team under the healthcare and medicines policy. For more details, see [CBD and other unapproved substances](https://support.google.com/merchants/answer/6165956).\n\nPlease note that you may only get one chance to disagree before a waiting period starts, as outlined in [Requesting a review or appealing a decision](https://support.google.com/merchants/answer/13585221).\n\nSince you disagree with this rejection and wish to appeal, this needs a specialist, so I've passed it on. Your case number is **CASE-20261007-141457-118520**. A specialist will review it, and your case already includes everything from our conversation, so you won't need to repeat yourself.",
+          "tool_calls": [
+            {
+              "name": "check_feed",
+              "args": {},
+              "response": {
+                "store_id": "sample-store",
+                "store_name": "Hearth & Hollow",
+                "account_status": "active",
+                "suspension_reason": "",
+                "total_products": 30,
+                "products_with_issues": 18,
+                "disapproved_products": 13,
+                "limited_products": 5,
+                "issue_groups": [
+                  {
+                    "issue_type": "invalid_image",
+                    "severity": "disapproved",
+                    "field": "image_link",
+                    "count": 3,
+                    "products": [
+                      {
+                        "id": "HG-006",
+                        "title": "Ceramic Table Lamp, Matte White",
+                        "detail": "No image link is set."
+                      },
+                      {
+                        "id": "HG-013",
+                        "title": "Walnut Wall Shelf, 24 inch",
+                        "detail": "Image link 'https://cdn.hearthandhollow.example/img/placeholder.png' points to a placeholder, not a real product photo."
+                      },
+                      {
+                        "id": "HG-027",
+                        "title": "Woven Wall Hanging, Cream and Rust",
+                        "detail": "No image link is set."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "price_mismatch",
+                    "severity": "disapproved",
+                    "field": "price",
+                    "count": 3,
+                    "products": [
+                      {
+                        "id": "HG-004",
+                        "title": "Waffle Weave Bath Towel, Sage",
+                        "detail": "Feed price is 32.00 USD but the product page shows 36.00 USD."
+                      },
+                      {
+                        "id": "HG-015",
+                        "title": "Pour Over Coffee Set, Glass and Copper",
+                        "detail": "Feed price is 58.00 USD but the product page shows 64.00 USD."
+                      },
+                      {
+                        "id": "HG-021",
+                        "title": "Stainless Steel Kettle, 1.7 L",
+                        "detail": "Feed price is 48.00 USD but the product page shows 44.00 USD."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "availability_mismatch",
+                    "severity": "disapproved",
+                    "field": "availability",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-012",
+                        "title": "Velvet Cushion Cover, 18 x 18, Rust",
+                        "detail": "Feed says in_stock but the product page says out_of_stock."
+                      },
+                      {
+                        "id": "HG-025",
+                        "title": "Linen Duvet Cover, Queen, Terracotta",
+                        "detail": "Feed says in_stock but the product page says preorder."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "missing_shipping",
+                    "severity": "disapproved",
+                    "field": "shipping",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-019",
+                        "title": "Marble Serving Board, White",
+                        "detail": "No shipping cost is set for this product."
+                      },
+                      {
+                        "id": "HG-030",
+                        "title": "Outdoor String Lights, 48 ft",
+                        "detail": "No shipping cost is set for this product."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "title_too_long",
+                    "severity": "disapproved",
+                    "field": "title",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-009",
+                        "title": "Handwoven Seagrass Storage Basket with Leather Handles for Living Room, Bedroom, Nursery, Laundry and Bathroom Organization, Extra Large 16 x 12 x 10 inch, Natural Color",
+                        "detail": "Title is 169 characters; the limit is 150."
+                      },
+                      {
+                        "id": "HG-017",
+                        "title": "Premium Long Staple Egyptian Cotton Sateen Sheet Set, Queen Size, 400 Thread Count, Deep Pocket Fitted Sheet, Flat Sheet and Two Pillowcases, Hotel Quality Bedding in Dove Grey",
+                        "detail": "Title is 176 characters; the limit is 150."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "restricted_product",
+                    "severity": "disapproved",
+                    "field": "product_type",
+                    "count": 1,
+                    "products": [
+                      {
+                        "id": "HG-023",
+                        "title": "CBD Infused Lavender Relaxation Candle, 6 oz",
+                        "detail": "Mentions 'CBD', which is a restricted product category."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "missing_gtin",
+                    "severity": "limited",
+                    "field": "gtin",
+                    "count": 6,
+                    "products": [
+                      {
+                        "id": "HG-002",
+                        "title": "Linen Napkins, Set of 4, Natural",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-007",
+                        "title": "Wool Throw Blanket, Charcoal Herringbone",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-011",
+                        "title": "Enamel Dutch Oven, 5.5 qt, Forest Green",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-019",
+                        "title": "Marble Serving Board, White",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-024",
+                        "title": "Recycled Glass Vase, Amber",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-028",
+                        "title": "Copper Measuring Cups, Set of 4",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "restricted_product"
+              },
+              "response": {
+                "query": "restricted_product",
+                "results": [
+                  {
+                    "doc_id": "cbd-unapproved-substances",
+                    "title": "CBD and other unapproved substances",
+                    "source_url": "https://support.google.com/merchants/answer/6165956",
+                    "passage": "Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD). Products on this list are not allowed in Shopping ads or free listings.",
+                    "score": 7
+                  },
+                  {
+                    "doc_id": "cbd-unapproved-substances",
+                    "title": "CBD and other unapproved substances",
+                    "source_url": "https://support.google.com/merchants/answer/6165956",
+                    "passage": "This is a policy decision, not a data problem, so it cannot be fixed by editing product details. Whether a specific product is allowed is decided by Google's policy team under the healthcare and medicines policy.",
+                    "score": 7
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "request review"
+              },
+              "response": {
+                "query": "request review",
+                "results": [
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "When a product or account has an issue, Merchant Center may offer a \"Request review\" option. For product issues it is in the product's details on the Needs attention tab. For account issues it is under View setup and policy issues.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "You may only get one chance to disagree before a waiting period starts, so it is worth getting the request right.",
+                    "score": 5
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "A review can take up to 7 business days. Your ads may not show while the account or products are under review.",
+                    "score": 5
+                  }
+                ]
+              }
+            },
+            {
+              "name": "create_handoff_case",
+              "args": {
+                "merchant_request": "The merchant wants to appeal the disapproval of their CBD lavender candle.",
+                "reason": "policy_appeal",
+                "merchant_reasons": [
+                  "Disagrees with Google rejecting their CBD lavender candle and wants to appeal."
+                ],
+                "suggested_next_step": "Review the policy decision for product HG-023 and assist the merchant with the appeal process.",
+                "already_tried": [
+                  "Checked store feed and found product HG-023 disapproved for restricted product policy (CBD)."
+                ],
+                "issues_found": [
+                  "restricted_product: HG-023"
+                ],
+                "cited_doc_ids": [
+                  "cbd-unapproved-substances",
+                  "request-review"
+                ]
+              },
+              "response": {
+                "status": "created",
+                "case_id": "CASE-20261007-141457-118520"
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 5,
+            "input_tokens": 18278,
+            "cached_tokens": 0,
+            "output_tokens": 2177
+          }
+        }
+      ],
+      "handoff_cases": [
+        {
+          "case_id": "CASE-20261007-141457-118520",
+          "store_id": "sample-store",
+          "created_at": "2026-10-07T14:14:57.182347Z",
+          "reason": "policy_appeal",
+          "issues_found": [
+            "restricted_product: HG-023"
+          ],
+          "already_tried": [
+            "Checked store feed and found product HG-023 disapproved for restricted product policy (CBD)."
+          ],
+          "merchant_request": "The merchant wants to appeal the disapproval of their CBD lavender candle.",
+          "merchant_reasons": [
+            "Disagrees with Google rejecting their CBD lavender candle and wants to appeal."
+          ],
+          "suggested_next_step": "Review the policy decision for product HG-023 and assist the merchant with the appeal process.",
+          "cited_doc_ids": [
+            "cbd-unapproved-substances",
+            "request-review"
+          ]
+        }
+      ],
+      "usage": {
+        "model_calls": 5,
+        "input_tokens": 18278,
+        "cached_tokens": 0,
+        "output_tokens": 2177
+      },
+      "cost_usd": 0.02187225,
+      "seconds": 19.9
+    },
+    "appeal-question-only-no-handoff": {
+      "case_id": "appeal-question-only-no-handoff",
+      "category": "handoff_appeal",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Why can't I sell my CBD candle on Google?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "Across your store, **13 products are disapproved**. The main reasons, from largest group to smallest, are:\n1. **Invalid image** (3 products)\n2. **Price mismatch** (3 products)\n3. **Availability mismatch** (2 products)\n4. **Missing shipping** (2 products)\n5. **Title too long** (2 products)\n6. **Restricted product** (1 product)\n\nAdditionally, **5 products have limited-reach warnings**.\n\n---\n\n### Why your CBD candle is disapproved\n* **CBD Infused Lavender Relaxation Candle, 6 oz** (ID: `HG-023`)\nGoogle's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD). Products on this list are not allowed in Shopping ads or free listings ([CBD and other unapproved substances](https://support.google.com/merchants/answer/6165956)).\n\nThis is a policy decision, not a data problem, so it cannot be fixed by editing product details ([CBD and other unapproved substances](https://support.google.com/merchants/answer/6165956)). If you disagree with this policy decision, an appeal is possible. You may only get one chance to disagree before a waiting period starts ([Requesting a review or appealing a decision](https://support.google.com/merchants/answer/13585221)). Please let me know if you would like to request an appeal.\n\n---\n\n### Biggest disapproval group: Invalid image (3 products)\nEvery product needs a main image link that is a full web address starting with `http://` or `https://`, and the image must show the actual product rather than a placeholder or generic graphic ([Product image link](https://support.google.com/merchants/answer/6324350)).\n\nHere are the affected products in this group:\n* **Ceramic Table Lamp, Matte White** (ID: `HG-006`): No image link is set. Provide a full URL to a photo of the product.\n* **Walnut Wall Shelf, 24 inch** (ID: `HG-013`): Link points to a placeholder image (`placeholder.png`). Replace it with a direct photo of the product.\n* **Woven Wall Hanging, Cream and Rust** (ID: `HG-027`): No image link is set. Provide a full URL to a photo of the product.\n\nWould you like to fix these image links first, or would you like to move on to the next issue?",
+          "tool_calls": [
+            {
+              "name": "check_feed",
+              "args": {},
+              "response": {
+                "store_id": "sample-store",
+                "store_name": "Hearth & Hollow",
+                "account_status": "active",
+                "suspension_reason": "",
+                "total_products": 30,
+                "products_with_issues": 18,
+                "disapproved_products": 13,
+                "limited_products": 5,
+                "issue_groups": [
+                  {
+                    "issue_type": "invalid_image",
+                    "severity": "disapproved",
+                    "field": "image_link",
+                    "count": 3,
+                    "products": [
+                      {
+                        "id": "HG-006",
+                        "title": "Ceramic Table Lamp, Matte White",
+                        "detail": "No image link is set."
+                      },
+                      {
+                        "id": "HG-013",
+                        "title": "Walnut Wall Shelf, 24 inch",
+                        "detail": "Image link 'https://cdn.hearthandhollow.example/img/placeholder.png' points to a placeholder, not a real product photo."
+                      },
+                      {
+                        "id": "HG-027",
+                        "title": "Woven Wall Hanging, Cream and Rust",
+                        "detail": "No image link is set."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "price_mismatch",
+                    "severity": "disapproved",
+                    "field": "price",
+                    "count": 3,
+                    "products": [
+                      {
+                        "id": "HG-004",
+                        "title": "Waffle Weave Bath Towel, Sage",
+                        "detail": "Feed price is 32.00 USD but the product page shows 36.00 USD."
+                      },
+                      {
+                        "id": "HG-015",
+                        "title": "Pour Over Coffee Set, Glass and Copper",
+                        "detail": "Feed price is 58.00 USD but the product page shows 64.00 USD."
+                      },
+                      {
+                        "id": "HG-021",
+                        "title": "Stainless Steel Kettle, 1.7 L",
+                        "detail": "Feed price is 48.00 USD but the product page shows 44.00 USD."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "availability_mismatch",
+                    "severity": "disapproved",
+                    "field": "availability",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-012",
+                        "title": "Velvet Cushion Cover, 18 x 18, Rust",
+                        "detail": "Feed says in_stock but the product page says out_of_stock."
+                      },
+                      {
+                        "id": "HG-025",
+                        "title": "Linen Duvet Cover, Queen, Terracotta",
+                        "detail": "Feed says in_stock but the product page says preorder."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "missing_shipping",
+                    "severity": "disapproved",
+                    "field": "shipping",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-019",
+                        "title": "Marble Serving Board, White",
+                        "detail": "No shipping cost is set for this product."
+                      },
+                      {
+                        "id": "HG-030",
+                        "title": "Outdoor String Lights, 48 ft",
+                        "detail": "No shipping cost is set for this product."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "title_too_long",
+                    "severity": "disapproved",
+                    "field": "title",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-009",
+                        "title": "Handwoven Seagrass Storage Basket with Leather Handles for Living Room, Bedroom, Nursery, Laundry and Bathroom Organization, Extra Large 16 x 12 x 10 inch, Natural Color",
+                        "detail": "Title is 169 characters; the limit is 150."
+                      },
+                      {
+                        "id": "HG-017",
+                        "title": "Premium Long Staple Egyptian Cotton Sateen Sheet Set, Queen Size, 400 Thread Count, Deep Pocket Fitted Sheet, Flat Sheet and Two Pillowcases, Hotel Quality Bedding in Dove Grey",
+                        "detail": "Title is 176 characters; the limit is 150."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "restricted_product",
+                    "severity": "disapproved",
+                    "field": "product_type",
+                    "count": 1,
+                    "products": [
+                      {
+                        "id": "HG-023",
+                        "title": "CBD Infused Lavender Relaxation Candle, 6 oz",
+                        "detail": "Mentions 'CBD', which is a restricted product category."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "missing_gtin",
+                    "severity": "limited",
+                    "field": "gtin",
+                    "count": 6,
+                    "products": [
+                      {
+                        "id": "HG-002",
+                        "title": "Linen Napkins, Set of 4, Natural",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-007",
+                        "title": "Wool Throw Blanket, Charcoal Herringbone",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-011",
+                        "title": "Enamel Dutch Oven, 5.5 qt, Forest Green",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-019",
+                        "title": "Marble Serving Board, White",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-024",
+                        "title": "Recycled Glass Vase, Amber",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-028",
+                        "title": "Copper Measuring Cups, Set of 4",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "restricted_product CBD"
+              },
+              "response": {
+                "query": "restricted_product CBD",
+                "results": [
+                  {
+                    "doc_id": "cbd-unapproved-substances",
+                    "title": "CBD and other unapproved substances",
+                    "source_url": "https://support.google.com/merchants/answer/6165956",
+                    "passage": "Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD). Products on this list are not allowed in Shopping ads or free listings.",
+                    "score": 10
+                  },
+                  {
+                    "doc_id": "cbd-unapproved-substances",
+                    "title": "CBD and other unapproved substances",
+                    "source_url": "https://support.google.com/merchants/answer/6165956",
+                    "passage": "This is a policy decision, not a data problem, so it cannot be fixed by editing product details. Whether a specific product is allowed is decided by Google's policy team under the healthcare and medicines policy.",
+                    "score": 9
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "request review policy appeal"
+              },
+              "response": {
+                "query": "request review policy appeal",
+                "results": [
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "When a product or account has an issue, Merchant Center may offer a \"Request review\" option. For product issues it is in the product's details on the Needs attention tab. For account issues it is under View setup and policy issues.",
+                    "score": 14
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "You may only get one chance to disagree before a waiting period starts, so it is worth getting the request right.",
+                    "score": 12
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "A review can take up to 7 business days. Your ads may not show while the account or products are under review.",
+                    "score": 12
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "invalid_image image_link"
+              },
+              "response": {
+                "query": "invalid_image image_link",
+                "results": [
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "Every product needs a main image link. Without one the product cannot show.",
+                    "score": 11
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "The link must be a full web address that starts with http:// or https://.",
+                    "score": 10
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "The image must show the actual product. Placeholder images, generic images and graphics that do not show the product are not allowed.",
+                    "score": 10
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 5,
+            "input_tokens": 20221,
+            "cached_tokens": 0,
+            "output_tokens": 3893
+          }
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 5,
+        "input_tokens": 20221,
+        "cached_tokens": 0,
+        "output_tokens": 3893
+      },
+      "cost_usd": 0.0297645,
+      "seconds": 27.4
+    },
+    "appeal-records-merchant-reason": {
+      "case_id": "appeal-records-merchant-reason",
+      "category": "handoff_appeal",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Why was my CBD candle disapproved?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "You have 13 disapproved products across your store, along with 5 products that have limited-reach warnings. \n\nHere is a summary of the disapproval reasons, starting with the largest groups:\n- **Invalid image links:** 3 products\n- **Price mismatches:** 3 products\n- **Availability mismatches:** 2 products\n- **Missing shipping costs:** 2 products\n- **Titles too long:** 2 products\n- **Restricted product policy:** 1 product\n\n---\n\n### Why your CBD candle was disapproved\n\nYour product **CBD Infused Lavender Relaxation Candle, 6 oz** (ID: `HG-023`) was disapproved under Google's restricted product policy.\n\nAccording to [CBD and other unapproved substances](https://support.google.com/merchants/answer/6165956), Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD), and products on this list are not allowed in Shopping ads or free listings. This is a policy decision rather than a data error, so it cannot be fixed by editing the product's details.\n\nIf you believe this decision is incorrect, an appeal is possible. As noted in [Requesting a review or appealing a decision](https://support.google.com/merchants/answer/13585221), you may only get one chance to disagree before a waiting period starts. Please let me know if you would like me to pass your case to a specialist to appeal this disapproval.\n\n---\n\n### Biggest disapproval group: Invalid image links\n\nThe largest group of disapprovals involves missing or invalid product images:\n\n1. **Ceramic Table Lamp, Matte White** (ID: `HG-006`) – No image link is set.\n2. **Walnut Wall Shelf, 24 inch** (ID: `HG-013`) – Image link points to a placeholder image, not a real product photo.\n3. **Woven Wall Hanging, Cream and Rust** (ID: `HG-027`) – No image link is set.\n\n**What to fix:** According to [Product image link](https://support.google.com/merchants/answer/6324350), every product needs a main image link that shows the actual product. Placeholder images are not allowed. Set a main image link pointing to a real photo for each item.\n\nWould you like to address these images first, or move on to the next issue group?",
+          "tool_calls": [
+            {
+              "name": "check_feed",
+              "args": {},
+              "response": {
+                "store_id": "sample-store",
+                "store_name": "Hearth & Hollow",
+                "account_status": "active",
+                "suspension_reason": "",
+                "total_products": 30,
+                "products_with_issues": 18,
+                "disapproved_products": 13,
+                "limited_products": 5,
+                "issue_groups": [
+                  {
+                    "issue_type": "invalid_image",
+                    "severity": "disapproved",
+                    "field": "image_link",
+                    "count": 3,
+                    "products": [
+                      {
+                        "id": "HG-006",
+                        "title": "Ceramic Table Lamp, Matte White",
+                        "detail": "No image link is set."
+                      },
+                      {
+                        "id": "HG-013",
+                        "title": "Walnut Wall Shelf, 24 inch",
+                        "detail": "Image link 'https://cdn.hearthandhollow.example/img/placeholder.png' points to a placeholder, not a real product photo."
+                      },
+                      {
+                        "id": "HG-027",
+                        "title": "Woven Wall Hanging, Cream and Rust",
+                        "detail": "No image link is set."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "price_mismatch",
+                    "severity": "disapproved",
+                    "field": "price",
+                    "count": 3,
+                    "products": [
+                      {
+                        "id": "HG-004",
+                        "title": "Waffle Weave Bath Towel, Sage",
+                        "detail": "Feed price is 32.00 USD but the product page shows 36.00 USD."
+                      },
+                      {
+                        "id": "HG-015",
+                        "title": "Pour Over Coffee Set, Glass and Copper",
+                        "detail": "Feed price is 58.00 USD but the product page shows 64.00 USD."
+                      },
+                      {
+                        "id": "HG-021",
+                        "title": "Stainless Steel Kettle, 1.7 L",
+                        "detail": "Feed price is 48.00 USD but the product page shows 44.00 USD."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "availability_mismatch",
+                    "severity": "disapproved",
+                    "field": "availability",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-012",
+                        "title": "Velvet Cushion Cover, 18 x 18, Rust",
+                        "detail": "Feed says in_stock but the product page says out_of_stock."
+                      },
+                      {
+                        "id": "HG-025",
+                        "title": "Linen Duvet Cover, Queen, Terracotta",
+                        "detail": "Feed says in_stock but the product page says preorder."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "missing_shipping",
+                    "severity": "disapproved",
+                    "field": "shipping",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-019",
+                        "title": "Marble Serving Board, White",
+                        "detail": "No shipping cost is set for this product."
+                      },
+                      {
+                        "id": "HG-030",
+                        "title": "Outdoor String Lights, 48 ft",
+                        "detail": "No shipping cost is set for this product."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "title_too_long",
+                    "severity": "disapproved",
+                    "field": "title",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-009",
+                        "title": "Handwoven Seagrass Storage Basket with Leather Handles for Living Room, Bedroom, Nursery, Laundry and Bathroom Organization, Extra Large 16 x 12 x 10 inch, Natural Color",
+                        "detail": "Title is 169 characters; the limit is 150."
+                      },
+                      {
+                        "id": "HG-017",
+                        "title": "Premium Long Staple Egyptian Cotton Sateen Sheet Set, Queen Size, 400 Thread Count, Deep Pocket Fitted Sheet, Flat Sheet and Two Pillowcases, Hotel Quality Bedding in Dove Grey",
+                        "detail": "Title is 176 characters; the limit is 150."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "restricted_product",
+                    "severity": "disapproved",
+                    "field": "product_type",
+                    "count": 1,
+                    "products": [
+                      {
+                        "id": "HG-023",
+                        "title": "CBD Infused Lavender Relaxation Candle, 6 oz",
+                        "detail": "Mentions 'CBD', which is a restricted product category."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "missing_gtin",
+                    "severity": "limited",
+                    "field": "gtin",
+                    "count": 6,
+                    "products": [
+                      {
+                        "id": "HG-002",
+                        "title": "Linen Napkins, Set of 4, Natural",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-007",
+                        "title": "Wool Throw Blanket, Charcoal Herringbone",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-011",
+                        "title": "Enamel Dutch Oven, 5.5 qt, Forest Green",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-019",
+                        "title": "Marble Serving Board, White",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-024",
+                        "title": "Recycled Glass Vase, Amber",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-028",
+                        "title": "Copper Measuring Cups, Set of 4",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "restricted_product CBD"
+              },
+              "response": {
+                "query": "restricted_product CBD",
+                "results": [
+                  {
+                    "doc_id": "cbd-unapproved-substances",
+                    "title": "CBD and other unapproved substances",
+                    "source_url": "https://support.google.com/merchants/answer/6165956",
+                    "passage": "Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD). Products on this list are not allowed in Shopping ads or free listings.",
+                    "score": 10
+                  },
+                  {
+                    "doc_id": "cbd-unapproved-substances",
+                    "title": "CBD and other unapproved substances",
+                    "source_url": "https://support.google.com/merchants/answer/6165956",
+                    "passage": "This is a policy decision, not a data problem, so it cannot be fixed by editing product details. Whether a specific product is allowed is decided by Google's policy team under the healthcare and medicines policy.",
+                    "score": 9
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "request review appeal"
+              },
+              "response": {
+                "query": "request review appeal",
+                "results": [
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "When a product or account has an issue, Merchant Center may offer a \"Request review\" option. For product issues it is in the product's details on the Needs attention tab. For account issues it is under View setup and policy issues.",
+                    "score": 13
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "You may only get one chance to disagree before a waiting period starts, so it is worth getting the request right.",
+                    "score": 12
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "A review can take up to 7 business days. Your ads may not show while the account or products are under review.",
+                    "score": 12
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "invalid_image"
+              },
+              "response": {
+                "query": "invalid_image",
+                "results": [
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "Every product needs a main image link. Without one the product cannot show.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "The image must show the actual product. Placeholder images, generic images and graphics that do not show the product are not allowed.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "Images must be at least 500 by 500 pixels, and around 1500 by 1500 pixels or larger is recommended. Do not add promotional text, logos, watermarks or other overlays to the main image.",
+                    "score": 8
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 5,
+            "input_tokens": 19598,
+            "cached_tokens": 0,
+            "output_tokens": 4044
+          }
+        },
+        {
+          "merchant": "But it only has trace amounts of CBD and it's a candle, nobody eats it. I want this reviewed by someone.",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "This needs a specialist, so I've passed it on. \n\nYour case number is **CASE-20261007-141607-23463b**. \n\nA specialist will review your request. Your case already includes all the details from this conversation—including that the product is a candle and only contains trace amounts of CBD—so you won't need to repeat yourself.",
+          "tool_calls": [
+            {
+              "name": "create_handoff_case",
+              "args": {
+                "merchant_request": "Merchant wants a specialist to review and appeal the disapproval of their CBD candle.",
+                "suggested_next_step": "Review product HG-023 (CBD Infused Lavender Relaxation Candle, 6 oz) for policy appeal.",
+                "merchant_reasons": [
+                  "States the product only has trace amounts of CBD.",
+                  "Notes that it is a candle and nobody eats it."
+                ],
+                "issues_found": [
+                  "restricted_product: HG-023"
+                ],
+                "already_tried": [
+                  "Checked product feed and identified HG-023 disapproved for restricted product policy (CBD).",
+                  "Explained the CBD policy and review/appeal process."
+                ],
+                "reason": "policy_appeal",
+                "cited_doc_ids": [
+                  "cbd-unapproved-substances",
+                  "request-review"
+                ]
+              },
+              "response": {
+                "status": "created",
+                "case_id": "CASE-20261007-141607-23463b"
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 2,
+            "input_tokens": 16779,
+            "cached_tokens": 0,
+            "output_tokens": 1201
+          }
+        }
+      ],
+      "handoff_cases": [
+        {
+          "case_id": "CASE-20261007-141607-23463b",
+          "store_id": "sample-store",
+          "created_at": "2026-10-07T14:16:07.219190Z",
+          "reason": "policy_appeal",
+          "issues_found": [
+            "restricted_product: HG-023"
+          ],
+          "already_tried": [
+            "Checked product feed and identified HG-023 disapproved for restricted product policy (CBD).",
+            "Explained the CBD policy and review/appeal process."
+          ],
+          "merchant_request": "Merchant wants a specialist to review and appeal the disapproval of their CBD candle.",
+          "merchant_reasons": [
+            "States the product only has trace amounts of CBD.",
+            "Notes that it is a candle and nobody eats it."
+          ],
+          "suggested_next_step": "Review product HG-023 (CBD Infused Lavender Relaxation Candle, 6 oz) for policy appeal.",
+          "cited_doc_ids": [
+            "cbd-unapproved-substances",
+            "request-review"
+          ]
+        }
+      ],
+      "usage": {
+        "model_calls": 7,
+        "input_tokens": 36377,
+        "cached_tokens": 0,
+        "output_tokens": 5245
+      },
+      "cost_usd": 0.0469515,
+      "seconds": 41.8
+    },
+    "multi-cbd-edit-not-a-fix": {
+      "case_id": "multi-cbd-edit-not-a-fix",
+      "category": "multi_issue",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "What's wrong with my products?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "You have **13 disapproved products** and **5 products with limited-reach warnings**.\n\n### Summary of disapprovals:\n1. **Invalid image links:** 3 products\n2. **Price mismatches:** 3 products\n3. **Availability mismatches:** 2 products\n4. **Missing shipping information:** 2 products\n5. **Title too long:** 2 products\n6. **Restricted product:** 1 product\n\nAdditionally, 5 products have limited-reach warnings (for missing barcode numbers).\n\n---\n\n### First issue to fix: Invalid Image Link (3 products)\n\nEvery product needs a main image link that shows the actual product. Placeholder images and missing links are not allowed.\n\nHere are the affected products:\n- **Ceramic Table Lamp, Matte White** (ID: `HG-006`) – No image link is set.\n- **Walnut Wall Shelf, 24 inch** (ID: `HG-013`) – The image link points to a placeholder image instead of a real product photo.\n- **Woven Wall Hanging, Cream and Rust** (ID: `HG-027`) – No image link is set.\n\n**What to change:** Add a valid link to a real photo showing the actual product for each of these items.\n\nReference: [Product image link](https://support.google.com/merchants/answer/6324350)\n\nWould you like to move on to the next issue?",
+          "tool_calls": [
+            {
+              "name": "check_feed",
+              "args": {},
+              "response": {
+                "store_id": "sample-store",
+                "store_name": "Hearth & Hollow",
+                "account_status": "active",
+                "suspension_reason": "",
+                "total_products": 30,
+                "products_with_issues": 18,
+                "disapproved_products": 13,
+                "limited_products": 5,
+                "issue_groups": [
+                  {
+                    "issue_type": "invalid_image",
+                    "severity": "disapproved",
+                    "field": "image_link",
+                    "count": 3,
+                    "products": [
+                      {
+                        "id": "HG-006",
+                        "title": "Ceramic Table Lamp, Matte White",
+                        "detail": "No image link is set."
+                      },
+                      {
+                        "id": "HG-013",
+                        "title": "Walnut Wall Shelf, 24 inch",
+                        "detail": "Image link 'https://cdn.hearthandhollow.example/img/placeholder.png' points to a placeholder, not a real product photo."
+                      },
+                      {
+                        "id": "HG-027",
+                        "title": "Woven Wall Hanging, Cream and Rust",
+                        "detail": "No image link is set."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "price_mismatch",
+                    "severity": "disapproved",
+                    "field": "price",
+                    "count": 3,
+                    "products": [
+                      {
+                        "id": "HG-004",
+                        "title": "Waffle Weave Bath Towel, Sage",
+                        "detail": "Feed price is 32.00 USD but the product page shows 36.00 USD."
+                      },
+                      {
+                        "id": "HG-015",
+                        "title": "Pour Over Coffee Set, Glass and Copper",
+                        "detail": "Feed price is 58.00 USD but the product page shows 64.00 USD."
+                      },
+                      {
+                        "id": "HG-021",
+                        "title": "Stainless Steel Kettle, 1.7 L",
+                        "detail": "Feed price is 48.00 USD but the product page shows 44.00 USD."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "availability_mismatch",
+                    "severity": "disapproved",
+                    "field": "availability",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-012",
+                        "title": "Velvet Cushion Cover, 18 x 18, Rust",
+                        "detail": "Feed says in_stock but the product page says out_of_stock."
+                      },
+                      {
+                        "id": "HG-025",
+                        "title": "Linen Duvet Cover, Queen, Terracotta",
+                        "detail": "Feed says in_stock but the product page says preorder."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "missing_shipping",
+                    "severity": "disapproved",
+                    "field": "shipping",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-019",
+                        "title": "Marble Serving Board, White",
+                        "detail": "No shipping cost is set for this product."
+                      },
+                      {
+                        "id": "HG-030",
+                        "title": "Outdoor String Lights, 48 ft",
+                        "detail": "No shipping cost is set for this product."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "title_too_long",
+                    "severity": "disapproved",
+                    "field": "title",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-009",
+                        "title": "Handwoven Seagrass Storage Basket with Leather Handles for Living Room, Bedroom, Nursery, Laundry and Bathroom Organization, Extra Large 16 x 12 x 10 inch, Natural Color",
+                        "detail": "Title is 169 characters; the limit is 150."
+                      },
+                      {
+                        "id": "HG-017",
+                        "title": "Premium Long Staple Egyptian Cotton Sateen Sheet Set, Queen Size, 400 Thread Count, Deep Pocket Fitted Sheet, Flat Sheet and Two Pillowcases, Hotel Quality Bedding in Dove Grey",
+                        "detail": "Title is 176 characters; the limit is 150."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "restricted_product",
+                    "severity": "disapproved",
+                    "field": "product_type",
+                    "count": 1,
+                    "products": [
+                      {
+                        "id": "HG-023",
+                        "title": "CBD Infused Lavender Relaxation Candle, 6 oz",
+                        "detail": "Mentions 'CBD', which is a restricted product category."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "missing_gtin",
+                    "severity": "limited",
+                    "field": "gtin",
+                    "count": 6,
+                    "products": [
+                      {
+                        "id": "HG-002",
+                        "title": "Linen Napkins, Set of 4, Natural",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-007",
+                        "title": "Wool Throw Blanket, Charcoal Herringbone",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-011",
+                        "title": "Enamel Dutch Oven, 5.5 qt, Forest Green",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-019",
+                        "title": "Marble Serving Board, White",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-024",
+                        "title": "Recycled Glass Vase, Amber",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-028",
+                        "title": "Copper Measuring Cups, Set of 4",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "invalid_image"
+              },
+              "response": {
+                "query": "invalid_image",
+                "results": [
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "Every product needs a main image link. Without one the product cannot show.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "The image must show the actual product. Placeholder images, generic images and graphics that do not show the product are not allowed.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "Images must be at least 500 by 500 pixels, and around 1500 by 1500 pixels or larger is recommended. Do not add promotional text, logos, watermarks or other overlays to the main image.",
+                    "score": 8
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 3,
+            "input_tokens": 9014,
+            "cached_tokens": 0,
+            "output_tokens": 1885
+          }
+        },
+        {
+          "merchant": "Can I just edit the CBD candle's description to get it approved?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "No, editing the product details will not fix this issue.\n\nGoogle's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD), and products on this list are not allowed in Shopping ads or free listings. Because this is a policy decision rather than a data problem, it cannot be resolved by editing product details. \n\nReference: [CBD and other unapproved substances](https://support.google.com/merchants/answer/6165956)\n\nIf you disagree with the decision, an appeal is possible. Please note that you may only get one chance to disagree before a waiting period starts, so it is worth getting the request right.\n\nReference: [Requesting a review or appealing a decision](https://support.google.com/merchants/answer/13585221)\n\nWould you like me to pass this to a human specialist to start an appeal, or would you like to move on to fixing the other product issues?",
+          "tool_calls": [
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "restricted_product"
+              },
+              "response": {
+                "query": "restricted_product",
+                "results": [
+                  {
+                    "doc_id": "cbd-unapproved-substances",
+                    "title": "CBD and other unapproved substances",
+                    "source_url": "https://support.google.com/merchants/answer/6165956",
+                    "passage": "Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD). Products on this list are not allowed in Shopping ads or free listings.",
+                    "score": 7
+                  },
+                  {
+                    "doc_id": "cbd-unapproved-substances",
+                    "title": "CBD and other unapproved substances",
+                    "source_url": "https://support.google.com/merchants/answer/6165956",
+                    "passage": "This is a policy decision, not a data problem, so it cannot be fixed by editing product details. Whether a specific product is allowed is decided by Google's policy team under the healthcare and medicines policy.",
+                    "score": 7
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "request review"
+              },
+              "response": {
+                "query": "request review",
+                "results": [
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "When a product or account has an issue, Merchant Center may offer a \"Request review\" option. For product issues it is in the product's details on the Needs attention tab. For account issues it is under View setup and policy issues.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "You may only get one chance to disagree before a waiting period starts, so it is worth getting the request right.",
+                    "score": 5
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "A review can take up to 7 business days. Your ads may not show while the account or products are under review.",
+                    "score": 5
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 3,
+            "input_tokens": 17453,
+            "cached_tokens": 0,
+            "output_tokens": 1401
+          }
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 6,
+        "input_tokens": 26467,
+        "cached_tokens": 0,
+        "output_tokens": 3286
+      },
+      "cost_usd": 0.03217275,
+      "seconds": 28.9
+    },
+    "multi-fix-two-in-a-row": {
+      "case_id": "multi-fix-two-in-a-row",
+      "category": "multi_issue",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "What's wrong with my products?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "You have **13 disapproved products** that cannot show to shoppers. Here is a summary of the main reasons, ordered by the largest groups:\n\n* **Invalid image**: 3 products\n* **Price mismatch**: 3 products\n* **Availability mismatch**: 2 products\n* **Missing shipping**: 2 products\n* **Title too long**: 2 products\n* **Restricted product**: 1 product\n\nAdditionally, **5 products** have limited-reach warnings.\n\n---\n\n### Issue 1: Invalid Product Images (3 products)\n\nEvery product needs a main image link, and the image must show the actual product. Placeholder images are not allowed.\n\nHere are the affected products:\n* **Ceramic Table Lamp, Matte White** (ID: `HG-006`): No image link is set.\n* **Walnut Wall Shelf, 24 inch** (ID: `HG-013`): The link points to a placeholder image rather than a real product photo.\n* **Woven Wall Hanging, Cream and Rust** (ID: `HG-027`): No image link is set.\n\n**How to fix:**\nProvide a link to a real photo of the product for each item. For more details, see the [Product image link](https://support.google.com/merchants/answer/6324350) documentation.\n\nWould you like to move on to the next issue?",
+          "tool_calls": [
+            {
+              "name": "check_feed",
+              "args": {},
+              "response": {
+                "store_id": "sample-store",
+                "store_name": "Hearth & Hollow",
+                "account_status": "active",
+                "suspension_reason": "",
+                "total_products": 30,
+                "products_with_issues": 18,
+                "disapproved_products": 13,
+                "limited_products": 5,
+                "issue_groups": [
+                  {
+                    "issue_type": "invalid_image",
+                    "severity": "disapproved",
+                    "field": "image_link",
+                    "count": 3,
+                    "products": [
+                      {
+                        "id": "HG-006",
+                        "title": "Ceramic Table Lamp, Matte White",
+                        "detail": "No image link is set."
+                      },
+                      {
+                        "id": "HG-013",
+                        "title": "Walnut Wall Shelf, 24 inch",
+                        "detail": "Image link 'https://cdn.hearthandhollow.example/img/placeholder.png' points to a placeholder, not a real product photo."
+                      },
+                      {
+                        "id": "HG-027",
+                        "title": "Woven Wall Hanging, Cream and Rust",
+                        "detail": "No image link is set."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "price_mismatch",
+                    "severity": "disapproved",
+                    "field": "price",
+                    "count": 3,
+                    "products": [
+                      {
+                        "id": "HG-004",
+                        "title": "Waffle Weave Bath Towel, Sage",
+                        "detail": "Feed price is 32.00 USD but the product page shows 36.00 USD."
+                      },
+                      {
+                        "id": "HG-015",
+                        "title": "Pour Over Coffee Set, Glass and Copper",
+                        "detail": "Feed price is 58.00 USD but the product page shows 64.00 USD."
+                      },
+                      {
+                        "id": "HG-021",
+                        "title": "Stainless Steel Kettle, 1.7 L",
+                        "detail": "Feed price is 48.00 USD but the product page shows 44.00 USD."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "availability_mismatch",
+                    "severity": "disapproved",
+                    "field": "availability",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-012",
+                        "title": "Velvet Cushion Cover, 18 x 18, Rust",
+                        "detail": "Feed says in_stock but the product page says out_of_stock."
+                      },
+                      {
+                        "id": "HG-025",
+                        "title": "Linen Duvet Cover, Queen, Terracotta",
+                        "detail": "Feed says in_stock but the product page says preorder."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "missing_shipping",
+                    "severity": "disapproved",
+                    "field": "shipping",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-019",
+                        "title": "Marble Serving Board, White",
+                        "detail": "No shipping cost is set for this product."
+                      },
+                      {
+                        "id": "HG-030",
+                        "title": "Outdoor String Lights, 48 ft",
+                        "detail": "No shipping cost is set for this product."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "title_too_long",
+                    "severity": "disapproved",
+                    "field": "title",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-009",
+                        "title": "Handwoven Seagrass Storage Basket with Leather Handles for Living Room, Bedroom, Nursery, Laundry and Bathroom Organization, Extra Large 16 x 12 x 10 inch, Natural Color",
+                        "detail": "Title is 169 characters; the limit is 150."
+                      },
+                      {
+                        "id": "HG-017",
+                        "title": "Premium Long Staple Egyptian Cotton Sateen Sheet Set, Queen Size, 400 Thread Count, Deep Pocket Fitted Sheet, Flat Sheet and Two Pillowcases, Hotel Quality Bedding in Dove Grey",
+                        "detail": "Title is 176 characters; the limit is 150."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "restricted_product",
+                    "severity": "disapproved",
+                    "field": "product_type",
+                    "count": 1,
+                    "products": [
+                      {
+                        "id": "HG-023",
+                        "title": "CBD Infused Lavender Relaxation Candle, 6 oz",
+                        "detail": "Mentions 'CBD', which is a restricted product category."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "missing_gtin",
+                    "severity": "limited",
+                    "field": "gtin",
+                    "count": 6,
+                    "products": [
+                      {
+                        "id": "HG-002",
+                        "title": "Linen Napkins, Set of 4, Natural",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-007",
+                        "title": "Wool Throw Blanket, Charcoal Herringbone",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-011",
+                        "title": "Enamel Dutch Oven, 5.5 qt, Forest Green",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-019",
+                        "title": "Marble Serving Board, White",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-024",
+                        "title": "Recycled Glass Vase, Amber",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-028",
+                        "title": "Copper Measuring Cups, Set of 4",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "invalid_image"
+              },
+              "response": {
+                "query": "invalid_image",
+                "results": [
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "Every product needs a main image link. Without one the product cannot show.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "The image must show the actual product. Placeholder images, generic images and graphics that do not show the product are not allowed.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "Images must be at least 500 by 500 pixels, and around 1500 by 1500 pixels or larger is recommended. Do not add promotional text, logos, watermarks or other overlays to the main image.",
+                    "score": 8
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 3,
+            "input_tokens": 9308,
+            "cached_tokens": 0,
+            "output_tokens": 2071
+          }
+        },
+        {
+          "merchant": "I added the shipping info.",
+          "fix": "missing_shipping",
+          "fixed_product_ids": [
+            "HG-019",
+            "HG-030"
+          ],
+          "reply": "The missing shipping issue is now resolved! You currently have **11 disapproved products** remaining.\n\nHere is the next issue to address:\n\n### Price Mismatch (3 products)\n\nThe price sent in your product data must match the price shown on the product's page and at checkout in the same currency.\n\nHere are the affected products:\n* **Waffle Weave Bath Towel, Sage** (ID: `HG-004`): Feed price is $32.00 USD, but the product page shows $36.00 USD.\n* **Pour Over Coffee Set, Glass and Copper** (ID: `HG-015`): Feed price is $58.00 USD, but the product page shows $64.00 USD.\n* **Stainless Steel Kettle, 1.7 L** (ID: `HG-021`): Feed price is $48.00 USD, but the product page shows $44.00 USD.\n\n**How to fix:**\nChange the price in your product data so it matches the product page exactly, then upload the corrected data. For details, review the guide on [Price in the feed does not match the website](https://support.google.com/merchants/answer/12159029).\n\nWould you like to move on to the next issue?",
+          "tool_calls": [
+            {
+              "name": "check_feed",
+              "args": {},
+              "response": {
+                "store_id": "sample-store",
+                "store_name": "Hearth & Hollow",
+                "account_status": "active",
+                "suspension_reason": "",
+                "total_products": 30,
+                "products_with_issues": 17,
+                "disapproved_products": 11,
+                "limited_products": 6,
+                "issue_groups": [
+                  {
+                    "issue_type": "invalid_image",
+                    "severity": "disapproved",
+                    "field": "image_link",
+                    "count": 3,
+                    "products": [
+                      {
+                        "id": "HG-006",
+                        "title": "Ceramic Table Lamp, Matte White",
+                        "detail": "No image link is set."
+                      },
+                      {
+                        "id": "HG-013",
+                        "title": "Walnut Wall Shelf, 24 inch",
+                        "detail": "Image link 'https://cdn.hearthandhollow.example/img/placeholder.png' points to a placeholder, not a real product photo."
+                      },
+                      {
+                        "id": "HG-027",
+                        "title": "Woven Wall Hanging, Cream and Rust",
+                        "detail": "No image link is set."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "price_mismatch",
+                    "severity": "disapproved",
+                    "field": "price",
+                    "count": 3,
+                    "products": [
+                      {
+                        "id": "HG-004",
+                        "title": "Waffle Weave Bath Towel, Sage",
+                        "detail": "Feed price is 32.00 USD but the product page shows 36.00 USD."
+                      },
+                      {
+                        "id": "HG-015",
+                        "title": "Pour Over Coffee Set, Glass and Copper",
+                        "detail": "Feed price is 58.00 USD but the product page shows 64.00 USD."
+                      },
+                      {
+                        "id": "HG-021",
+                        "title": "Stainless Steel Kettle, 1.7 L",
+                        "detail": "Feed price is 48.00 USD but the product page shows 44.00 USD."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "availability_mismatch",
+                    "severity": "disapproved",
+                    "field": "availability",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-012",
+                        "title": "Velvet Cushion Cover, 18 x 18, Rust",
+                        "detail": "Feed says in_stock but the product page says out_of_stock."
+                      },
+                      {
+                        "id": "HG-025",
+                        "title": "Linen Duvet Cover, Queen, Terracotta",
+                        "detail": "Feed says in_stock but the product page says preorder."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "title_too_long",
+                    "severity": "disapproved",
+                    "field": "title",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-009",
+                        "title": "Handwoven Seagrass Storage Basket with Leather Handles for Living Room, Bedroom, Nursery, Laundry and Bathroom Organization, Extra Large 16 x 12 x 10 inch, Natural Color",
+                        "detail": "Title is 169 characters; the limit is 150."
+                      },
+                      {
+                        "id": "HG-017",
+                        "title": "Premium Long Staple Egyptian Cotton Sateen Sheet Set, Queen Size, 400 Thread Count, Deep Pocket Fitted Sheet, Flat Sheet and Two Pillowcases, Hotel Quality Bedding in Dove Grey",
+                        "detail": "Title is 176 characters; the limit is 150."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "restricted_product",
+                    "severity": "disapproved",
+                    "field": "product_type",
+                    "count": 1,
+                    "products": [
+                      {
+                        "id": "HG-023",
+                        "title": "CBD Infused Lavender Relaxation Candle, 6 oz",
+                        "detail": "Mentions 'CBD', which is a restricted product category."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "missing_gtin",
+                    "severity": "limited",
+                    "field": "gtin",
+                    "count": 6,
+                    "products": [
+                      {
+                        "id": "HG-002",
+                        "title": "Linen Napkins, Set of 4, Natural",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-007",
+                        "title": "Wool Throw Blanket, Charcoal Herringbone",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-011",
+                        "title": "Enamel Dutch Oven, 5.5 qt, Forest Green",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-019",
+                        "title": "Marble Serving Board, White",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-024",
+                        "title": "Recycled Glass Vase, Amber",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-028",
+                        "title": "Copper Measuring Cups, Set of 4",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "price_mismatch"
+              },
+              "response": {
+                "query": "price_mismatch",
+                "results": [
+                  {
+                    "doc_id": "price-mismatch",
+                    "title": "Price in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12159029",
+                    "passage": "The price you send must match the price shown on the product's page and at checkout, in the same currency. If they differ, Google disapproves the product.",
+                    "score": 10
+                  },
+                  {
+                    "doc_id": "price-mismatch",
+                    "title": "Price in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12159029",
+                    "passage": "Common causes are a delay between changing the price on your website and updating your product data, a sale price with the wrong dates, or price markup on the page that differs from the price shoppers see.",
+                    "score": 10
+                  },
+                  {
+                    "doc_id": "price-mismatch",
+                    "title": "Price in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12159029",
+                    "passage": "To fix it, change the price in your product data so it matches the product page exactly, then upload the corrected data. You can edit products one at a time in Merchant Center or download the list of affected products and fix them in bulk.",
+                    "score": 10
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 3,
+            "input_tokens": 19456,
+            "cached_tokens": 0,
+            "output_tokens": 1934
+          }
+        },
+        {
+          "merchant": "And now I've fixed the prices too. Where am I at?",
+          "fix": "price_mismatch",
+          "fixed_product_ids": [
+            "HG-004",
+            "HG-015",
+            "HG-021"
+          ],
+          "reply": "Great news! The price mismatch issue is now resolved.\n\nYou currently have **8 disapproved products** and **6 products with limited-reach warnings**.\n\nHere is a summary of what is still flagged among disapproved products:\n* **Invalid image**: 3 products\n* **Availability mismatch**: 2 products\n* **Title too long**: 2 products\n* **Restricted product**: 1 product\n\n---\n\n### Largest Disapproval: Invalid Images (3 products)\n\nEvery product needs a main image link that shows the actual product. Placeholder images are not allowed.\n\nHere are the affected products:\n* **Ceramic Table Lamp, Matte White** (ID: `HG-006`): No image link is set.\n* **Walnut Wall Shelf, 24 inch** (ID: `HG-013`): The image link points to a placeholder image rather than a real product photo.\n* **Woven Wall Hanging, Cream and Rust** (ID: `HG-027`): No image link is set.\n\n**How to fix:**\nProvide a valid image link for each product showing the actual item. For more details, see the [Product image link](https://support.google.com/merchants/answer/6324350) guide.\n\nWould you like to move on to the next issue?",
+          "tool_calls": [
+            {
+              "name": "check_feed",
+              "args": {},
+              "response": {
+                "store_id": "sample-store",
+                "store_name": "Hearth & Hollow",
+                "account_status": "active",
+                "suspension_reason": "",
+                "total_products": 30,
+                "products_with_issues": 14,
+                "disapproved_products": 8,
+                "limited_products": 6,
+                "issue_groups": [
+                  {
+                    "issue_type": "invalid_image",
+                    "severity": "disapproved",
+                    "field": "image_link",
+                    "count": 3,
+                    "products": [
+                      {
+                        "id": "HG-006",
+                        "title": "Ceramic Table Lamp, Matte White",
+                        "detail": "No image link is set."
+                      },
+                      {
+                        "id": "HG-013",
+                        "title": "Walnut Wall Shelf, 24 inch",
+                        "detail": "Image link 'https://cdn.hearthandhollow.example/img/placeholder.png' points to a placeholder, not a real product photo."
+                      },
+                      {
+                        "id": "HG-027",
+                        "title": "Woven Wall Hanging, Cream and Rust",
+                        "detail": "No image link is set."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "availability_mismatch",
+                    "severity": "disapproved",
+                    "field": "availability",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-012",
+                        "title": "Velvet Cushion Cover, 18 x 18, Rust",
+                        "detail": "Feed says in_stock but the product page says out_of_stock."
+                      },
+                      {
+                        "id": "HG-025",
+                        "title": "Linen Duvet Cover, Queen, Terracotta",
+                        "detail": "Feed says in_stock but the product page says preorder."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "title_too_long",
+                    "severity": "disapproved",
+                    "field": "title",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-009",
+                        "title": "Handwoven Seagrass Storage Basket with Leather Handles for Living Room, Bedroom, Nursery, Laundry and Bathroom Organization, Extra Large 16 x 12 x 10 inch, Natural Color",
+                        "detail": "Title is 169 characters; the limit is 150."
+                      },
+                      {
+                        "id": "HG-017",
+                        "title": "Premium Long Staple Egyptian Cotton Sateen Sheet Set, Queen Size, 400 Thread Count, Deep Pocket Fitted Sheet, Flat Sheet and Two Pillowcases, Hotel Quality Bedding in Dove Grey",
+                        "detail": "Title is 176 characters; the limit is 150."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "restricted_product",
+                    "severity": "disapproved",
+                    "field": "product_type",
+                    "count": 1,
+                    "products": [
+                      {
+                        "id": "HG-023",
+                        "title": "CBD Infused Lavender Relaxation Candle, 6 oz",
+                        "detail": "Mentions 'CBD', which is a restricted product category."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "missing_gtin",
+                    "severity": "limited",
+                    "field": "gtin",
+                    "count": 6,
+                    "products": [
+                      {
+                        "id": "HG-002",
+                        "title": "Linen Napkins, Set of 4, Natural",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-007",
+                        "title": "Wool Throw Blanket, Charcoal Herringbone",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-011",
+                        "title": "Enamel Dutch Oven, 5.5 qt, Forest Green",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-019",
+                        "title": "Marble Serving Board, White",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-024",
+                        "title": "Recycled Glass Vase, Amber",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-028",
+                        "title": "Copper Measuring Cups, Set of 4",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "availability_mismatch"
+              },
+              "response": {
+                "query": "availability_mismatch",
+                "results": [
+                  {
+                    "doc_id": "availability-mismatch",
+                    "title": "Availability in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12470049",
+                    "passage": "The availability you send (in stock, out of stock, preorder or backorder) must match what the product page and checkout show. If they differ, Google disapproves the product.",
+                    "score": 10
+                  },
+                  {
+                    "doc_id": "availability-mismatch",
+                    "title": "Availability in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12470049",
+                    "passage": "To fix it, change the availability in your product data to match the product page, then upload the corrected data. You can edit products one at a time in Merchant Center or download the list of affected products and fix them in bulk.",
+                    "score": 10
+                  },
+                  {
+                    "doc_id": "availability-mismatch",
+                    "title": "Availability in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12470049",
+                    "passage": "This often happens because of a delay between changing stock on your website and updating your product data.",
+                    "score": 9
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 3,
+            "input_tokens": 29159,
+            "cached_tokens": 14584,
+            "output_tokens": 1594
+          }
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 9,
+        "input_tokens": 57923,
+        "cached_tokens": 14584,
+        "output_tokens": 5599
+      },
+      "cost_usd": 0.054594300000000005,
+      "seconds": 53.6
+    },
+    "multi-summary-counts": {
+      "case_id": "multi-summary-counts",
+      "category": "multi_issue",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Half my products got disapproved yesterday, what happened?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "You have **13 disapproved products** in your account due to image issues (3 products), price mismatches (3 products), availability mismatches (2 products), missing shipping costs (2 products), titles that are too long (2 products), and a restricted product policy issue (1 product). \n\nAdditionally, **5 products** have limited-reach warnings.\n\n---\n\n### First Issue: Image Issues (3 products)\n\nAccording to [Product image link](https://support.google.com/merchants/answer/6324350), every product must have a main image link that shows the actual product. Placeholder images are not allowed.\n\nHere are the affected products:\n* **Ceramic Table Lamp, Matte White** (ID: `HG-006`): No image link is set.\n* **Walnut Wall Shelf, 24 inch** (ID: `HG-013`): The link points to a placeholder image instead of a photo of the product.\n* **Woven Wall Hanging, Cream and Rust** (ID: `HG-027`): No image link is set.\n\n**How to fix:** Provide a direct web link to a real product photo showing the item for each product listed above.\n\nWould you like to move on to the next issue?",
+          "tool_calls": [
+            {
+              "name": "check_feed",
+              "args": {},
+              "response": {
+                "store_id": "sample-store",
+                "store_name": "Hearth & Hollow",
+                "account_status": "active",
+                "suspension_reason": "",
+                "total_products": 30,
+                "products_with_issues": 18,
+                "disapproved_products": 13,
+                "limited_products": 5,
+                "issue_groups": [
+                  {
+                    "issue_type": "invalid_image",
+                    "severity": "disapproved",
+                    "field": "image_link",
+                    "count": 3,
+                    "products": [
+                      {
+                        "id": "HG-006",
+                        "title": "Ceramic Table Lamp, Matte White",
+                        "detail": "No image link is set."
+                      },
+                      {
+                        "id": "HG-013",
+                        "title": "Walnut Wall Shelf, 24 inch",
+                        "detail": "Image link 'https://cdn.hearthandhollow.example/img/placeholder.png' points to a placeholder, not a real product photo."
+                      },
+                      {
+                        "id": "HG-027",
+                        "title": "Woven Wall Hanging, Cream and Rust",
+                        "detail": "No image link is set."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "price_mismatch",
+                    "severity": "disapproved",
+                    "field": "price",
+                    "count": 3,
+                    "products": [
+                      {
+                        "id": "HG-004",
+                        "title": "Waffle Weave Bath Towel, Sage",
+                        "detail": "Feed price is 32.00 USD but the product page shows 36.00 USD."
+                      },
+                      {
+                        "id": "HG-015",
+                        "title": "Pour Over Coffee Set, Glass and Copper",
+                        "detail": "Feed price is 58.00 USD but the product page shows 64.00 USD."
+                      },
+                      {
+                        "id": "HG-021",
+                        "title": "Stainless Steel Kettle, 1.7 L",
+                        "detail": "Feed price is 48.00 USD but the product page shows 44.00 USD."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "availability_mismatch",
+                    "severity": "disapproved",
+                    "field": "availability",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-012",
+                        "title": "Velvet Cushion Cover, 18 x 18, Rust",
+                        "detail": "Feed says in_stock but the product page says out_of_stock."
+                      },
+                      {
+                        "id": "HG-025",
+                        "title": "Linen Duvet Cover, Queen, Terracotta",
+                        "detail": "Feed says in_stock but the product page says preorder."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "missing_shipping",
+                    "severity": "disapproved",
+                    "field": "shipping",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-019",
+                        "title": "Marble Serving Board, White",
+                        "detail": "No shipping cost is set for this product."
+                      },
+                      {
+                        "id": "HG-030",
+                        "title": "Outdoor String Lights, 48 ft",
+                        "detail": "No shipping cost is set for this product."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "title_too_long",
+                    "severity": "disapproved",
+                    "field": "title",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-009",
+                        "title": "Handwoven Seagrass Storage Basket with Leather Handles for Living Room, Bedroom, Nursery, Laundry and Bathroom Organization, Extra Large 16 x 12 x 10 inch, Natural Color",
+                        "detail": "Title is 169 characters; the limit is 150."
+                      },
+                      {
+                        "id": "HG-017",
+                        "title": "Premium Long Staple Egyptian Cotton Sateen Sheet Set, Queen Size, 400 Thread Count, Deep Pocket Fitted Sheet, Flat Sheet and Two Pillowcases, Hotel Quality Bedding in Dove Grey",
+                        "detail": "Title is 176 characters; the limit is 150."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "restricted_product",
+                    "severity": "disapproved",
+                    "field": "product_type",
+                    "count": 1,
+                    "products": [
+                      {
+                        "id": "HG-023",
+                        "title": "CBD Infused Lavender Relaxation Candle, 6 oz",
+                        "detail": "Mentions 'CBD', which is a restricted product category."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "missing_gtin",
+                    "severity": "limited",
+                    "field": "gtin",
+                    "count": 6,
+                    "products": [
+                      {
+                        "id": "HG-002",
+                        "title": "Linen Napkins, Set of 4, Natural",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-007",
+                        "title": "Wool Throw Blanket, Charcoal Herringbone",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-011",
+                        "title": "Enamel Dutch Oven, 5.5 qt, Forest Green",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-019",
+                        "title": "Marble Serving Board, White",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-024",
+                        "title": "Recycled Glass Vase, Amber",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-028",
+                        "title": "Copper Measuring Cups, Set of 4",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "invalid_image"
+              },
+              "response": {
+                "query": "invalid_image",
+                "results": [
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "Every product needs a main image link. Without one the product cannot show.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "The image must show the actual product. Placeholder images, generic images and graphics that do not show the product are not allowed.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "Images must be at least 500 by 500 pixels, and around 1500 by 1500 pixels or larger is recommended. Do not add promotional text, logos, watermarks or other overlays to the main image.",
+                    "score": 8
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 3,
+            "input_tokens": 8867,
+            "cached_tokens": 0,
+            "output_tokens": 1544
+          }
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 3,
+        "input_tokens": 8867,
+        "cached_tokens": 0,
+        "output_tokens": 1544
+      },
+      "cost_usd": 0.01244025,
+      "seconds": 13.7
+    },
+    "multi-tied-groups": {
+      "case_id": "multi-tied-groups",
+      "category": "multi_issue",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "What's wrong with my products?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "You have 4 disapproved products due to two main issues: missing product images (2 products) and price mismatches (2 products). You have 0 products with limited-reach warnings.\n\n### Missing Product Images\nAccording to [Product image link](https://support.google.com/merchants/answer/6324350), every product needs a main image link. Without one, the product cannot show.\n\nThe following products are missing an image link:\n* **Ceramic Table Lamp, Matte White** (ID: `HG-006`) – No image link is set.\n* **Woven Wall Hanging, Cream and Rust** (ID: `HG-027`) – No image link is set.\n\nTo fix this, provide a main image link for each of these products in your product data.\n\nWould you like to move on to the price mismatch issue next?",
+          "tool_calls": [
+            {
+              "name": "check_feed",
+              "args": {},
+              "response": {
+                "store_id": "tied-issues",
+                "store_name": "Eval store: two issue groups of equal size",
+                "account_status": "active",
+                "suspension_reason": "",
+                "total_products": 6,
+                "products_with_issues": 4,
+                "disapproved_products": 4,
+                "limited_products": 0,
+                "issue_groups": [
+                  {
+                    "issue_type": "invalid_image",
+                    "severity": "disapproved",
+                    "field": "image_link",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-006",
+                        "title": "Ceramic Table Lamp, Matte White",
+                        "detail": "No image link is set."
+                      },
+                      {
+                        "id": "HG-027",
+                        "title": "Woven Wall Hanging, Cream and Rust",
+                        "detail": "No image link is set."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "price_mismatch",
+                    "severity": "disapproved",
+                    "field": "price",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-004",
+                        "title": "Waffle Weave Bath Towel, Sage",
+                        "detail": "Feed price is 32.00 USD but the product page shows 36.00 USD."
+                      },
+                      {
+                        "id": "HG-015",
+                        "title": "Pour Over Coffee Set, Glass and Copper",
+                        "detail": "Feed price is 58.00 USD but the product page shows 64.00 USD."
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "invalid_image"
+              },
+              "response": {
+                "query": "invalid_image",
+                "results": [
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "Every product needs a main image link. Without one the product cannot show.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "The image must show the actual product. Placeholder images, generic images and graphics that do not show the product are not allowed.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "Images must be at least 500 by 500 pixels, and around 1500 by 1500 pixels or larger is recommended. Do not add promotional text, logos, watermarks or other overlays to the main image.",
+                    "score": 8
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "price_mismatch"
+              },
+              "response": {
+                "query": "price_mismatch",
+                "results": [
+                  {
+                    "doc_id": "price-mismatch",
+                    "title": "Price in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12159029",
+                    "passage": "The price you send must match the price shown on the product's page and at checkout, in the same currency. If they differ, Google disapproves the product.",
+                    "score": 10
+                  },
+                  {
+                    "doc_id": "price-mismatch",
+                    "title": "Price in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12159029",
+                    "passage": "Common causes are a delay between changing the price on your website and updating your product data, a sale price with the wrong dates, or price markup on the page that differs from the price shoppers see.",
+                    "score": 10
+                  },
+                  {
+                    "doc_id": "price-mismatch",
+                    "title": "Price in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12159029",
+                    "passage": "To fix it, change the price in your product data so it matches the product page exactly, then upload the corrected data. You can edit products one at a time in Merchant Center or download the list of affected products and fix them in bulk.",
+                    "score": 10
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 4,
+            "input_tokens": 10429,
+            "cached_tokens": 0,
+            "output_tokens": 1430
+          }
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 4,
+        "input_tokens": 10429,
+        "cached_tokens": 0,
+        "output_tokens": 1430
+      },
+      "cost_usd": 0.01318425,
+      "seconds": 14.7
+    }
+  },
+  "grades": {
+    "appeal-cbd-after-diagnosis": {
+      "wrong_advice": {
+        "replies": [
+          {
+            "turn": 1,
+            "verdict": "supported",
+            "unsupported_claims": [],
+            "evidence": "The agent states that every product needs a link to a main image showing the actual item and that generic/placeholder images or missing links are not allowed, recommending a direct URL to a real photo. This is directly supported by the 'Product image link' doc: 'Every product needs a main image link... The link must be a full web address that starts with http:// or https://. The image must show the actual product. Placeholder images, generic images and graphics that do not show the product are not allowed.'"
+          },
+          {
+            "turn": 2,
+            "verdict": "supported",
+            "unsupported_claims": [],
+            "evidence": "The agent quotes Google's policy on CBD and notes that you may only get one chance to disagree before a waiting period starts. These claims match the retrieved docs: 'cbd-unapproved-substances' ('Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD)... This is a policy decision, not a data problem...') and 'request-review' ('You may only get one chance to disagree before a waiting period starts...'). Passing the case to a specialist is explicitly excluded from advice."
+          }
+        ]
+      },
+      "completeness": {
+        "verdict": "complete",
+        "missing": [],
+        "evidence": "Merchant said: \"The CBD candle is just a candle. I think that decision is wrong and I want to appeal it.\" In the case: \"merchant_reasons\": [\"Says the CBD candle is just a candle\", \"Thinks the decision is wrong and wants to appeal it\"], \"merchant_request\": \"Merchant wants to appeal the product disapproval for the CBD Infused Lavender Relaxation Candle (HG-023).\""
+      },
+      "usage": {
+        "model_calls": 2,
+        "input_tokens": 4463,
+        "cached_tokens": 0,
+        "output_tokens": 2053
+      },
+      "cost_usd": 0.011046,
+      "error": ""
+    },
+    "appeal-cbd-first-message": {
+      "wrong_advice": {
+        "replies": [
+          {
+            "turn": 1,
+            "verdict": "supported",
+            "unsupported_claims": [],
+            "evidence": "The agent's advice is directly supported by the retrieved help docs. Doc 'CBD and other unapproved substances' states: 'Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD). Products on this list are not allowed in Shopping ads or free listings. This is a policy decision, not a data problem, so it cannot be fixed by editing product details. Whether a specific product is allowed is decided by Google's policy team under the healthcare and medicines policy.' Doc 'Requesting a review or appealing a decision' states: 'You may only get one chance to disagree before a waiting period starts'. Passing the case to a specialist is not advice."
+          }
+        ]
+      },
+      "completeness": {
+        "verdict": "complete",
+        "missing": [],
+        "evidence": "Conversation:\n\"Merchant: Google rejected my CBD lavender candle. I disagree with that and want to appeal.\"\n\nCase:\n\"reason\": \"policy_appeal\",\n\"issues_found\": [\n  \"restricted_product: HG-023\"\n],\n\"merchant_request\": \"The merchant wants to appeal the disapproval of their CBD lavender candle.\",\n\"merchant_reasons\": [\n  \"Disagrees with Google rejecting their CBD lavender candle and wants to appeal.\"\n],"
+      },
+      "usage": {
+        "model_calls": 2,
+        "input_tokens": 3639,
+        "cached_tokens": 0,
+        "output_tokens": 1913
+      },
+      "cost_usd": 0.009903,
+      "error": ""
+    },
+    "appeal-question-only-no-handoff": {
+      "wrong_advice": {
+        "replies": [
+          {
+            "turn": 1,
+            "verdict": "supported",
+            "unsupported_claims": [],
+            "evidence": "All advice given is directly supported by the retrieved docs. For CBD products: \"Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD). Products on this list are not allowed in Shopping ads or free listings... This is a policy decision, not a data problem, so it cannot be fixed by editing product details.\" (cbd-unapproved-substances). For review/appeals: \"You may only get one chance to disagree before a waiting period starts\" (request-review). For image requirements: \"Every product needs a main image link... The link must be a full web address that starts with http:// or https://. The image must show the actual product. Placeholder images, generic images and graphics that do not show the product are not allowed.\" (image-link)."
+          }
+        ]
+      },
+      "completeness": null,
+      "usage": {
+        "model_calls": 1,
+        "input_tokens": 3109,
+        "cached_tokens": 0,
+        "output_tokens": 927
+      },
+      "cost_usd": 0.005808,
+      "error": ""
+    },
+    "appeal-records-merchant-reason": {
+      "wrong_advice": {
+        "replies": [
+          {
+            "turn": 1,
+            "verdict": "supported",
+            "unsupported_claims": [],
+            "evidence": "All advice in Reply 1 is supported by the retrieved docs:\n- CBD policy: \"According to CBD and other unapproved substances, Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD)... This is a policy decision rather than a data error, so it cannot be fixed by editing the product's details.\" Matches doc: \"Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD). Products on this list are not allowed in Shopping ads or free listings. This is a policy decision, not a data problem, so it cannot be fixed by editing product details.\"\n- Review process: \"you may only get one chance to disagree before a waiting period starts.\" Matches doc: \"You may only get one chance to disagree before a waiting period starts\".\n- Image requirements: \"every product needs a main image link that shows the actual product. Placeholder images are not allowed.\" Matches doc: \"Every product needs a main image link... The image must show the actual product. Placeholder images... are not allowed.\""
+          },
+          {
+            "turn": 2,
+            "verdict": "no_advice",
+            "unsupported_claims": [],
+            "evidence": "Reply 2 only states that the case is being passed to a specialist, provides a case number, and confirms the merchant's details were included (\"This needs a specialist, so I've passed it on... Your case already includes all the details from this conversation\"). Under the rubric, passing a case to a specialist and restating what the merchant said are not advice."
+          }
+        ]
+      },
+      "completeness": {
+        "verdict": "complete",
+        "missing": [],
+        "evidence": "Merchant: But it only has trace amounts of CBD and it's a candle, nobody eats it. I want this reviewed by someone.\n\nCase merchant_reasons:\n- States the product only has trace amounts of CBD.\n- Notes that it is a candle and nobody eats it."
+      },
+      "usage": {
+        "model_calls": 2,
+        "input_tokens": 4615,
+        "cached_tokens": 0,
+        "output_tokens": 1939
+      },
+      "cost_usd": 0.0107325,
+      "error": ""
+    },
+    "multi-cbd-edit-not-a-fix": {
+      "wrong_advice": {
+        "replies": [
+          {
+            "turn": 1,
+            "verdict": "supported",
+            "unsupported_claims": [],
+            "evidence": "The agent states: \"Every product needs a main image link that shows the actual product. Placeholder images and missing links are not allowed.\" and \"Add a valid link to a real photo showing the actual product for each of these items.\" This is supported by the Product image link doc: \"Every product needs a main image link. Without one the product cannot show... The image must show the actual product. Placeholder images, generic images and graphics that do not show the product are not allowed.\""
+          },
+          {
+            "turn": 2,
+            "verdict": "supported",
+            "unsupported_claims": [],
+            "evidence": "The agent states: \"No, editing the product details will not fix this issue. Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD)...\" Supported by CBD doc: \"Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD)... This is a policy decision, not a data problem, so it cannot be fixed by editing product details.\" The agent also states: \"If you disagree with the decision, an appeal is possible. Please note that you may only get one chance to disagree before a waiting period starts...\". Supported by Requesting a review doc: \"When a product or account has an issue, Merchant Center may offer a 'Request review' option... You may only get one chance to disagree before a waiting period starts, so it is worth getting the request right.\""
+          }
+        ]
+      },
+      "completeness": null,
+      "usage": {
+        "model_calls": 1,
+        "input_tokens": 3093,
+        "cached_tokens": 0,
+        "output_tokens": 1753
+      },
+      "cost_usd": 0.0088935,
+      "error": ""
+    },
+    "multi-fix-two-in-a-row": {
+      "wrong_advice": {
+        "replies": [
+          {
+            "turn": 1,
+            "verdict": "supported",
+            "unsupported_claims": [],
+            "evidence": "Agent says: \"Every product needs a main image link, and the image must show the actual product. Placeholder images are not allowed.\" and \"Provide a link to a real photo of the product for each item.\" Doc states: \"Every product needs a main image link... The image must show the actual product. Placeholder images, generic images and graphics that do not show the product are not allowed.\""
+          },
+          {
+            "turn": 2,
+            "verdict": "supported",
+            "unsupported_claims": [],
+            "evidence": "Agent says: \"The price sent in your product data must match the price shown on the product's page and at checkout in the same currency.\" and \"Change the price in your product data so it matches the product page exactly, then upload the corrected data.\" Doc states: \"The price you send must match the price shown on the product's page and at checkout, in the same currency.\" and \"To fix it, change the price in your product data so it matches the product page exactly, then upload the corrected data.\""
+          },
+          {
+            "turn": 3,
+            "verdict": "supported",
+            "unsupported_claims": [],
+            "evidence": "Agent says: \"Every product needs a main image link that shows the actual product. Placeholder images are not allowed.\" and \"Provide a valid image link for each product showing the actual item.\" Doc states: \"Every product needs a main image link... The image must show the actual product. Placeholder images, generic images and graphics that do not show the product are not allowed.\""
+          }
+        ]
+      },
+      "completeness": null,
+      "usage": {
+        "model_calls": 1,
+        "input_tokens": 6190,
+        "cached_tokens": 0,
+        "output_tokens": 1309
+      },
+      "cost_usd": 0.00955125,
+      "error": ""
+    },
+    "multi-summary-counts": {
+      "wrong_advice": {
+        "replies": [
+          {
+            "turn": 1,
+            "verdict": "supported",
+            "unsupported_claims": [],
+            "evidence": "The agent states: \"every product must have a main image link that shows the actual product. Placeholder images are not allowed.\" and \"Provide a direct web link to a real product photo showing the item for each product listed above.\" This is supported by the Product image link doc: \"Every product needs a main image link... The link must be a full web address that starts with http:// or https://. The image must show the actual product. Placeholder images, generic images and graphics that do not show the product are not allowed.\" Summaries of other issues in the store come directly from the feed check data."
+          }
+        ]
+      },
+      "completeness": null,
+      "usage": {
+        "model_calls": 1,
+        "input_tokens": 2511,
+        "cached_tokens": 0,
+        "output_tokens": 755
+      },
+      "cost_usd": 0.0047145,
+      "error": ""
+    },
+    "multi-tied-groups": {
+      "wrong_advice": {
+        "replies": [
+          {
+            "turn": 1,
+            "verdict": "supported",
+            "unsupported_claims": [],
+            "evidence": "The agent states: \"According to [Product image link](https://support.google.com/merchants/answer/6324350), every product needs a main image link. Without one, the product cannot show... To fix this, provide a main image link for each of these products in your product data.\" This is supported by the doc: \"Every product needs a main image link. Without one the product cannot show.\""
+          }
+        ]
+      },
+      "completeness": null,
+      "usage": {
+        "model_calls": 1,
+        "input_tokens": 1501,
+        "cached_tokens": 0,
+        "output_tokens": 725
+      },
+      "cost_usd": 0.0038445,
+      "error": ""
+    }
+  }
+}

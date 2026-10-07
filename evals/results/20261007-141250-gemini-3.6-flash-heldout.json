@@ -1,0 +1,561 @@
+{
+  "model": "gemini-3.6-flash",
+  "case_set": "heldout",
+  "started_at": "2026-10-07T14:12:50.308421Z",
+  "finished_at": "2026-10-07T14:14:08.162851Z",
+  "price": {
+    "input_per_million": 0.75,
+    "cached_input_per_million": 0.075,
+    "output_per_million": 3.75
+  },
+  "case_filter": [],
+  "category_filter": [
+    "handoff_appeal"
+  ],
+  "runs": {
+    "heldout-appeal-hemp-oil": {
+      "case_id": "heldout-appeal-hemp-oil",
+      "category": "handoff_appeal",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Why was my lavender massage oil disapproved?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "You have 1 disapproved product due to a restricted product policy, and 0 products with limited-reach warnings.\n\n### Disapproved Product\n* **Hemp Extract Massage Oil, Lavender, 100 ml** (ID: `HG-040`)\n  * **Issue:** Mentions \"Hemp Extract\", which is flagged as a restricted product category.\n\n### Why this happened\nAccording to [CBD and other unapproved substances](https://support.google.com/merchants/answer/6165956), Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD), and products on this list are not allowed in Shopping ads or free listings. \n\nThis is a policy decision rather than a data problem, so it cannot be fixed by editing product details. Whether a specific product is allowed is decided by the policy team under the healthcare and medicines policy. \n\nIf you disagree with this disapproval and would like to request an appeal, please let me know!",
+          "tool_calls": [
+            {
+              "name": "check_feed",
+              "args": {},
+              "response": {
+                "store_id": "restricted-oil",
+                "store_name": "Held-out store: hemp extract product",
+                "account_status": "active",
+                "suspension_reason": "",
+                "total_products": 3,
+                "products_with_issues": 1,
+                "disapproved_products": 1,
+                "limited_products": 0,
+                "issue_groups": [
+                  {
+                    "issue_type": "restricted_product",
+                    "severity": "disapproved",
+                    "field": "product_type",
+                    "count": 1,
+                    "products": [
+                      {
+                        "id": "HG-040",
+                        "title": "Hemp Extract Massage Oil, Lavender, 100 ml",
+                        "detail": "Mentions 'Hemp Extract', which is a restricted product category."
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "restricted_product"
+              },
+              "response": {
+                "query": "restricted_product",
+                "results": [
+                  {
+                    "doc_id": "cbd-unapproved-substances",
+                    "title": "CBD and other unapproved substances",
+                    "source_url": "https://support.google.com/merchants/answer/6165956",
+                    "passage": "Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD). Products on this list are not allowed in Shopping ads or free listings.",
+                    "score": 7
+                  },
+                  {
+                    "doc_id": "cbd-unapproved-substances",
+                    "title": "CBD and other unapproved substances",
+                    "source_url": "https://support.google.com/merchants/answer/6165956",
+                    "passage": "This is a policy decision, not a data problem, so it cannot be fixed by editing product details. Whether a specific product is allowed is decided by Google's policy team under the healthcare and medicines policy.",
+                    "score": 7
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 3,
+            "input_tokens": 6642,
+            "cached_tokens": 0,
+            "output_tokens": 1650
+          }
+        },
+        {
+          "merchant": "It's a cosmetic oil for the skin and it's sold legally in every shop near me. Please get someone to look at this again.",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "According to [CBD and other unapproved substances](https://support.google.com/merchants/answer/6165956), Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD), and products on this list are not allowed in Shopping ads or free listings. As noted in [Requesting a review or appealing a decision](https://support.google.com/merchants/answer/13585221), you may only get one chance to disagree before a waiting period starts.\n\nThis needs a specialist, so I've passed it on. \n\nYour case number is **CASE-20261007-141315-a742f0**. A specialist will review your case. It already includes all details from this conversation, including your explanation that this is a cosmetic oil sold legally in local shops, so you won't need to repeat yourself.",
+          "tool_calls": [
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "request review"
+              },
+              "response": {
+                "query": "request review",
+                "results": [
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "When a product or account has an issue, Merchant Center may offer a \"Request review\" option. For product issues it is in the product's details on the Needs attention tab. For account issues it is under View setup and policy issues.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "You may only get one chance to disagree before a waiting period starts, so it is worth getting the request right.",
+                    "score": 5
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "A review can take up to 7 business days. Your ads may not show while the account or products are under review.",
+                    "score": 5
+                  }
+                ]
+              }
+            },
+            {
+              "name": "create_handoff_case",
+              "args": {
+                "cited_doc_ids": [
+                  "cbd-unapproved-substances",
+                  "request-review"
+                ],
+                "merchant_request": "Merchant wants to appeal the policy disapproval for Hemp Extract Massage Oil, Lavender, 100 ml (HG-040).",
+                "already_tried": [
+                  "Checked feed and identified HG-040 disapproved under restricted_product policy",
+                  "Explained CBD policy restriction and that editing product details cannot resolve it"
+                ],
+                "suggested_next_step": "Review product HG-040 for policy compliance appeal under CBD and healthcare policies.",
+                "reason": "policy_appeal",
+                "issues_found": [
+                  "restricted_product (HG-040)"
+                ],
+                "merchant_reasons": [
+                  "Says it is a cosmetic oil for the skin",
+                  "Says it is sold legally in every shop near them"
+                ]
+              },
+              "response": {
+                "status": "created",
+                "case_id": "CASE-20261007-141315-a742f0"
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 3,
+            "input_tokens": 13955,
+            "cached_tokens": 0,
+            "output_tokens": 1973
+          }
+        }
+      ],
+      "handoff_cases": [
+        {
+          "case_id": "CASE-20261007-141315-a742f0",
+          "store_id": "restricted-oil",
+          "created_at": "2026-10-07T14:13:15.634357Z",
+          "reason": "policy_appeal",
+          "issues_found": [
+            "restricted_product (HG-040)"
+          ],
+          "already_tried": [
+            "Checked feed and identified HG-040 disapproved under restricted_product policy",
+            "Explained CBD policy restriction and that editing product details cannot resolve it"
+          ],
+          "merchant_request": "Merchant wants to appeal the policy disapproval for Hemp Extract Massage Oil, Lavender, 100 ml (HG-040).",
+          "merchant_reasons": [
+            "Says it is a cosmetic oil for the skin",
+            "Says it is sold legally in every shop near them"
+          ],
+          "suggested_next_step": "Review product HG-040 for policy compliance appeal under CBD and healthcare policies.",
+          "cited_doc_ids": [
+            "cbd-unapproved-substances",
+            "request-review"
+          ]
+        }
+      ],
+      "usage": {
+        "model_calls": 6,
+        "input_tokens": 20597,
+        "cached_tokens": 0,
+        "output_tokens": 3623
+      },
+      "cost_usd": 0.029034,
+      "seconds": 30.3
+    },
+    "heldout-appeal-other-shops": {
+      "case_id": "heldout-appeal-other-shops",
+      "category": "handoff_appeal",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Other shops sell CBD candles on Google Shopping all the time, so why can't I? I want to challenge this decision.",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "Google includes cannabidiol (CBD) on its list of unapproved pharmaceuticals and supplements, and products on this list are not allowed in Shopping ads or free listings ([CBD and other unapproved substances](https://support.google.com/merchants/answer/6165956)).\n\nWhen appealing a decision or requesting a review, keep in mind that you may only get one chance to disagree before a waiting period starts ([Requesting a review or appealing a decision](https://support.google.com/merchants/answer/13585221)).\n\nThis needs a specialist, so I've passed it on. \n\nYour case number is **CASE-20261007-141337-997598**. A specialist will review your request. The case includes everything from this conversation, so you will not need to repeat yourself.",
+          "tool_calls": [
+            {
+              "name": "check_feed",
+              "args": {},
+              "response": {
+                "store_id": "sample-store",
+                "store_name": "Hearth & Hollow",
+                "account_status": "active",
+                "suspension_reason": "",
+                "total_products": 30,
+                "products_with_issues": 18,
+                "disapproved_products": 13,
+                "limited_products": 5,
+                "issue_groups": [
+                  {
+                    "issue_type": "invalid_image",
+                    "severity": "disapproved",
+                    "field": "image_link",
+                    "count": 3,
+                    "products": [
+                      {
+                        "id": "HG-006",
+                        "title": "Ceramic Table Lamp, Matte White",
+                        "detail": "No image link is set."
+                      },
+                      {
+                        "id": "HG-013",
+                        "title": "Walnut Wall Shelf, 24 inch",
+                        "detail": "Image link 'https://cdn.hearthandhollow.example/img/placeholder.png' points to a placeholder, not a real product photo."
+                      },
+                      {
+                        "id": "HG-027",
+                        "title": "Woven Wall Hanging, Cream and Rust",
+                        "detail": "No image link is set."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "price_mismatch",
+                    "severity": "disapproved",
+                    "field": "price",
+                    "count": 3,
+                    "products": [
+                      {
+                        "id": "HG-004",
+                        "title": "Waffle Weave Bath Towel, Sage",
+                        "detail": "Feed price is 32.00 USD but the product page shows 36.00 USD."
+                      },
+                      {
+                        "id": "HG-015",
+                        "title": "Pour Over Coffee Set, Glass and Copper",
+                        "detail": "Feed price is 58.00 USD but the product page shows 64.00 USD."
+                      },
+                      {
+                        "id": "HG-021",
+                        "title": "Stainless Steel Kettle, 1.7 L",
+                        "detail": "Feed price is 48.00 USD but the product page shows 44.00 USD."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "availability_mismatch",
+                    "severity": "disapproved",
+                    "field": "availability",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-012",
+                        "title": "Velvet Cushion Cover, 18 x 18, Rust",
+                        "detail": "Feed says in_stock but the product page says out_of_stock."
+                      },
+                      {
+                        "id": "HG-025",
+                        "title": "Linen Duvet Cover, Queen, Terracotta",
+                        "detail": "Feed says in_stock but the product page says preorder."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "missing_shipping",
+                    "severity": "disapproved",
+                    "field": "shipping",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-019",
+                        "title": "Marble Serving Board, White",
+                        "detail": "No shipping cost is set for this product."
+                      },
+                      {
+                        "id": "HG-030",
+                        "title": "Outdoor String Lights, 48 ft",
+                        "detail": "No shipping cost is set for this product."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "title_too_long",
+                    "severity": "disapproved",
+                    "field": "title",
+                    "count": 2,
+                    "products": [
+                      {
+                        "id": "HG-009",
+                        "title": "Handwoven Seagrass Storage Basket with Leather Handles for Living Room, Bedroom, Nursery, Laundry and Bathroom Organization, Extra Large 16 x 12 x 10 inch, Natural Color",
+                        "detail": "Title is 169 characters; the limit is 150."
+                      },
+                      {
+                        "id": "HG-017",
+                        "title": "Premium Long Staple Egyptian Cotton Sateen Sheet Set, Queen Size, 400 Thread Count, Deep Pocket Fitted Sheet, Flat Sheet and Two Pillowcases, Hotel Quality Bedding in Dove Grey",
+                        "detail": "Title is 176 characters; the limit is 150."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "restricted_product",
+                    "severity": "disapproved",
+                    "field": "product_type",
+                    "count": 1,
+                    "products": [
+                      {
+                        "id": "HG-023",
+                        "title": "CBD Infused Lavender Relaxation Candle, 6 oz",
+                        "detail": "Mentions 'CBD', which is a restricted product category."
+                      }
+                    ]
+                  },
+                  {
+                    "issue_type": "missing_gtin",
+                    "severity": "limited",
+                    "field": "gtin",
+                    "count": 6,
+                    "products": [
+                      {
+                        "id": "HG-002",
+                        "title": "Linen Napkins, Set of 4, Natural",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-007",
+                        "title": "Wool Throw Blanket, Charcoal Herringbone",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-011",
+                        "title": "Enamel Dutch Oven, 5.5 qt, Forest Green",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-019",
+                        "title": "Marble Serving Board, White",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-024",
+                        "title": "Recycled Glass Vase, Amber",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      },
+                      {
+                        "id": "HG-028",
+                        "title": "Copper Measuring Cups, Set of 4",
+                        "detail": "No GTIN (barcode number) is set for this product."
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "restricted_product"
+              },
+              "response": {
+                "query": "restricted_product",
+                "results": [
+                  {
+                    "doc_id": "cbd-unapproved-substances",
+                    "title": "CBD and other unapproved substances",
+                    "source_url": "https://support.google.com/merchants/answer/6165956",
+                    "passage": "Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD). Products on this list are not allowed in Shopping ads or free listings.",
+                    "score": 7
+                  },
+                  {
+                    "doc_id": "cbd-unapproved-substances",
+                    "title": "CBD and other unapproved substances",
+                    "source_url": "https://support.google.com/merchants/answer/6165956",
+                    "passage": "This is a policy decision, not a data problem, so it cannot be fixed by editing product details. Whether a specific product is allowed is decided by Google's policy team under the healthcare and medicines policy.",
+                    "score": 7
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "request review appeal"
+              },
+              "response": {
+                "query": "request review appeal",
+                "results": [
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "When a product or account has an issue, Merchant Center may offer a \"Request review\" option. For product issues it is in the product's details on the Needs attention tab. For account issues it is under View setup and policy issues.",
+                    "score": 13
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "You may only get one chance to disagree before a waiting period starts, so it is worth getting the request right.",
+                    "score": 12
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "A review can take up to 7 business days. Your ads may not show while the account or products are under review.",
+                    "score": 12
+                  }
+                ]
+              }
+            },
+            {
+              "name": "create_handoff_case",
+              "args": {
+                "cited_doc_ids": [
+                  "cbd-unapproved-substances",
+                  "request-review"
+                ],
+                "merchant_request": "Wants to appeal the disapproval of their CBD candle product.",
+                "already_tried": [
+                  "Checked product feed",
+                  "Found restricted_product disapproval on product HG-023"
+                ],
+                "issues_found": [
+                  "restricted_product: HG-023"
+                ],
+                "merchant_reasons": [
+                  "Merchant states that other shops sell CBD candles on Google Shopping all the time and wants to challenge the disapproval."
+                ],
+                "reason": "policy_appeal",
+                "suggested_next_step": "Review product HG-023 and assist merchant with policy appeal process for CBD products."
+              },
+              "response": {
+                "status": "created",
+                "case_id": "CASE-20261007-141337-997598"
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 5,
+            "input_tokens": 18401,
+            "cached_tokens": 0,
+            "output_tokens": 2348
+          }
+        }
+      ],
+      "handoff_cases": [
+        {
+          "case_id": "CASE-20261007-141337-997598",
+          "store_id": "sample-store",
+          "created_at": "2026-10-07T14:13:37.079009Z",
+          "reason": "policy_appeal",
+          "issues_found": [
+            "restricted_product: HG-023"
+          ],
+          "already_tried": [
+            "Checked product feed",
+            "Found restricted_product disapproval on product HG-023"
+          ],
+          "merchant_request": "Wants to appeal the disapproval of their CBD candle product.",
+          "merchant_reasons": [
+            "Merchant states that other shops sell CBD candles on Google Shopping all the time and wants to challenge the disapproval."
+          ],
+          "suggested_next_step": "Review product HG-023 and assist merchant with policy appeal process for CBD products.",
+          "cited_doc_ids": [
+            "cbd-unapproved-substances",
+            "request-review"
+          ]
+        }
+      ],
+      "usage": {
+        "model_calls": 5,
+        "input_tokens": 18401,
+        "cached_tokens": 0,
+        "output_tokens": 2348
+      },
+      "cost_usd": 0.02260575,
+      "seconds": 23.7
+    }
+  },
+  "grades": {
+    "heldout-appeal-hemp-oil": {
+      "wrong_advice": {
+        "replies": [
+          {
+            "turn": 1,
+            "verdict": "supported",
+            "unsupported_claims": [],
+            "evidence": "The agent's statement that CBD is on Google's list of unapproved pharmaceuticals/supplements, not allowed in Shopping ads or free listings, and that it is a policy decision that cannot be fixed by editing product details is directly supported by the CBD doc: \"Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD). Products on this list are not allowed in Shopping ads or free listings. This is a policy decision, not a data problem, so it cannot be fixed by editing product details.\""
+          },
+          {
+            "turn": 2,
+            "verdict": "supported",
+            "unsupported_claims": [],
+            "evidence": "The agent quotes supported policy information from the CBD doc (\"Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD)\") and the request-review doc (\"you may only get one chance to disagree before a waiting period starts\"). Passing the case to a specialist and restating the merchant's explanation is non-advice per the rubric."
+          }
+        ]
+      },
+      "completeness": {
+        "verdict": "complete",
+        "missing": [],
+        "evidence": "Merchant said: \"It's a cosmetic oil for the skin and it's sold legally in every shop near me. Please get someone to look at this again.\" The case correctly recorded these reasons: \"merchant_reasons\": [\"Says it is a cosmetic oil for the skin\", \"Says it is sold legally in every shop near them\"] as well as the product ID, issues found, and suggested next steps."
+      },
+      "usage": {
+        "model_calls": 2,
+        "input_tokens": 2710,
+        "cached_tokens": 0,
+        "output_tokens": 1712
+      },
+      "cost_usd": 0.0084525,
+      "error": ""
+    },
+    "heldout-appeal-other-shops": {
+      "wrong_advice": {
+        "replies": [
+          {
+            "turn": 1,
+            "verdict": "supported",
+            "unsupported_claims": [],
+            "evidence": "Agent states: \"Google includes cannabidiol (CBD) on its list of unapproved pharmaceuticals and supplements, and products on this list are not allowed in Shopping ads or free listings\", which is directly supported by cbd-unapproved-substances (\"Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD). Products on this list are not allowed in Shopping ads or free listings.\"). Agent states: \"you may only get one chance to disagree before a waiting period starts\", supported by request-review (\"You may only get one chance to disagree before a waiting period starts\")."
+          }
+        ]
+      },
+      "completeness": {
+        "verdict": "complete",
+        "missing": [],
+        "evidence": "Conversation: \"Other shops sell CBD candles on Google Shopping all the time, so why can't I? I want to challenge this decision.\"\nCase: \"merchant_reasons\": [\"Merchant states that other shops sell CBD candles on Google Shopping all the time and wants to challenge the disapproval.\"]"
+      },
+      "usage": {
+        "model_calls": 2,
+        "input_tokens": 3559,
+        "cached_tokens": 0,
+        "output_tokens": 1155
+      },
+      "cost_usd": 0.0070005,
+      "error": ""
+    }
+  }
+}
