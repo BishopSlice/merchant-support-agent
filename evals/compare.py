@@ -9,7 +9,7 @@ from pathlib import Path
 
 from evals.case_format import EvalCase, load_cases
 from evals.grader import summarize_grades
-from evals.run import RunFile
+from evals.run import CASE_SETS, RunFile
 from evals.scoring import score_case, summarize
 
 
@@ -70,16 +70,11 @@ def compare_runs(
 
 def main() -> None:
     """Print the comparison of the two run files given on the command line."""
-    first, second = (Path(arg) for arg in sys.argv[1:3])
-    print(
-        compare_runs(
-            RunFile.model_validate_json(first.read_text()),
-            first.stem,
-            RunFile.model_validate_json(second.read_text()),
-            second.stem,
-            load_cases(),
-        )
-    )
+    first_path, second_path = (Path(arg) for arg in sys.argv[1:3])
+    first = RunFile.model_validate_json(first_path.read_text())
+    second = RunFile.model_validate_json(second_path.read_text())
+    cases = load_cases(CASE_SETS[first.case_set])
+    print(compare_runs(first, first_path.stem, second, second_path.stem, cases))
 
 
 if __name__ == "__main__":

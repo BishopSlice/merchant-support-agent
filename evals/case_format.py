@@ -16,6 +16,9 @@ from merchant_agent.models import HandoffReason, IssueType
 from merchant_agent.tools.help_search import load_help_docs
 
 CASES_DIR = PROJECT_ROOT / "evals" / "cases"
+# Held-out cases, written before Task 11's prompt changes, to check fixes don't just fit
+# the main set.
+HELDOUT_DIR = PROJECT_ROOT / "evals" / "cases_heldout"
 EVAL_STORES_DIR = PROJECT_ROOT / "evals" / "stores"
 DATA_STORES_DIR = PROJECT_ROOT / "data" / "stores"
 

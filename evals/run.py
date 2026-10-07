@@ -1,9 +1,9 @@
 """Run eval cases against the agent and save a scored result.
 
-uv run python -m evals.run [--case ID ...] [--category NAME ...] [--resume PATH [--regrade]]
-                           [--no-grade]
+uv run python -m evals.run [--set main|heldout] [--case ID ...] [--category NAME ...]
+                           [--resume PATH [--regrade]] [--no-grade]
 
-Each run is saved to evals/results/<timestamp>-<model>.json after every case, with a
+Each run is saved to evals/results/<timestamp>-<model>[-heldout].json after every case, with a
 markdown scorecard next to it. Earlier runs are never overwritten; --resume continues a
 partial run in place, rerunning only cases that are missing or errored.
 """
@@ -16,7 +16,7 @@ from pathlib import Path
 
 from pydantic import BaseModel, Field
 
-from evals.case_format import Category, EvalCase, load_cases
+from evals.case_format import CASES_DIR, HELDOUT_DIR, Category, EvalCase, load_cases
 from evals.grader import CaseGrade, grade_run, summarize_grades
 from evals.records import CaseRun
 from evals.report import render_scorecard
@@ -25,12 +25,14 @@ from evals.scoring import score_case, summarize
 from merchant_agent.config import MODEL_PRICES, PROJECT_ROOT, ModelPrice, get_settings
 
 RESULTS_DIR = PROJECT_ROOT / "evals" / "results"
+CASE_SETS = {"main": CASES_DIR, "heldout": HELDOUT_DIR}
 
 
 class RunFile(BaseModel):
     """Everything saved for one eval run."""
 
     model: str
+    case_set: str = "main"
     started_at: datetime
     finished_at: datetime | None = None
     price: ModelPrice
@@ -40,9 +42,10 @@ class RunFile(BaseModel):
     grades: dict[str, CaseGrade] = Field(default_factory=dict)
 
 
-def new_run_path(model: str, now: datetime) -> Path:
+def new_run_path(model: str, now: datetime, case_set: str = "main") -> Path:
     """Path for a new run's results. Refuses to reuse a path, so runs are never overwritten."""
-    path = RESULTS_DIR / f"{now:%Y%m%d-%H%M%S}-{model}.json"
+    suffix = "" if case_set == "main" else f"-{case_set}"
+    path = RESULTS_DIR / f"{now:%Y%m%d-%H%M%S}-{model}{suffix}.json"
     if path.exists():
         raise FileExistsError(f"{path} already exists")
     return path
@@ -102,6 +105,7 @@ def main(argv: list[str] | None = None) -> None:
         choices=[c.value for c in Category],
         help="run only this category",
     )
+    parser.add_argument("--set", choices=list(CASE_SETS), default="main", help="which cases")
     parser.add_argument("--resume", type=Path, help="continue a partial run in this file")
     parser.add_argument("--no-grade", action="store_true", help="skip the AI grader")
     parser.add_argument(
@@ -112,21 +116,22 @@ def main(argv: list[str] | None = None) -> None:
     model = get_settings().model_name
     if model not in MODEL_PRICES:
         sys.exit(f"No price for {model}; add it to MODEL_PRICES in merchant_agent/config.py")
-    all_cases = load_cases()
-
     if args.resume:
         path = args.resume
         run_file = RunFile.model_validate_json(path.read_text())
+        all_cases = load_cases(CASE_SETS[run_file.case_set])
         if args.regrade:
             run_file.grades = {}
         case_ids = args.case or run_file.case_filter
         categories = args.category or run_file.category_filter
     else:
         now = datetime.now(UTC)
-        path = new_run_path(model, now)
+        path = new_run_path(model, now, args.set)
+        all_cases = load_cases(CASE_SETS[args.set])
         case_ids, categories = args.case, args.category
         run_file = RunFile(
             model=model,
+            case_set=args.set,
             started_at=now,
             price=MODEL_PRICES[model],
             case_filter=case_ids,

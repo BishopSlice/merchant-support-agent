@@ -162,3 +162,10 @@ def test_scorecard_reports_cases_the_grader_could_not_grade(results_dir, fake_ag
     eval_run.main(["--case", "human-asks-at-start"])
     scorecard = next(results_dir.glob("*.md")).read_text()
     assert "Grading failures: 1 (human-asks-at-start), left out of the AI-graded rates" in scorecard
+
+
+def test_heldout_set_runs_from_its_own_folder_and_is_named_in_the_file(results_dir, fake_agent):
+    eval_run.main(["--set", "heldout", "--no-grade"])
+    [path] = results_dir.glob("*.json")
+    assert path.name.endswith("-gemini-3.6-flash-heldout.json")
+    assert fake_agent and all(case_id.startswith("heldout-") for case_id in fake_agent)
