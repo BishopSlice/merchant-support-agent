@@ -73,6 +73,10 @@ def main() -> None:
     first_path, second_path = (Path(arg) for arg in sys.argv[1:3])
     first = RunFile.model_validate_json(first_path.read_text())
     second = RunFile.model_validate_json(second_path.read_text())
+    if first.case_set != second.case_set:
+        sys.exit(
+            f"Can't compare runs from different case sets ({first.case_set}, {second.case_set})"
+        )
     cases = load_cases(CASE_SETS[first.case_set])
     print(compare_runs(first, first_path.stem, second, second_path.stem, cases))
 

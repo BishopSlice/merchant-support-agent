@@ -96,3 +96,20 @@ def test_compare_runs_reports_metric_changes_and_flipped_cases():
     report = compare_runs(first, "run-1", second, "run-2", cases)
     assert "| Handoff recall |" in report
     assert "off-topic-bids: passed in run-1, failed in run-2" in report
+
+
+def test_compare_refuses_runs_from_different_case_sets(tmp_path, monkeypatch):
+    import pytest
+
+    from evals import compare
+
+    main_run, heldout_run = run_file(), run_file()
+    heldout_run.case_set = "heldout"
+    paths = []
+    for name, rf in [("a", main_run), ("b", heldout_run)]:
+        path = tmp_path / f"{name}.json"
+        path.write_text(rf.model_dump_json())
+        paths.append(str(path))
+    monkeypatch.setattr("sys.argv", ["compare", *paths])
+    with pytest.raises(SystemExit, match="different case sets"):
+        compare.main()
