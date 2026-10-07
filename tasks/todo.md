@@ -4,7 +4,7 @@
 - [x] Task 2: Feed checker
 - [x] Checkpoint A: unit tests pass, all planted problems found
 - [x] Task 3: Agent with one tool (terminal chat)
-- [ ] Task 4: Help docs and search
+- [x] Task 4: Help docs and search
 - [ ] Task 5: Handoff
 - [ ] Checkpoint B: full journey in terminal
 - [ ] Task 6: Merchant chat screen
