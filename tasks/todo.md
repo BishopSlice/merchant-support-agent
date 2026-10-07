@@ -3,7 +3,7 @@
 - [x] Task 1: Data shapes and sample store
 - [x] Task 2: Feed checker
 - [x] Checkpoint A: unit tests pass, all planted problems found
-- [ ] Task 3: Agent with one tool (terminal chat)
+- [x] Task 3: Agent with one tool (terminal chat)
 - [ ] Task 4: Help docs and search
 - [ ] Task 5: Handoff
 - [ ] Checkpoint B: full journey in terminal
