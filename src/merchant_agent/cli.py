@@ -6,15 +6,14 @@ import json
 from datetime import UTC, datetime
 from pathlib import Path
 
-from google.adk import Event, Runner
+from google.adk import Runner
 from google.adk.runners import InMemoryRunner
-from google.genai import types
 
 from merchant_agent.agent import build_agent
+from merchant_agent.chat import APP_NAME, USER_ID, describe_tool_call, run_turn
 from merchant_agent.config import get_settings
 
-APP_NAME = "merchant_support"
-USER_ID = "merchant"
+__all__ = ["APP_NAME", "USER_ID", "Transcript", "send"]
 
 
 class Transcript:
@@ -56,25 +55,11 @@ class Transcript:
 
 async def send(runner: Runner, session_id: str, text: str, transcript: Transcript) -> str:
     """Send one merchant message and return the agent's reply, logging tool calls."""
-    message = types.Content(role="user", parts=[types.Part(text=text)])
-    calls: dict[str, tuple[str, dict]] = {}
-    reply = ""
-    event: Event
-    async for event in runner.run_async(
-        user_id=USER_ID, session_id=session_id, new_message=message
-    ):
-        for part in (event.content.parts if event.content else None) or []:
-            if part.function_call:
-                call = part.function_call
-                calls[call.id or call.name] = (call.name, dict(call.args or {}))
-                print(f"  [calling {call.name}]")
-            elif part.function_response:
-                result = part.function_response
-                name, args = calls.get(result.id or result.name, (result.name, {}))
-                transcript.add_tool_call(name, args, result.response)
-            elif part.text and not part.thought and event.is_final_response():
-                reply += part.text
-    return reply
+    turn = await run_turn(runner, session_id, text)
+    for call in turn.tool_calls:
+        print(f"  [{describe_tool_call(call)}]")
+        transcript.add_tool_call(call.name, call.args, call.response)
+    return turn.reply
 
 
 async def chat(store_id: str, transcript_path: Path | None) -> None:
