@@ -12,8 +12,8 @@
 - [x] Checkpoint C: browser demo works
 - [x] Task 8: Eval cases
 - [x] Task 9: Runner and rule-based scores
-- [ ] Task 10: AI grader
-- [ ] Checkpoint D: full scorecard
+- [x] Task 10: AI grader
+- [x] Checkpoint D: full scorecard
 - [ ] Task 11: Fix the worst failure
 - [ ] Task 12a: Guided landing walkthrough
 - [ ] Task 12: Write-up and demo
