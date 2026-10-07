@@ -31,3 +31,9 @@ def test_unknown_store_raises():
 def test_store_ids_must_be_plain_slugs(bad_id):
     with pytest.raises(StoreNotFoundError):
         load_feed(bad_id)
+
+
+def test_list_stores_finds_both_sample_stores():
+    from merchant_agent.stores import list_stores
+
+    assert list_stores() == ["sample-store", "suspended-store"]

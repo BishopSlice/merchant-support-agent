@@ -35,3 +35,9 @@ def load_feed(store_id: str) -> list[Product]:
     """Load every product row from a store's feed.csv."""
     with (store_dir(store_id) / "feed.csv").open(newline="") as f:
         return [Product(**row) for row in csv.DictReader(f)]
+
+
+def list_stores() -> list[str]:
+    """Ids of every store in data/stores, sorted."""
+    folder = get_settings().stores_dir
+    return sorted(path.name for path in folder.iterdir() if (path / "store.json").is_file())
