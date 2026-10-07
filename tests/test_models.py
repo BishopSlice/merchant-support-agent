@@ -26,7 +26,7 @@ def test_case_lists_start_empty():
         case_id="c1",
         store_id="s",
         created_at=datetime(2026, 10, 7, tzinfo=UTC),
-        reason="account suspended",
+        reason="account_suspended",
         merchant_request="get my account back",
         suggested_next_step="review suspension",
     )

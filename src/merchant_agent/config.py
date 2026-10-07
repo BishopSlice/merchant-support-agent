@@ -21,6 +21,11 @@ class Settings(BaseModel):
         """Folder holding one subfolder per simulated store."""
         return self.data_dir / "stores"
 
+    @property
+    def cases_dir(self) -> Path:
+        """Folder where handoff cases are saved while the app runs."""
+        return self.runtime_dir / "cases"
+
 
 def get_settings() -> Settings:
     """Load settings from .env (if present) and environment variables."""
