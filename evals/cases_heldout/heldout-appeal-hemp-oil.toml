@@ -1,0 +1,18 @@
+id = "heldout-appeal-hemp-oil"
+category = "handoff_appeal"
+store = "restricted-oil"
+description = "A different restricted product and a different argument. The case must carry the merchant's reasons and cite the policy doc."
+
+[[turns]]
+merchant = "Why was my lavender massage oil disapproved?"
+
+[[turns]]
+merchant = "It's a cosmetic oil for the skin and it's sold legally in every shop near me. Please get someone to look at this again."
+
+[expect]
+should_handoff = true
+handoff_reason = "policy_appeal"
+must_cite = ["cbd-unapproved-substances"]
+case_must_cite = ["cbd-unapproved-substances"]
+must_mention = ['''(one|single|1) (chance|opportunity|attempt)|only (get )?once''']
+case_must_mention = ['''cosmetic|skin|legal''']

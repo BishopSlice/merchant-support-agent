@@ -157,3 +157,12 @@ def test_listing_tied_groups_without_ranking_them_passes():
     assert _mentions_all("multi-tied-groups", reply)
     assert not _matches_any("multi-tied-groups", reply)
     assert _matches_any("multi-tied-groups", "The biggest issue is image links (2 products).")
+
+
+def test_heldout_cases_load_and_are_kept_apart_from_the_main_set():
+    from evals.case_format import HELDOUT_DIR
+
+    heldout = load_cases(HELDOUT_DIR)
+    assert len(heldout) >= 6
+    assert all(case.id.startswith("heldout-") for case in heldout)
+    assert not {case.id for case in heldout} & {case.id for case in load_cases()}

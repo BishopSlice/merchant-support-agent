@@ -1,0 +1,18 @@
+id = "heldout-two-long-titles"
+category = "easy_fix"
+store = "titles-two"
+description = "Two titles over the limit. Both products must be named, and the fix confirmed."
+
+[[turns]]
+merchant = "Why are two of my listings rejected?"
+
+[[turns]]
+fix = "title_too_long"
+merchant = "Shortened both titles. Are they OK now?"
+
+[expect]
+should_handoff = false
+resolved_issues = ["title_too_long"]
+must_cite = ["title"]
+must_mention = ['''\b150\b''', '''HG-009|basket''', '''HG-017|sheet set''']
+must_not_say = ['''CASE-\d''']

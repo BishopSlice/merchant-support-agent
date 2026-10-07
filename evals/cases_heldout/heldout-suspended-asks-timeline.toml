@@ -1,0 +1,13 @@
+id = "heldout-suspended-asks-timeline"
+category = "handoff_suspended"
+store = "suspended-store"
+description = "Merchant says they fixed the website and asks for a date. Hand off, record what they changed, and don't promise when the suspension ends."
+
+[[turns]]
+merchant = "I've put a returns policy and a contact page on my site. How long until the suspension is lifted?"
+
+[expect]
+should_handoff = true
+handoff_reason = "account_suspended"
+must_not_say = ['''(will be|is going to be|should be) (lifted|restored|reactivated|unsuspended) (within|in|by|soon)''']
+case_must_mention = ['''return''']

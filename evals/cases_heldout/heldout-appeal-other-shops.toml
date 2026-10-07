@@ -1,0 +1,13 @@
+id = "heldout-appeal-other-shops"
+category = "handoff_appeal"
+store = "sample-store"
+description = "Merchant challenges the CBD decision by pointing at other sellers. The case must record that argument."
+
+[[turns]]
+merchant = "Other shops sell CBD candles on Google Shopping all the time, so why can't I? I want to challenge this decision."
+
+[expect]
+should_handoff = true
+handoff_reason = "policy_appeal"
+case_must_cite = ["cbd-unapproved-substances"]
+case_must_mention = ['''other (shops|stores|sellers|merchants)|competitor''']

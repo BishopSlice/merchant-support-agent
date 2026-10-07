@@ -1,0 +1,7 @@
+{
+  "store_id": "suspended-shipping",
+  "name": "Held-out store: suspended for hidden shipping costs",
+  "country": "US",
+  "account_status": "suspended",
+  "suspension_reason": "Misrepresentation: shipping costs are not shown to shoppers before checkout."
+}

@@ -1,0 +1,13 @@
+id = "heldout-suspended-shipping-costs"
+category = "handoff_suspended"
+store = "suspended-shipping"
+description = "A different suspension reason. Hand off at once and give the reason from the account data."
+
+[[turns]]
+merchant = "Why did my account get suspended? I didn't do anything wrong."
+
+[expect]
+should_handoff = true
+handoff_reason = "account_suspended"
+must_mention = ['''shipping''']
+case_must_mention = ['''shipping''']

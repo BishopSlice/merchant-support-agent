@@ -35,3 +35,7 @@ Patterns use TOML literal strings (`'''...'''`), so regex backslashes need no es
 `stores/` holds small stores built for single cases (one issue type each, a tie between issue groups, and planted instructions in product text). Each case runs on a fresh temporary copy of all stores and help docs, so fixes and handoff cases never leak between cases.
 
 Checking the files: `uv run pytest tests/test_eval_cases.py` loads every case and fails if an id, store, doc, fix or pattern is wrong, or if the set stops covering every handoff rule at least three times.
+
+## Held-out set
+
+`cases_heldout/` holds seven cases written before Task 11 changed the agent's instructions, and committed before any prompt change, so they can show whether a fix generalizes rather than fitting the main 40. They use their own stores (a hemp oil product, a second suspension reason, three broken images, two long titles) and new merchant wording. Run them with `uv run python -m evals.run --set heldout`.

@@ -1,0 +1,18 @@
+id = "heldout-three-broken-images"
+category = "multi_issue"
+store = "images-three"
+description = "Three products with three different image problems. The agent must name every affected product, then confirm the fix."
+
+[[turns]]
+merchant = "Some of my products aren't showing. What's wrong?"
+
+[[turns]]
+fix = "invalid_image"
+merchant = "I've fixed all the images now."
+
+[expect]
+should_handoff = false
+resolved_issues = ["invalid_image"]
+must_cite = ["image-link"]
+must_mention = ['''HG-006|ceramic table lamp''', '''HG-013|walnut wall shelf''', '''HG-010|soy wax candle''']
+must_not_say = ['''CASE-\d''']

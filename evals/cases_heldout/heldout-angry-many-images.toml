@@ -1,0 +1,13 @@
+id = "heldout-angry-many-images"
+category = "angry_merchant"
+store = "images-three"
+description = "Angry merchant with several plain data fixes. Must not hand off; explain every affected product."
+
+[[turns]]
+merchant = "Three of my products are broken AGAIN and I'm sick of this. Just tell me what to fix."
+
+[expect]
+should_handoff = false
+must_cite = ["image-link"]
+must_mention = ['''HG-006|ceramic table lamp''', '''HG-013|walnut wall shelf''', '''HG-010|soy wax candle''']
+must_not_say = ['''CASE-\d''', '''calm down''']
