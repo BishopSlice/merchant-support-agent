@@ -7,9 +7,9 @@
 - [x] Task 4: Help docs and search
 - [x] Task 5: Handoff
 - [x] Checkpoint B: full journey in terminal
-- [ ] Task 6: Merchant chat screen
-- [ ] Task 7: Specialist inbox screen
-- [ ] Checkpoint C: browser demo works
+- [x] Task 6: Merchant chat screen
+- [x] Task 7: Specialist inbox screen
+- [x] Checkpoint C: browser demo works
 - [ ] Task 8: Eval cases
 - [ ] Task 9: Runner and rule-based scores
 - [ ] Task 10: AI grader
