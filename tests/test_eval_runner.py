@@ -3,6 +3,7 @@
 import asyncio
 import os
 
+import httpx
 from google.adk import Event
 from google.adk.sessions import InMemorySessionService
 from google.genai import types
@@ -21,12 +22,15 @@ ORIGINAL_FEED = PROJECT_ROOT / "evals" / "stores" / "shipping-only" / "feed.csv"
 class FakeAgentRunner:
     """Checks the feed on every message; files an appeal case when asked to appeal."""
 
-    def __init__(self, store_id: str, fail: bool = False) -> None:
+    def __init__(self, store_id: str, fail: bool = False, network_error: bool = False) -> None:
+        self.network_error = network_error
         self.store_id = store_id
         self.fail = fail
         self.session_service = InMemorySessionService()
 
     async def run_async(self, *, user_id, session_id, new_message):
+        if self.network_error:
+            raise httpx.ReadTimeout("timed out")
         if self.fail:
             raise ClientError(429, {"error": {"message": "quota exhausted"}})
         text = new_message.parts[0].text
@@ -126,3 +130,9 @@ def test_handoff_cases_are_recorded_oldest_first():
         "policy_appeal",
         "merchant_requested_human",
     ]
+
+
+def test_network_errors_are_recorded_not_raised():
+    record = run(make_case([{"merchant": "a"}]), network_error=True)
+    assert record.status == "error"
+    assert "timed out" in record.error

@@ -70,3 +70,8 @@ def test_instructions_cover_the_must_not_hand_off_rule_and_appeal_warning():
     assert "do not hand off" in instruction
     assert "one chance to disagree" in instruction
     assert "repeat" in instruction  # merchant won't need to repeat themselves
+
+
+def test_model_calls_time_out_instead_of_hanging():
+    timeout_ms = build_agent().generate_content_config.http_options.timeout
+    assert 30_000 <= timeout_ms <= 300_000

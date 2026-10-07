@@ -88,6 +88,8 @@ def check_feed(tool_context: Context) -> dict:
 # The free tier allows a few requests per minute and one merchant turn can take several,
 # so wait and retry on rate limits (HTTP 429) instead of failing the conversation.
 RETRY_OPTIONS = types.HttpRetryOptions(attempts=5, initial_delay=10, max_delay=60)
+# A dropped connection (for example the laptop sleeping) must fail, not hang forever.
+REQUEST_TIMEOUT_MS = 120_000
 
 
 def create_handoff_case(
@@ -126,4 +128,7 @@ def build_agent() -> Agent:
         description="Helps Google Shopping merchants fix disapproved products.",
         instruction=INSTRUCTION,
         tools=[check_feed, search_help_docs, create_handoff_case],
+        generate_content_config=types.GenerateContentConfig(
+            http_options=types.HttpOptions(timeout=REQUEST_TIMEOUT_MS)
+        ),
     )

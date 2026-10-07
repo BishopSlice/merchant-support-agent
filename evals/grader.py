@@ -137,7 +137,7 @@ def grade_case(run: CaseRun, generate: Generate, price: ModelPrice | None) -> Ca
 def gemini_generate(model: str) -> Generate:
     """A Generate function backed by Gemini with JSON output and retries on rate limits."""
     retry = types.HttpRetryOptions(attempts=5, initial_delay=10, max_delay=60)
-    client = genai.Client(http_options=types.HttpOptions(retry_options=retry))
+    client = genai.Client(http_options=types.HttpOptions(retry_options=retry, timeout=120_000))
 
     def generate(prompt: str, schema: type[BaseModel]) -> tuple[BaseModel, Usage]:
         response = client.models.generate_content(

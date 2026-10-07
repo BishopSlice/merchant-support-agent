@@ -10,6 +10,7 @@ from contextlib import contextmanager
 from dataclasses import asdict
 from pathlib import Path
 
+import httpx
 from google.adk import Runner
 from google.genai.errors import APIError
 
@@ -66,8 +67,8 @@ async def run_case(
                 ]
                 turn_record.usage = TokenUsage(**asdict(turn.usage))
                 total += turn.usage
-        except APIError as error:
-            record.status, record.error = "error", str(error)
+        except (APIError, httpx.HTTPError) as error:  # model or network errors: resume reruns these
+            record.status, record.error = "error", f"{type(error).__name__}: {error}"
         finally:
             await runner.close()
         # Oldest first, so the last entry is the most recent handoff.
