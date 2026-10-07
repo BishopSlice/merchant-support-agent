@@ -72,3 +72,13 @@ def test_title_over_150_characters_is_flagged():
 
 def test_title_of_exactly_150_characters_is_fine():
     assert issue_types(clean_product(title="x" * 150)) == []
+
+
+def test_in_stock_in_feed_but_out_of_stock_on_page_is_flagged():
+    product = clean_product(availability="in_stock", landing_page_availability="out_of_stock")
+    assert issue_types(product) == [IssueType.AVAILABILITY_MISMATCH]
+
+
+def test_availability_comparison_ignores_case_and_spaces():
+    product = clean_product(availability="in stock", landing_page_availability="In_Stock")
+    assert issue_types(product) == []

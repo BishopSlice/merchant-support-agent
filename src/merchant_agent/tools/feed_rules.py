@@ -104,11 +104,33 @@ def check_title_too_long(product: Product) -> list[Issue]:
     ]
 
 
+def _normalize_availability(value: str) -> str:
+    """Treat "In stock", "in stock" and "in_stock" as the same value."""
+    return value.strip().lower().replace(" ", "_")
+
+
+def check_availability_mismatch(product: Product) -> list[Issue]:
+    """Flag products whose feed availability differs from what their landing page says."""
+    feed = _normalize_availability(product.availability)
+    page = _normalize_availability(product.landing_page_availability)
+    if not feed or not page or feed == page:
+        return []
+    return [
+        Issue(
+            product_id=product.id,
+            issue_type=IssueType.AVAILABILITY_MISMATCH,
+            field="availability",
+            detail=f"Feed says {feed} but the product page says {page}.",
+        )
+    ]
+
+
 RULES: list[Rule] = [
     check_missing_gtin,
     check_price_mismatch,
     check_invalid_image,
     check_title_too_long,
+    check_availability_mismatch,
 ]
 
 
