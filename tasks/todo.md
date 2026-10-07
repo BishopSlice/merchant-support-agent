@@ -6,7 +6,7 @@
 - [x] Task 3: Agent with one tool (terminal chat)
 - [x] Task 4: Help docs and search
 - [x] Task 5: Handoff
-- [ ] Checkpoint B: full journey in terminal
+- [x] Checkpoint B: full journey in terminal
 - [ ] Task 6: Merchant chat screen
 - [ ] Task 7: Specialist inbox screen
 - [ ] Checkpoint C: browser demo works
