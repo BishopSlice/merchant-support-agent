@@ -86,3 +86,17 @@ def test_availability_comparison_ignores_case_and_spaces():
 
 def test_missing_shipping_is_flagged():
     assert issue_types(clean_product(shipping="")) == [IssueType.MISSING_SHIPPING]
+
+
+def test_cbd_product_is_flagged_as_restricted():
+    product = clean_product(title="CBD Infused Lavender Candle")
+    assert issue_types(product) == [IssueType.RESTRICTED_PRODUCT]
+
+
+def test_restricted_term_in_product_type_is_flagged():
+    product = clean_product(product_type="Home & Garden > Decor > Candles > CBD Products")
+    assert issue_types(product) == [IssueType.RESTRICTED_PRODUCT]
+
+
+def test_restricted_terms_match_whole_words_only():
+    assert issue_types(clean_product(title="ABCD Brand Mug")) == []

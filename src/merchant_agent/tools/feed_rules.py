@@ -4,6 +4,7 @@ To add a rule: write a test with a planted problem, add a check function here,
 and append it to RULES.
 """
 
+import re
 from collections.abc import Callable
 from decimal import Decimal, InvalidOperation
 
@@ -139,6 +140,27 @@ def check_missing_shipping(product: Product) -> list[Issue]:
     ]
 
 
+RESTRICTED_TERMS = ("cbd", "cannabidiol", "hemp extract")
+_RESTRICTED_PATTERN = re.compile(
+    r"\b(" + "|".join(re.escape(term) for term in RESTRICTED_TERMS) + r")\b", re.IGNORECASE
+)
+
+
+def check_restricted_product(product: Product) -> list[Issue]:
+    """Flag products that fall under a restricted content policy, such as CBD."""
+    match = _RESTRICTED_PATTERN.search(f"{product.title} {product.product_type}")
+    if not match:
+        return []
+    return [
+        Issue(
+            product_id=product.id,
+            issue_type=IssueType.RESTRICTED_PRODUCT,
+            field="product_type",
+            detail=f"Mentions {match.group(0)!r}, which is a restricted product category.",
+        )
+    ]
+
+
 RULES: list[Rule] = [
     check_missing_gtin,
     check_price_mismatch,
@@ -146,6 +168,7 @@ RULES: list[Rule] = [
     check_title_too_long,
     check_availability_mismatch,
     check_missing_shipping,
+    check_restricted_product,
 ]
 
 
