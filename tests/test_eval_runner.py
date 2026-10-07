@@ -31,30 +31,54 @@ class FakeAgentRunner:
             raise ClientError(429, {"error": {"message": "quota exhausted"}})
         text = new_message.parts[0].text
         call = types.FunctionCall(id="1", name="check_feed", args={})
-        yield Event(author="agent", content=types.Content(role="model", parts=[types.Part(function_call=call)]),
-                    usage_metadata=types.GenerateContentResponseUsageMetadata(
-                        prompt_token_count=1000, candidates_token_count=100))
-        result = types.FunctionResponse(id="1", name="check_feed", response=check_feed(self.store_id))
-        yield Event(author="agent", content=types.Content(role="user", parts=[types.Part(function_response=result)]))
+        yield Event(
+            author="agent",
+            content=types.Content(role="model", parts=[types.Part(function_call=call)]),
+            usage_metadata=types.GenerateContentResponseUsageMetadata(
+                prompt_token_count=1000, candidates_token_count=100
+            ),
+        )
+        result = types.FunctionResponse(
+            id="1", name="check_feed", response=check_feed(self.store_id)
+        )
+        yield Event(
+            author="agent",
+            content=types.Content(role="user", parts=[types.Part(function_response=result)]),
+        )
         if "appeal" in text:
-            handoff.create_handoff_case(self.store_id, "policy_appeal", [], [], "Appeal", "Review", [])
-        yield Event(author="agent", content=types.Content(role="model", parts=[types.Part(text=f"Re: {text}")]))
+            handoff.create_handoff_case(
+                self.store_id, "policy_appeal", [], [], "Appeal", "Review", []
+            )
+        yield Event(
+            author="agent",
+            content=types.Content(role="model", parts=[types.Part(text=f"Re: {text}")]),
+        )
 
     async def close(self):
         pass
 
 
 def make_case(turns, store="shipping-only") -> EvalCase:
-    return EvalCase(id="c1", category="easy_fix", store=store, description="d", turns=turns,
-                    expect={"should_handoff": False})
+    return EvalCase(
+        id="c1",
+        category="easy_fix",
+        store=store,
+        description="d",
+        turns=turns,
+        expect={"should_handoff": False},
+    )
 
 
 def run(case, **fake_kwargs):
-    return asyncio.run(run_case(case, PRICE, runner_factory=lambda: FakeAgentRunner(case.store, **fake_kwargs)))
+    return asyncio.run(
+        run_case(case, PRICE, runner_factory=lambda: FakeAgentRunner(case.store, **fake_kwargs))
+    )
 
 
 def test_records_turns_tool_calls_and_fixes():
-    case = make_case([{"merchant": "What's wrong?"}, {"merchant": "Fixed", "fix": "missing_shipping"}])
+    case = make_case(
+        [{"merchant": "What's wrong?"}, {"merchant": "Fixed", "fix": "missing_shipping"}]
+    )
     record = run(case)
     assert record.status == "ok"
     assert [turn.reply for turn in record.turns] == ["Re: What's wrong?", "Re: Fixed"]

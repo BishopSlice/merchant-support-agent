@@ -24,8 +24,15 @@ def feed_check(*issue_types: str) -> ToolCallRecord:
 
 
 def handoff(reason: str, **fields) -> dict:
-    return {"reason": reason, "cited_doc_ids": [], "issues_found": [], "already_tried": [],
-            "merchant_request": "", "suggested_next_step": "", **fields}
+    return {
+        "reason": reason,
+        "cited_doc_ids": [],
+        "issues_found": [],
+        "already_tried": [],
+        "merchant_request": "",
+        "suggested_next_step": "",
+        **fields,
+    }
 
 
 def make_run(replies: list[str], calls: list[list[ToolCallRecord]], cases=()) -> CaseRun:
@@ -44,14 +51,23 @@ GOOD_RUN = make_run(
 
 
 def test_a_good_run_passes_every_check():
-    score = score_case(make_case(resolved_issues=["missing_shipping"], must_cite=["shipping"],
-                                 must_mention=["shipping"], must_not_say=[r"CASE-\d"]), GOOD_RUN)
+    score = score_case(
+        make_case(
+            resolved_issues=["missing_shipping"],
+            must_cite=["shipping"],
+            must_mention=["shipping"],
+            must_not_say=[r"CASE-\d"],
+        ),
+        GOOD_RUN,
+    )
     assert score.passed, score.failures
     assert not score.handed_off
 
 
 def test_no_recheck_after_the_fix_fails():
-    run = make_run(["Shipping is missing.", "Great, all fixed."], [[feed_check("missing_shipping")], []])
+    run = make_run(
+        ["Shipping is missing.", "Great, all fixed."], [[feed_check("missing_shipping")], []]
+    )
     score = score_case(make_case(resolved_issues=["missing_shipping"]), run)
     assert not score.passed
     assert "did not re-run check_feed after the last fix" in score.failures
@@ -88,11 +104,23 @@ def test_unexpected_handoff_fails():
 
 
 def test_expected_handoff_checks_reason_and_case_contents():
-    case = make_case(should_handoff=True, handoff_reason="policy_appeal",
-                     case_must_cite=["cbd-unapproved-substances"], case_must_mention=["candle"])
-    good = GOOD_RUN.model_copy(update={"handoff_cases": [handoff(
-        "policy_appeal", cited_doc_ids=["cbd-unapproved-substances"],
-        merchant_request="Appeal the candle")]})
+    case = make_case(
+        should_handoff=True,
+        handoff_reason="policy_appeal",
+        case_must_cite=["cbd-unapproved-substances"],
+        case_must_mention=["candle"],
+    )
+    good = GOOD_RUN.model_copy(
+        update={
+            "handoff_cases": [
+                handoff(
+                    "policy_appeal",
+                    cited_doc_ids=["cbd-unapproved-substances"],
+                    merchant_request="Appeal the candle",
+                )
+            ]
+        }
+    )
     assert score_case(case, good).passed
 
     wrong = GOOD_RUN.model_copy(update={"handoff_cases": [handoff("merchant_requested_human")]})
@@ -104,7 +132,10 @@ def test_expected_handoff_checks_reason_and_case_contents():
 
 def test_missing_handoff_fails():
     case = make_case(should_handoff=True, handoff_reason="account_suspended")
-    assert "should have handed off (account_suspended) but did not" in score_case(case, GOOD_RUN).failures
+    assert (
+        "should have handed off (account_suspended) but did not"
+        in score_case(case, GOOD_RUN).failures
+    )
 
 
 def test_errored_run_fails_with_its_error():
@@ -119,13 +150,24 @@ def test_summary_metrics():
         expect = {"should_handoff": should_handoff}
         if reason:
             expect["handoff_reason"] = reason
-        return EvalCase(id=case_id, category=category, store="sample-store", description="d",
-                        turns=[{"merchant": "hi"}], expect=expect)
+        return EvalCase(
+            id=case_id,
+            category=category,
+            store="sample-store",
+            description="d",
+            turns=[{"merchant": "hi"}],
+            expect=expect,
+        )
 
     def run(case_id, category, handoff_reason=None, cost=0.01):
         cases = [handoff(handoff_reason)] if handoff_reason else []
-        return CaseRun(case_id=case_id, category=category, cost_usd=cost,
-                       turns=[TurnRecord(merchant="hi", reply="ok")], handoff_cases=cases)
+        return CaseRun(
+            case_id=case_id,
+            category=category,
+            cost_usd=cost,
+            turns=[TurnRecord(merchant="hi", reply="ok")],
+            handoff_cases=cases,
+        )
 
     pairs = [
         # fixable, resolved
@@ -133,9 +175,15 @@ def test_summary_metrics():
         # fixable, wrongly handed off: not resolved, false positive
         (case("b", "easy_fix", False), run("b", "easy_fix", "merchant_requested_human")),
         # needed handoff, got it with the right reason
-        (case("c", "handoff_appeal", True, "policy_appeal"), run("c", "handoff_appeal", "policy_appeal")),
+        (
+            case("c", "handoff_appeal", True, "policy_appeal"),
+            run("c", "handoff_appeal", "policy_appeal"),
+        ),
         # needed handoff, got it with the wrong reason
-        (case("d", "handoff_human", True, "merchant_requested_human"), run("d", "handoff_human", "no_supporting_doc")),
+        (
+            case("d", "handoff_human", True, "merchant_requested_human"),
+            run("d", "handoff_human", "no_supporting_doc"),
+        ),
         # needed handoff, missed
         (case("e", "handoff_no_doc", True, "no_supporting_doc"), run("e", "handoff_no_doc")),
         # off topic: not a fixable case, not a handoff

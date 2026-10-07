@@ -75,9 +75,13 @@ def _resolution_failures(case: EvalCase, run: CaseRun) -> list[str]:
 def _reply_failures(case: EvalCase, run: CaseRun) -> list[str]:
     replies = "\n\n".join(turn.reply for turn in run.turns)
     urls = {doc.doc_id: doc.source_url for doc in load_help_docs()}
-    failures = [f"did not mention {p!r}" for p in case.expect.must_mention if not _matches(p, replies)]
+    failures = [
+        f"did not mention {p!r}" for p in case.expect.must_mention if not _matches(p, replies)
+    ]
     failures += [
-        f"said forbidden text matching {p!r}" for p in case.expect.must_not_say if _matches(p, replies)
+        f"said forbidden text matching {p!r}"
+        for p in case.expect.must_not_say
+        if _matches(p, replies)
     ]
     failures += [f"did not cite {d}" for d in case.expect.must_cite if urls[d] not in replies]
     return failures

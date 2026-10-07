@@ -1,0 +1,107 @@
+"""The eval command line: filters, saving, never overwriting, resuming. No model calls."""
+
+import json
+
+import pytest
+
+from evals import run as eval_run
+from evals.case_format import load_cases
+from evals.records import CaseRun, ToolCallRecord, TurnRecord
+
+
+@pytest.fixture
+def results_dir(monkeypatch, tmp_path):
+    monkeypatch.setattr(eval_run, "RESULTS_DIR", tmp_path)
+    monkeypatch.setenv("MODEL_NAME", "gemini-3.6-flash")
+    return tmp_path
+
+
+@pytest.fixture
+def fake_agent(monkeypatch):
+    """Replace the real case runner: every case 'passes' only the checks it can."""
+    calls = []
+
+    async def fake_run_case(case, price, runner_factory=None):
+        calls.append(case.id)
+        handoffs = []
+        if case.expect.should_handoff:
+            handoffs = [
+                {
+                    "reason": case.expect.handoff_reason.value,
+                    "cited_doc_ids": [],
+                    "issues_found": [],
+                    "already_tried": [],
+                    "merchant_request": "",
+                    "suggested_next_step": "",
+                }
+            ]
+        turn = TurnRecord(
+            merchant=case.turns[0].merchant,
+            reply="ok",
+            tool_calls=[ToolCallRecord(name="check_feed", args={}, response={})],
+        )
+        return CaseRun(
+            case_id=case.id,
+            category=case.category.value,
+            turns=[turn],
+            handoff_cases=handoffs,
+            cost_usd=0.002,
+        )
+
+    monkeypatch.setattr(eval_run, "run_case", fake_run_case)
+    return calls
+
+
+def test_select_cases_by_id_and_category():
+    cases = load_cases()
+    assert [c.id for c in eval_run.select_cases(cases, ["fix-price-mismatch"], [])] == [
+        "fix-price-mismatch"
+    ]
+    off_topic = eval_run.select_cases(cases, [], ["off_topic"])
+    assert {c.category.value for c in off_topic} == {"off_topic"} and len(off_topic) == 3
+    with pytest.raises(SystemExit):
+        eval_run.select_cases(cases, ["no-such-case"], [])
+
+
+def test_a_run_saves_json_and_a_scorecard(results_dir, fake_agent):
+    eval_run.main(["--category", "off_topic", "--no-grade"])
+    [json_path] = results_dir.glob("*.json")
+    assert json_path.name.endswith("-gemini-3.6-flash.json")
+    saved = json.loads(json_path.read_text())
+    assert set(saved["runs"]) == {"off-topic-billing", "off-topic-bids", "off-topic-shopify-steps"}
+    assert saved["finished_at"]
+    scorecard = json_path.with_suffix(".md").read_text()
+    assert "Handoff precision" in scorecard and "off_topic" in scorecard
+
+
+def test_runs_never_overwrite_an_existing_file(results_dir):
+    from datetime import UTC, datetime
+
+    now = datetime(2026, 10, 7, 12, 0, 0, tzinfo=UTC)
+    path = eval_run.new_run_path("m", now)
+    path.write_text("{}")
+    with pytest.raises(FileExistsError):
+        eval_run.new_run_path("m", now)
+
+
+def test_resume_only_reruns_missing_or_errored_cases(results_dir, fake_agent):
+    eval_run.main(["--category", "off_topic", "--no-grade"])
+    [path] = results_dir.glob("*.json")
+    saved = json.loads(path.read_text())
+    saved["runs"]["off-topic-bids"]["status"] = "error"
+    del saved["runs"]["off-topic-billing"]
+    path.write_text(json.dumps(saved))
+    fake_agent.clear()
+
+    eval_run.main(["--resume", str(path), "--no-grade"])
+    assert sorted(fake_agent) == ["off-topic-bids", "off-topic-billing"]
+    assert len(list(results_dir.glob("*.json"))) == 1  # resumed in place
+    assert json.loads(path.read_text())["runs"]["off-topic-bids"]["status"] == "ok"
+
+
+def test_scorecard_lists_failures_and_prd_targets(results_dir, fake_agent):
+    eval_run.main(["--case", "fix-price-mismatch", "--no-grade"])
+    scorecard = next(results_dir.glob("*.md")).read_text()
+    assert "fix-price-mismatch" in scorecard
+    assert "did not mention" in scorecard  # the fake reply says only "ok"
+    assert "80%" in scorecard  # resolution target from the PRD
