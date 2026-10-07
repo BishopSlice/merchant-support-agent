@@ -1,7 +1,7 @@
 {
   "model": "gemini-3.6-flash",
   "started_at": "2026-10-07T11:04:58.259565Z",
-  "finished_at": "2026-10-07T11:05:46.573747Z",
+  "finished_at": "2026-10-07T11:09:22.534767Z",
   "price": {
     "input_per_million": 0.75,
     "cached_input_per_million": 0.075,
@@ -608,5 +608,90 @@
       "seconds": 13.4
     }
   },
-  "grades": {}
+  "grades": {
+    "appeal-cbd-after-diagnosis": {
+      "wrong_advice": {
+        "replies": [
+          {
+            "turn": 1,
+            "verdict": "supported",
+            "unsupported_claims": [],
+            "evidence": "Agent reply 1 states: \"Every product needs a main image link, and the image must show the actual product. Add valid image links for products missing them, and replace placeholder images with real product photos.\" This is supported by Product image link: \"Every product needs a main image link. Without one the product cannot show... The image must show the actual product. Placeholder images, generic images and graphics that do not show the product are not allowed.\""
+          },
+          {
+            "turn": 2,
+            "verdict": "supported",
+            "unsupported_claims": [],
+            "evidence": "Agent reply 2 states: \"you may only get one chance to disagree before a waiting period starts.\" This is supported by Requesting a review or appealing a decision: \"You may only get one chance to disagree before a waiting period starts, so it is worth getting the request right.\""
+          }
+        ]
+      },
+      "completeness": {
+        "verdict": "incomplete",
+        "missing": [
+          "Why does the merchant believe the policy disapproval for product HG-023 is wrong?"
+        ],
+        "evidence": "Conversation: Merchant said 'The CBD candle is just a candle. I think that decision is wrong and I want to appeal it.' Case: merchant_request states 'The merchant disagrees with the restricted product policy disapproval for product HG-023 (CBD Infused Lavender Relaxation Candle) and wants to appeal the decision.' without mentioning the merchant's specific detail/argument that it is 'just a candle'."
+      },
+      "usage": {
+        "model_calls": 2,
+        "input_tokens": 3958,
+        "cached_tokens": 0,
+        "output_tokens": 2297
+      },
+      "cost_usd": 0.01158225
+    },
+    "fix-missing-shipping": {
+      "wrong_advice": {
+        "replies": [
+          {
+            "turn": 1,
+            "verdict": "supported",
+            "unsupported_claims": [],
+            "evidence": "The agent advises: \"Products need shipping information, including cost and delivery speed, or they can be disapproved. How to fix it: You can set up shipping settings in your Merchant Center account, which will apply to your products. Alternatively, you can specify the shipping cost directly in your product data to override your account settings for specific products.\" This is supported by the retrieved doc Shipping costs: \"In the United States and many other countries, products need shipping information, including cost and delivery speed. Products with missing or wrong shipping information can be disapproved. The recommended way is to set up shipping in your Merchant Center account settings, which then applies to your products. Use the shipping value in your product data only to override those settings for specific products.\""
+          },
+          {
+            "turn": 2,
+            "verdict": "no_advice",
+            "unsupported_claims": [],
+            "evidence": "The agent reports the updated status from the feed check data (0 disapproved products) and offers further assistance, which contains no advice as defined by the rubric."
+          }
+        ]
+      },
+      "completeness": null,
+      "usage": {
+        "model_calls": 1,
+        "input_tokens": 1221,
+        "cached_tokens": 0,
+        "output_tokens": 1187
+      },
+      "cost_usd": 0.005367
+    },
+    "suspended-why-not-showing": {
+      "wrong_advice": {
+        "replies": [
+          {
+            "turn": 1,
+            "verdict": "unsupported",
+            "unsupported_claims": [
+              "When an account is suspended, none of your products can show on Google."
+            ],
+            "evidence": "The agent stated that \"When an account is suspended, none of your products can show on Google.\" None of the retrieved help docs state this rule for account suspensions (the 'Requesting a review or appealing a decision' doc only states that \"Your ads may not show while the account or products are under review\")."
+          }
+        ]
+      },
+      "completeness": {
+        "verdict": "complete",
+        "missing": [],
+        "evidence": "Conversation:\nMerchant: \"None of my products are showing on Google. Why?\"\nAgent reply 1: \"Your account is currently suspended for Misrepresentation because your website is missing a return policy and business contact details.\"\n\nCase:\n\"reason\": \"account_suspended\"\n\"issues_found\": [\"Account suspended: Misrepresentation (website missing returns policy and business contact details)\"]\n\"merchant_request\": \"Merchant wants to know why none of their products are showing on Google.\"\n\"suggested_next_step\": \"Assist merchant with resolving account suspension due to Misrepresentation.\""
+      },
+      "usage": {
+        "model_calls": 2,
+        "input_tokens": 2037,
+        "cached_tokens": 0,
+        "output_tokens": 2375
+      },
+      "cost_usd": 0.010434
+    }
+  }
 }

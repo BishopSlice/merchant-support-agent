@@ -1,6 +1,7 @@
 """Run eval cases against the agent and save a scored result.
 
-uv run python -m evals.run [--case ID ...] [--category NAME ...] [--resume PATH] [--no-grade]
+uv run python -m evals.run [--case ID ...] [--category NAME ...] [--resume PATH [--regrade]]
+                           [--no-grade]
 
 Each run is saved to evals/results/<timestamp>-<model>.json after every case, with a
 markdown scorecard next to it. Earlier runs are never overwritten; --resume continues a
@@ -96,6 +97,9 @@ def main(argv: list[str] | None = None) -> None:
     )
     parser.add_argument("--resume", type=Path, help="continue a partial run in this file")
     parser.add_argument("--no-grade", action="store_true", help="skip the AI grader")
+    parser.add_argument(
+        "--regrade", action="store_true", help="with --resume: drop old grades and grade again"
+    )
     args = parser.parse_args(argv)
 
     model = get_settings().model_name
@@ -106,6 +110,8 @@ def main(argv: list[str] | None = None) -> None:
     if args.resume:
         path = args.resume
         run_file = RunFile.model_validate_json(path.read_text())
+        if args.regrade:
+            run_file.grades = {}
         case_ids = args.case or run_file.case_filter
         categories = args.category or run_file.category_filter
     else:

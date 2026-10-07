@@ -144,7 +144,10 @@ def gemini_generate(model: str) -> Generate:
             model=model,
             contents=prompt,
             config=types.GenerateContentConfig(
-                response_mime_type="application/json", response_schema=schema, temperature=0
+                response_mime_type="application/json",
+                response_schema=schema,
+                temperature=0,
+                automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
             ),
         )
         usage = Usage.from_metadata(response.usage_metadata) if response.usage_metadata else Usage()

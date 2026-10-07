@@ -127,3 +127,26 @@ def test_grading_feeds_the_scorecard(results_dir, fake_agent, monkeypatch):
     assert "| Wrong advice rate (AI graded) | 100% | under 5% | **missed** |" in scorecard
     assert "| Case completeness (AI graded) | 100% | 90% or higher | met |" in scorecard
     assert "Grading cost: $" in scorecard
+
+
+def test_regrade_clears_old_grades_on_resume(results_dir, fake_agent, monkeypatch):
+    from evals import grader
+
+    calls = []
+
+    def fake_generate(prompt, schema):
+        from merchant_agent.chat import Usage
+
+        calls.append(schema.__name__)
+        if schema is grader.WrongAdviceGrade:
+            return grader.WrongAdviceGrade(replies=[]), Usage()
+        return grader.CompletenessGrade(verdict="complete", evidence="q"), Usage()
+
+    monkeypatch.setattr(grader, "gemini_generate", lambda model: fake_generate)
+    eval_run.main(["--case", "human-asks-at-start"])
+    [path] = results_dir.glob("*.json")
+    calls.clear()
+    eval_run.main(["--resume", str(path)])
+    assert calls == []  # already graded
+    eval_run.main(["--resume", str(path), "--regrade"])
+    assert calls == ["WrongAdviceGrade", "CompletenessGrade"]
