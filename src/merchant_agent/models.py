@@ -77,3 +77,14 @@ class Case(BaseModel):
     already_tried: list[str] = Field(default_factory=list)
     merchant_request: str
     suggested_next_step: str
+
+
+class HelpDoc(BaseModel):
+    """A short paraphrased summary of one Merchant Center help page."""
+
+    doc_id: str
+    title: str
+    source_url: str
+    issue_codes: list[str] = Field(default_factory=list)
+    keywords: list[str] = Field(default_factory=list)
+    passages: list[str] = Field(default_factory=list)
