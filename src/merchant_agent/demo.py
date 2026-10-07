@@ -60,7 +60,9 @@ def apply_fix(store_id: str, issue_type: IssueType) -> list[str]:
     column, new_value = FIXES[issue_type]
     path = store_dir(store_id) / "feed.csv"
     with path.open(newline="") as f:
-        rows = list(csv.DictReader(f))
+        reader = csv.DictReader(f)
+        rows = list(reader)
+        columns = reader.fieldnames or []
 
     changed = []
     for row in rows:
@@ -70,7 +72,7 @@ def apply_fix(store_id: str, issue_type: IssueType) -> list[str]:
             changed.append(product.id)
 
     with path.open("w", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=list(rows[0]), lineterminator="\n")
+        writer = csv.DictWriter(f, fieldnames=columns, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
     return changed

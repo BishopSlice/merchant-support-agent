@@ -69,3 +69,9 @@ def test_shortened_titles_end_on_a_whole_word(demo_data):
     for product_id in demo.apply_fix("sample-store", IssueType.TITLE_TOO_LONG):
         new_title = next(p.title for p in load_feed("sample-store") if p.id == product_id)
         assert originals[product_id].startswith(new_title + " ")
+
+
+def test_fixing_a_feed_with_no_products_changes_nothing(demo_data):
+    feed = demo_data / "stores" / "sample-store" / "feed.csv"
+    feed.write_text(feed.read_text().splitlines()[0] + "\n")
+    assert demo.apply_fix("sample-store", IssueType.MISSING_SHIPPING) == []
