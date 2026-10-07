@@ -63,7 +63,6 @@ def merchant_chat_page(store_id: str) -> None:
     session = current_chat(store_id)
     st.title("Merchant chat")
     st.caption(f"You are the merchant: the owner of **{store_id}**. Ask about your products.")
-    guide_panel("Merchant chat")
     for message in st.session_state.messages:
         show_message(message)
     queued = st.session_state.pop("pending_message", "")
@@ -74,7 +73,6 @@ def merchant_chat_page(store_id: str) -> None:
 def specialist_inbox_page() -> None:
     st.title("Specialist inbox")
     st.caption("You are a support specialist at Google, picking up cases the agent handed over.")
-    guide_panel("Specialist inbox")
     cases = list_cases()
     if not cases:
         st.info("No cases yet. Cases appear here when the agent hands a conversation off.")
@@ -101,6 +99,7 @@ page = st.sidebar.radio("Page", PAGES, key="page")
 store_id = st.sidebar.selectbox("Store", list_stores(), key="store")
 if page == "Merchant chat" and st.sidebar.button("Reset conversation", key="reset_conversation"):
     end_conversation()
+guide_panel(page)
 
 with st.sidebar.expander("Demo operator controls", expanded=False):
     st.caption(ROLES["Demo operator"])

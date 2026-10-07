@@ -37,16 +37,17 @@ def queue_message(text: str) -> None:
 
 def apply_guide_fix(issue: IssueType) -> None:
     fixed = demo.apply_fix(st.session_state.store, issue)
-    st.session_state.guide_notice = f"Fixed {issue.value} on {', '.join(fixed)}."
+    products = ", ".join(fixed) or "no products"
+    st.session_state.guide_notice = f"Done: the merchant's product data now fixes {products}."
 
 
 def guide_panel(page: str) -> None:
-    """The current step: who you are, what to do, and buttons to do it or move on."""
+    """The current step, in the sidebar so it stays in view while the chat scrolls."""
     number = st.session_state.get("guide_step")
     if not number:
         return
     current = step(number)
-    with st.container(border=True):
+    with st.sidebar.container(border=True):
         st.caption(f"Guided demo · Step {number} of {len(STEPS)} · You are the {current.role}")
         st.subheader(current.title)
         st.markdown(current.body)
@@ -70,13 +71,13 @@ def guide_panel(page: str) -> None:
                 on_click=queue_message,
                 args=(current.message,),
             )
-        back, forward, leave = st.columns(3)
+        back, forward = st.columns(2)
         back.button(
             "Back", key="guide_back", disabled=number == 1, on_click=go_to_step, args=(number - 1,)
         )
         if number < len(STEPS):
             forward.button("Next step", key="guide_next", on_click=go_to_step, args=(number + 1,))
-        leave.button("Exit the guide", key="guide_exit", on_click=exit_guide)
+        st.button("Exit the guide", key="guide_exit", on_click=exit_guide)
 
 
 def landing_page() -> None:
