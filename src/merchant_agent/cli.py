@@ -7,13 +7,9 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from google.adk import Runner
-from google.adk.runners import InMemoryRunner
 
-from merchant_agent.agent import build_agent
-from merchant_agent.chat import APP_NAME, USER_ID, describe_tool_call, run_turn
+from merchant_agent.chat import describe_tool_call, new_runner, new_session, run_turn
 from merchant_agent.config import get_settings
-
-__all__ = ["APP_NAME", "USER_ID", "Transcript", "send"]
 
 
 class Transcript:
@@ -65,10 +61,8 @@ async def send(runner: Runner, session_id: str, text: str, transcript: Transcrip
 async def chat(store_id: str, transcript_path: Path | None) -> None:
     """Run a chat loop until the merchant types 'quit' or input ends."""
     settings = get_settings()
-    runner = InMemoryRunner(agent=build_agent(), app_name=APP_NAME)
-    session = await runner.session_service.create_session(
-        app_name=APP_NAME, user_id=USER_ID, state={"store_id": store_id}
-    )
+    runner = new_runner()
+    session_id = await new_session(runner, store_id)
     transcript = Transcript(store_id, settings.model_name)
     print(f"Chatting as the owner of {store_id}. Type 'quit' to stop.\n")
     try:
@@ -82,7 +76,7 @@ async def chat(store_id: str, transcript_path: Path | None) -> None:
             if not text:
                 continue
             transcript.add("Merchant", text)
-            reply = await send(runner, session.id, text, transcript)
+            reply = await send(runner, session_id, text, transcript)
             transcript.add("Agent", reply)
             print(f"\nagent> {reply}\n")
     finally:

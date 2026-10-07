@@ -44,6 +44,19 @@ class Turn:
         ]
 
 
+def new_runner() -> InMemoryRunner:
+    """Create a runner for the support agent, with sessions kept in memory."""
+    return InMemoryRunner(agent=build_agent(), app_name=APP_NAME)
+
+
+async def new_session(runner: Runner, store_id: str) -> str:
+    """Start a conversation as the owner of a store and return its session id."""
+    session = await runner.session_service.create_session(
+        app_name=APP_NAME, user_id=USER_ID, state={"store_id": store_id}
+    )
+    return session.id
+
+
 async def run_turn(runner: Runner, session_id: str, text: str) -> Turn:
     """Send one merchant message through the runner and collect the reply and tool calls."""
     message = types.Content(role="user", parts=[types.Part(text=text)])
@@ -100,13 +113,8 @@ class ChatSession:
         self.store_id = store_id
         self._loop = asyncio.new_event_loop()
         threading.Thread(target=self._loop.run_forever, daemon=True).start()
-        self._runner = runner or InMemoryRunner(agent=build_agent(), app_name=APP_NAME)
-        session = self._run(
-            self._runner.session_service.create_session(
-                app_name=APP_NAME, user_id=USER_ID, state={"store_id": store_id}
-            )
-        )
-        self._session_id = session.id
+        self._runner = runner or new_runner()
+        self._session_id = self._run(new_session(self._runner, store_id))
 
     def _run(self, coroutine: Coroutine) -> Any:
         return asyncio.run_coroutine_threadsafe(coroutine, self._loop).result()

@@ -15,10 +15,8 @@ import os
 import tempfile
 from pathlib import Path
 
-from google.adk.runners import InMemoryRunner
-
-from merchant_agent.agent import build_agent
-from merchant_agent.cli import APP_NAME, USER_ID, Transcript, send
+from merchant_agent.chat import new_runner, new_session
+from merchant_agent.cli import Transcript, send
 from merchant_agent.config import PROJECT_ROOT, get_settings
 from merchant_agent.demo import apply_fix, prepare_demo_data
 from merchant_agent.models import IssueType
@@ -69,10 +67,8 @@ async def run_scenario(name: str) -> Path:
         os.environ.pop("DATA_DIR", None)
         os.environ["DATA_DIR"] = str(prepare_demo_data())
 
-        runner = InMemoryRunner(agent=build_agent(), app_name=APP_NAME)
-        session = await runner.session_service.create_session(
-            app_name=APP_NAME, user_id=USER_ID, state={"store_id": store_id}
-        )
+        runner = new_runner()
+        session_id = await new_session(runner, store_id)
         transcript = Transcript(store_id, get_settings().model_name)
         try:
             for fixed, text in turns:
@@ -84,7 +80,7 @@ async def run_scenario(name: str) -> Path:
                     ]
                 print(f"\nyou> {text}")
                 transcript.add("Merchant", text)
-                reply = await send(runner, session.id, text, transcript)
+                reply = await send(runner, session_id, text, transcript)
                 transcript.add("Agent", reply)
                 print(f"\nagent> {reply}")
         finally:
