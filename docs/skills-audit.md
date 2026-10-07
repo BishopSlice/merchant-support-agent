@@ -98,11 +98,11 @@ Both are minor for a local demo. I've left them as findings rather than add sile
 - **Observability.** Nothing is logged at runtime. Task 9 records tool calls and token usage per eval run, which covers the PRD's cost metric. Logging in the app itself is not planned.
 - **Docs describe the current state.** The README is current. `SPEC.md`'s module table and project structure don't list `chat.py`, `demo.py`, `inbox.py`, `stores.py` or `scripts/` (see below).
 
-## Needs your call
+## Decisions (Vikrant, 7 Oct)
 
-1. **Update the SPEC module table** (`SPEC.md:29-50`) to list `stores`, `chat`, `demo`, `inbox` and `scripts/`. It's documentation only, but SPEC changes are yours to approve.
-2. **Branch and PR per task** instead of committing straight to `main`. That would give each task a review point that matches the definition of done. Nothing has been pushed yet, so it would start with the evals.
-3. **Corrupt case files and CLI error handling** (above): fix now, or leave for Task 11 or later.
+1. **SPEC module table:** updated to match the code (8770fa2).
+2. **Branch and PR per task:** no. Work stays on `main`, and the history will be published to GitHub in one go at the end.
+3. **Corrupt case files and CLI error handling:** fixed test-first. Unreadable case files are skipped with a warning (9f6081d), and the terminal chat now survives API errors (b00f2ff).
 
 ## How I'm working from here
 
