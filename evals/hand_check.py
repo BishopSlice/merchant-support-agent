@@ -4,6 +4,7 @@ Picks a mix of passes and fails from both graders and writes evals/hand-check.md
 empty "Agree?" column, so we can measure how often a person agrees with the grader.
 """
 
+import json
 import sys
 from dataclasses import dataclass
 from itertools import zip_longest
@@ -61,7 +62,7 @@ def pick_items(run_file: RunFile, count: int = 10) -> list[HandCheckItem]:
                 HandCheckItem(
                     case_id,
                     "Case completeness",
-                    str(run.handoff_cases[-1]),
+                    json.dumps(run.handoff_cases[-1]),
                     verdict,
                     "; ".join(grade.completeness.missing),
                     grade.completeness.evidence,

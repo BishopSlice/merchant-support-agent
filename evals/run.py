@@ -55,7 +55,9 @@ def save(run_file: RunFile, path: Path) -> None:
     temporary.replace(path)
 
 
-def select_cases(cases: list[EvalCase], case_ids: list[str], categories: list[str]) -> list:
+def select_cases(
+    cases: list[EvalCase], case_ids: list[str], categories: list[str]
+) -> list[EvalCase]:
     """Keep the cases named by id or category; with neither, keep them all."""
     unknown = set(case_ids) - {case.id for case in cases}
     if unknown:
