@@ -1,0 +1,7 @@
+{
+  "store_id": "gtin-only",
+  "name": "Eval store: missing GTINs only",
+  "country": "US",
+  "account_status": "active",
+  "suspension_reason": ""
+}

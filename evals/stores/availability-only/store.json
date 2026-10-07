@@ -1,0 +1,7 @@
+{
+  "store_id": "availability-only",
+  "name": "Eval store: availability mismatch only",
+  "country": "US",
+  "account_status": "active",
+  "suspension_reason": ""
+}
