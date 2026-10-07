@@ -6,3 +6,8 @@ __pycache__/
 .DS_Store
 evals/results/*.tmp
 runtime/
+
+# Build tooling for this repo, not part of the agent
+.agents/
+.claude/
+skills-lock.json
