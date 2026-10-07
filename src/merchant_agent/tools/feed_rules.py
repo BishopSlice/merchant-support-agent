@@ -56,9 +56,40 @@ def check_price_mismatch(product: Product) -> list[Issue]:
     ]
 
 
+PLACEHOLDER_IMAGE_WORDS = ("placeholder", "no-image", "noimage", "coming-soon")
+
+
+def _image_problem(image_link: str) -> str:
+    """Describe what is wrong with an image link, or return "" if it looks fine."""
+    link = image_link.strip()
+    if not link:
+        return "No image link is set."
+    if not link.startswith(("http://", "https://")):
+        return f"Image link {link!r} is not a full web address."
+    if any(word in link.lower() for word in PLACEHOLDER_IMAGE_WORDS):
+        return f"Image link {link!r} points to a placeholder, not a real product photo."
+    return ""
+
+
+def check_invalid_image(product: Product) -> list[Issue]:
+    """Flag products with a missing, malformed or placeholder image link."""
+    problem = _image_problem(product.image_link)
+    if not problem:
+        return []
+    return [
+        Issue(
+            product_id=product.id,
+            issue_type=IssueType.INVALID_IMAGE,
+            field="image_link",
+            detail=problem,
+        )
+    ]
+
+
 RULES: list[Rule] = [
     check_missing_gtin,
     check_price_mismatch,
+    check_invalid_image,
 ]
 
 

@@ -51,3 +51,16 @@ def test_price_mismatch_detail_shows_both_prices():
     product = clean_product(price="14.00 USD", landing_page_price="18.00 USD")
     detail = feed_rules.check_price_mismatch(product)[0].detail
     assert "14.00 USD" in detail and "18.00 USD" in detail
+
+
+def test_missing_image_link_is_flagged():
+    assert issue_types(clean_product(image_link="")) == [IssueType.INVALID_IMAGE]
+
+
+def test_placeholder_image_is_flagged():
+    product = clean_product(image_link="https://cdn.shop.example/img/placeholder.png")
+    assert issue_types(product) == [IssueType.INVALID_IMAGE]
+
+
+def test_image_link_must_be_a_web_address():
+    assert issue_types(clean_product(image_link="mug.jpg")) == [IssueType.INVALID_IMAGE]
