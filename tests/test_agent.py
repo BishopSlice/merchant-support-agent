@@ -28,3 +28,9 @@ def test_model_retries_when_rate_limited():
     retry = build_agent().model.retry_options
     assert retry.attempts >= 3
     assert retry.initial_delay >= 5
+
+
+def test_instructions_put_disapprovals_before_warnings():
+    instruction = build_agent().instruction
+    assert "disapproved_products" in instruction
+    assert instruction.index("disapproved") < instruction.index("limited")
