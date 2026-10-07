@@ -7,6 +7,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from google.adk import Runner
+from google.genai.errors import APIError
 
 from merchant_agent.chat import describe_tool_call, new_runner, new_session, run_turn
 from merchant_agent.config import get_settings
@@ -76,7 +77,11 @@ async def chat(store_id: str, transcript_path: Path | None) -> None:
             if not text:
                 continue
             transcript.add("Merchant", text)
-            reply = await send(runner, session_id, text, transcript)
+            try:
+                reply = await send(runner, session_id, text, transcript)
+            except APIError as error:  # e.g. rate limits: report it and let the merchant retry
+                print(f"\nThe agent couldn't answer: {error}\n")
+                continue
             transcript.add("Agent", reply)
             print(f"\nagent> {reply}\n")
     finally:
