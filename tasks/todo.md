@@ -15,6 +15,7 @@
 - [ ] Task 10: AI grader
 - [ ] Checkpoint D: full scorecard
 - [ ] Task 11: Fix the worst failure
+- [ ] Task 12a: Guided landing walkthrough
 - [ ] Task 12: Write-up and demo
 
 Details for each task are in `tasks/plan.md`.

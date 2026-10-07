@@ -52,6 +52,7 @@ We build in thin vertical slices. The riskiest piece is getting a real Gemini ag
 ## Phase 5: Improve and package
 
 - [ ] **Task 11: Fix the worst failure** and rerun evals, recording before vs after.
+- [ ] **Task 12a: Guided landing walkthrough.** A first screen that explains the problem (Google Shopping disapprovals) and who the app is for. Then a step-by-step walkthrough that casts the user as the merchant, tells them what to type or click at each step, and hands them over to the specialist inbox to see the case. Every screen makes clear which role the user is in (merchant, specialist or demo operator) and what the demo buttons do. Write the script after Task 11, once the agent's behaviour is settled, and follow the `frontend-ui-engineering` skill (accessibility, clear states, no AI-generated look).
 - [ ] **Task 12: Write-up.** README as a case study, responsible AI page, one-slide business case. You record the demo video.
 
 ## Risks
