@@ -129,3 +129,72 @@ def test_grade_run_skips_errored_and_already_graded_runs():
     assert set(run_file.grades) == {"a", "b"}
     assert len(model.prompts) == 1 and len(saves) == 1
     assert run_file.grades["a"].cost_usd > 0
+
+
+class FakeResponse:
+    def __init__(self, text):
+        self.text = text
+        self.usage_metadata = None
+
+
+def test_gemini_generate_retries_empty_or_invalid_responses(monkeypatch):
+    from evals import grader
+
+    responses = iter(
+        [FakeResponse(None), FakeResponse("{not json"), FakeResponse('{"replies": []}')]
+    )
+
+    class FakeClient:
+        def __init__(self, **kwargs):
+            self.models = self
+
+        def generate_content(self, **kwargs):
+            return next(responses)
+
+    monkeypatch.setattr(grader.genai, "Client", FakeClient)
+    parsed, _ = grader.gemini_generate("m")("prompt", WrongAdviceGrade)
+    assert parsed.replies == []
+
+
+def test_gemini_generate_gives_up_with_a_grading_error(monkeypatch):
+    import pytest
+
+    from evals import grader
+
+    class FakeClient:
+        def __init__(self, **kwargs):
+            self.models = self
+
+        def generate_content(self, **kwargs):
+            return FakeResponse(None)
+
+    monkeypatch.setattr(grader.genai, "Client", FakeClient)
+    with pytest.raises(grader.GradingFailed):
+        grader.gemini_generate("m")("prompt", WrongAdviceGrade)
+
+
+def test_a_failed_grade_is_recorded_skipped_in_rates_and_retried_later():
+    from evals.grader import GradingFailed
+    from evals.run import RunFile
+    from merchant_agent.config import MODEL_PRICES
+
+    run_file = RunFile(
+        model="m",
+        started_at="2026-10-07T00:00:00Z",
+        price=MODEL_PRICES["gemini-3.6-flash"],
+        runs={"a": make_run(), "b": make_run()},
+    )
+    good = FakeModel()
+
+    def flaky(prompt, schema):
+        if "b-marker" in prompt:
+            raise GradingFailed("empty response")
+        return good(prompt, schema)
+
+    run_file.runs["b"].turns[0].merchant = "b-marker"
+    grade_run(run_file, generate=flaky, save=lambda: None)
+    assert run_file.grades["b"].error == "empty response"
+    assert summarize_grades(run_file.grades)["wrong_advice_rate"] == 0.0  # only "a" counted
+
+    grade_run(run_file, generate=good, save=lambda: None)
+    assert run_file.grades["b"].error == ""

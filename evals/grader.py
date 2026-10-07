@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING, Literal
 
 from google import genai
 from google.genai import types
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ValidationError
 
 from evals.records import CaseRun, TokenUsage
 from merchant_agent.chat import Usage
@@ -53,6 +53,14 @@ class CaseGrade(BaseModel):
     completeness: CompletenessGrade | None = None
     usage: TokenUsage = Field(default_factory=TokenUsage)
     cost_usd: float = 0.0
+    error: str = ""  # set when grading failed; --resume grades the case again
+
+
+class GradingFailed(RuntimeError):
+    """The grader model gave no usable answer after retrying."""
+
+
+PARSE_ATTEMPTS = 3
 
 
 # A model call: (prompt, response schema) -> (parsed response, token usage).
@@ -140,18 +148,26 @@ def gemini_generate(model: str) -> Generate:
     client = genai.Client(http_options=types.HttpOptions(retry_options=retry, timeout=120_000))
 
     def generate(prompt: str, schema: type[BaseModel]) -> tuple[BaseModel, Usage]:
-        response = client.models.generate_content(
-            model=model,
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                response_mime_type="application/json",
-                response_schema=schema,
-                temperature=0,
-                automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
-            ),
-        )
-        usage = Usage.from_metadata(response.usage_metadata) if response.usage_metadata else Usage()
-        return schema.model_validate_json(response.text), usage
+        total = Usage()
+        for _ in range(PARSE_ATTEMPTS):
+            response = client.models.generate_content(
+                model=model,
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json",
+                    response_schema=schema,
+                    temperature=0,
+                    automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
+                ),
+            )
+            if response.usage_metadata:
+                total += Usage.from_metadata(response.usage_metadata)
+            if response.text:
+                try:
+                    return schema.model_validate_json(response.text), total
+                except ValidationError:
+                    pass  # malformed JSON: ask again
+        raise GradingFailed(f"no valid {schema.__name__} after {PARSE_ATTEMPTS} attempts")
 
     return generate
 
@@ -159,21 +175,27 @@ def gemini_generate(model: str) -> Generate:
 def grade_run(
     run_file: "RunFile", save: Callable[[], None], generate: Generate | None = None
 ) -> None:
-    """Grade every finished, ungraded case in a run, saving after each one."""
+    """Grade every finished case that has no grade (or a failed one), saving after each."""
     generate = generate or gemini_generate(get_settings().model_name)
     pending = [
         (case_id, run)
         for case_id, run in run_file.runs.items()
-        if run.status == "ok" and case_id not in run_file.grades
+        if run.status == "ok" and (case_id not in run_file.grades or run_file.grades[case_id].error)
     ]
     for number, (case_id, run) in enumerate(pending, start=1):
-        run_file.grades[case_id] = grade_case(run, generate, run_file.price)
+        try:
+            run_file.grades[case_id] = grade_case(run, generate, run_file.price)
+            status = "ok"
+        except GradingFailed as error:
+            run_file.grades[case_id] = CaseGrade(error=str(error))
+            status = f"FAILED {error}"
         save()
-        print(f"[graded {number}/{len(pending)}] {case_id}")
+        print(f"[graded {number}/{len(pending)}] {case_id}: {status}")
 
 
 def summarize_grades(grades: dict[str, CaseGrade]) -> dict[str, float | None]:
     """Wrong advice rate (over every graded reply) and case completeness (over handoffs)."""
+    grades = {case_id: grade for case_id, grade in grades.items() if not grade.error}
     verdicts = [
         reply.verdict
         for grade in grades.values()
