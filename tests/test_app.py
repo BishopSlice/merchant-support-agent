@@ -56,8 +56,12 @@ def isolated(monkeypatch, tmp_path):
     FakeChatSession.started = []
 
 
-def run_app() -> AppTest:
-    return AppTest.from_file(APP, default_timeout=10).run()
+def run_app(page: str = "Merchant chat") -> AppTest:
+    """Start the app and open a page (the app itself opens on "Start here")."""
+    app = AppTest.from_file(APP, default_timeout=10).run()
+    if page != "Start here":
+        app.sidebar.radio(key="page").set_value(page).run()
+    return app
 
 
 def go_to(app: AppTest, page: str) -> AppTest:
@@ -141,3 +145,71 @@ def test_demo_fix_uses_the_chosen_store_on_every_page():
     app.sidebar.selectbox(key="fix_issue").set_value("missing_shipping")
     app.sidebar.button(key="apply_fix").click().run()
     assert "suspended-store" in app.sidebar.info[0].value
+
+
+# --- Guided walkthrough (Task 12a) ---
+
+
+def test_the_app_opens_on_a_landing_page_that_explains_itself():
+    app = run_app("Start here")
+    assert app.sidebar.radio(key="page").value == "Start here"
+    page = "\n".join(m.value for m in app.markdown)
+    assert "Google Shopping" in page
+    for role in ("Merchant", "Demo operator", "Specialist"):
+        assert role in page
+    assert app.button(key="start_guide").label == "Start the guided demo"
+    assert FakeChatSession.started == []  # no agent session until the chat is opened
+
+
+def test_starting_the_guide_opens_step_one_as_the_merchant_on_sample_store():
+    app = run_app("Start here")
+    app.button(key="start_guide").click().run()
+    assert app.sidebar.radio(key="page").value == "Merchant chat"
+    assert app.sidebar.selectbox(key="store").value == "sample-store"
+    panel = "\n".join([m.value for m in app.markdown] + [c.value for c in app.caption])
+    assert "Step 1 of 6" in panel and "You are the Merchant" in panel
+
+
+def test_send_this_message_sends_the_suggested_text():
+    app = run_app("Start here")
+    app.button(key="start_guide").click().run()
+    app.button(key="guide_send").click().run()
+    texts = [m.markdown[0].value for m in app.chat_message]
+    assert texts[0] == "Half my products got disapproved yesterday, what happened?"
+    assert texts[1].startswith("Reply to: Half my products")
+
+
+def test_the_fix_step_applies_the_fix_to_the_demo_data():
+    from merchant_agent.tools.feed_checker import check_feed
+
+    app = run_app("Start here")
+    app.button(key="start_guide").click().run()
+    app.button(key="guide_next").click().run()
+    app.button(key="guide_next").click().run()
+    assert "Step 3 of 6" in "\n".join(m.value for m in app.caption)
+    app.button(key="guide_fix").click().run()
+    groups = {g["issue_type"] for g in check_feed("sample-store")["issue_groups"]}
+    assert "missing_shipping" not in groups
+
+
+def test_the_guide_moves_to_the_inbox_for_the_specialist_steps_and_can_go_back():
+    app = run_app("Start here")
+    app.button(key="start_guide").click().run()
+    for _ in range(4):
+        app.button(key="guide_next").click().run()
+    assert app.sidebar.radio(key="page").value == "Specialist inbox"
+    assert "You are the Specialist" in "\n".join(m.value for m in app.caption)
+    app.button(key="guide_back").click().run()
+    assert app.sidebar.radio(key="page").value == "Merchant chat"
+
+
+def test_exiting_the_guide_removes_the_step_panel():
+    app = run_app("Start here")
+    app.button(key="start_guide").click().run()
+    app.button(key="guide_exit").click().run()
+    assert not any("Step 1 of 6" in c.value for c in app.caption)
+
+
+def test_every_page_says_which_role_you_are_playing():
+    assert any("You are the merchant" in c.value for c in run_app("Merchant chat").caption)
+    assert any("You are a support specialist" in c.value for c in run_app("Specialist inbox").caption)
