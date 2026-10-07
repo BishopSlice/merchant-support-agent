@@ -97,6 +97,7 @@ def create_handoff_case(
     issues_found: list[str],
     already_tried: list[str],
     merchant_request: str,
+    merchant_reasons: list[str],
     suggested_next_step: str,
     cited_doc_ids: list[str],
     tool_context: Context,
@@ -105,8 +106,9 @@ def create_handoff_case(
 
     reason must be one of: account_suspended, policy_appeal, merchant_requested_human,
     repeated_failure_or_frustration, no_supporting_doc. The other fields describe the issues
-    found, what was already tried, what the merchant wants, what the specialist should do
-    next, and the doc_ids of help docs used. Never include names, emails or phone numbers.
+    found, what was already tried, what the merchant wants, every reason or detail the
+    merchant gave in their own words (merchant_reasons), what the specialist should do next,
+    and the doc_ids of all relevant help docs. Never include names, emails or phone numbers.
     Returns the case_id, or an error message saying what to fix.
     """
     return handoff.create_handoff_case(
@@ -115,6 +117,7 @@ def create_handoff_case(
         issues_found=issues_found,
         already_tried=already_tried,
         merchant_request=merchant_request,
+        merchant_reasons=merchant_reasons,
         suggested_next_step=suggested_next_step,
         cited_doc_ids=cited_doc_ids,
     )

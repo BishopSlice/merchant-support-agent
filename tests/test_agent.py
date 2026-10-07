@@ -53,6 +53,7 @@ def test_handoff_tool_files_the_case_under_the_session_store(monkeypatch, tmp_pa
         issues_found=["Account suspended for misrepresentation"],
         already_tried=[],
         merchant_request="Get my products showing again",
+        merchant_reasons=["I already added a returns page"],
         suggested_next_step="Review the suspension",
         cited_doc_ids=["misrepresentation"],
         tool_context=context,

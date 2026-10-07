@@ -22,6 +22,7 @@ def make_case(**overrides) -> dict:
         "merchant_request": "Appeal the CBD disapproval",
         "suggested_next_step": "Review whether the candle qualifies for an exception",
         "cited_doc_ids": ["cbd-unapproved-substances", "request-review"],
+        "merchant_reasons": [],
     }
     return create_handoff_case(**(fields | overrides))
 
@@ -150,3 +151,22 @@ def test_a_corrupt_case_file_is_skipped_with_a_warning(runtime_dir, caplog):
     (runtime_dir / "cases" / "CASE-broken.json").write_text("{not json")
     assert [case.case_id for case in list_cases()] == [good]
     assert "CASE-broken.json" in caplog.text
+
+
+def test_merchant_reasons_are_saved_with_the_case():
+    case_id = make_case(merchant_reasons=["It's just a candle", "Other shops sell them"])["case_id"]
+    assert get_case(case_id).merchant_reasons == ["It's just a candle", "Other shops sell them"]
+
+
+def test_merchant_reasons_default_to_empty_for_older_case_files(runtime_dir):
+    from merchant_agent.models import Case
+
+    old = make_case()
+    path = runtime_dir / "cases" / f"{old['case_id']}.json"
+    data = path.read_text().replace('"merchant_reasons": [],', "")
+    assert Case.model_validate_json(data).merchant_reasons == []
+
+
+def test_merchant_reasons_reject_contact_details():
+    result = make_case(merchant_reasons=["Call me on +1 415 555 0134"])
+    assert result["status"] == "error"

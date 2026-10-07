@@ -101,6 +101,7 @@ class Case(BaseModel):
     issues_found: list[str] = Field(default_factory=list)
     already_tried: list[str] = Field(default_factory=list)
     merchant_request: str
+    merchant_reasons: list[str] = Field(default_factory=list)
     suggested_next_step: str
     cited_doc_ids: list[str] = Field(default_factory=list)
 
@@ -111,7 +112,9 @@ class Case(BaseModel):
             raise ValueError("must not be blank")
         return value.strip()
 
-    @field_validator("issues_found", "already_tried", "merchant_request", "suggested_next_step")
+    @field_validator(
+        "issues_found", "already_tried", "merchant_request", "merchant_reasons", "suggested_next_step"
+    )
     @classmethod
     def _no_personal_details(cls, value: str | list[str]) -> str | list[str]:
         texts = [value] if isinstance(value, str) else value

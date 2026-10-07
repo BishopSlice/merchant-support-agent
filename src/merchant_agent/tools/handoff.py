@@ -23,6 +23,7 @@ def create_handoff_case(
     merchant_request: str,
     suggested_next_step: str,
     cited_doc_ids: list[str],
+    merchant_reasons: list[str] | None = None,
 ) -> dict:
     """Save a case for a human specialist and return its id, or an error saying what to fix."""
     try:
@@ -40,6 +41,7 @@ def create_handoff_case(
             issues_found=issues_found,
             already_tried=already_tried,
             merchant_request=merchant_request,
+            merchant_reasons=merchant_reasons or [],
             suggested_next_step=suggested_next_step,
             cited_doc_ids=cited_doc_ids,
         )

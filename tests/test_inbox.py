@@ -57,4 +57,11 @@ def test_cited_docs_become_links_and_unknown_ids_are_flagged():
 
 def test_empty_lists_say_none():
     text = format_case(sample_case(already_tried=[], cited_doc_ids=[]))
-    assert text.count("_None_") == 2
+    assert text.count("_None_") == 3  # steps tried, docs cited, and no merchant reasons
+
+
+def test_merchant_reasons_are_shown_right_after_what_the_merchant_wants():
+    text = format_case(sample_case(merchant_reasons=["It's just a candle"]))
+    assert text.index("**What the merchant wants**") < text.index("**Merchant's reasons**")
+    assert text.index("**Merchant's reasons**") < text.index("**Issues found**")
+    assert "- It's just a candle" in text

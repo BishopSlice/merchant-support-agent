@@ -38,6 +38,7 @@ def format_case(case: Case) -> str:
         [
             f"**Reason**\n\n{REASON_LABELS[case.reason]}",
             f"**What the merchant wants**\n\n{case.merchant_request}",
+            f"**Merchant's reasons**\n\n{_bullets(case.merchant_reasons)}",
             f"**Issues found**\n\n{_bullets(case.issues_found)}",
             f"**Already tried**\n\n{_bullets(case.already_tried)}",
             f"**Suggested next step**\n\n{case.suggested_next_step}",
