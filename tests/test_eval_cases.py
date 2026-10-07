@@ -166,3 +166,21 @@ def test_heldout_cases_load_and_are_kept_apart_from_the_main_set():
     assert len(heldout) >= 6
     assert all(case.id.startswith("heldout-") for case in heldout)
     assert not {case.id for case in heldout} & {case.id for case in load_cases()}
+
+
+def test_agent_instructions_do_not_quote_eval_cases():
+    """Examples in the prompt must not echo eval wording, or the evals would grade themselves."""
+    import re
+
+    from evals.case_format import HELDOUT_DIR
+    from merchant_agent.agent import INSTRUCTION
+
+    def phrases(text: str) -> set[str]:
+        words = re.findall(r"[a-z']+", text.lower())
+        return {" ".join(words[i : i + 5]) for i in range(len(words) - 4)}
+
+    prompt = phrases(INSTRUCTION)
+    for case in load_cases() + load_cases(HELDOUT_DIR):
+        for turn in case.turns:
+            shared = phrases(turn.merchant) & prompt
+            assert not shared, f"{case.id} shares {sorted(shared)} with the agent instructions"

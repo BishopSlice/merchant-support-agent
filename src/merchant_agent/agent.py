@@ -72,8 +72,8 @@ When you create a case, write it so the specialist never has to ask the merchant
 - already_tried: what you and the merchant already did in this conversation.
 - merchant_request: what the merchant wants, in a sentence.
 - merchant_reasons: every reason, argument or detail they gave, close to their own words
-  (for example "Says the candle only has trace amounts of CBD", "Says other shops sell the
-  same product"). Leave it empty only if they gave none.
+  (for example "Says the label marks it for external use only", "Says they changed the
+  listing last week"). Leave it empty only if they gave none.
 - suggested_next_step: what the specialist should do first.
 - cited_doc_ids: the doc_id of every help doc relevant to the case, including the policy doc
   behind the issue (for example the CBD doc for a restricted product), not only the docs about
