@@ -92,3 +92,19 @@ def test_eval_only_stores_count_as_known(tmp_path):
     text = VALID.format(id="x").replace('store = "sample-store"', 'store = "price-only"')
     write(tmp_path, "x", text)
     assert load_cases(tmp_path)[0].store == "price-only"
+
+
+def test_the_real_case_set_loads_and_covers_the_prd():
+    from collections import Counter
+
+    from evals.case_format import Category
+    from merchant_agent.models import HandoffReason
+
+    cases = load_cases()
+    assert len(cases) >= 40
+    assert {case.category for case in cases} == set(Category)
+    reasons = Counter(case.expect.handoff_reason for case in cases if case.expect.should_handoff)
+    for reason in HandoffReason:
+        assert reasons[reason] >= 3, f"fewer than 3 cases expect {reason}"
+    must_not = [c for c in cases if c.category == Category.NO_HANDOFF_DATA_FIX]
+    assert len(must_not) >= 3 and not any(c.expect.should_handoff for c in must_not)

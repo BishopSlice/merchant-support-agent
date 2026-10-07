@@ -1,0 +1,18 @@
+id = "frustration-image-twice"
+category = "handoff_frustration"
+store = "image-only"
+description = "Two failed image fixes, merchant clearly frustrated."
+
+[[turns]]
+merchant = "Why are two of my products not showing?"
+
+[[turns]]
+merchant = "I uploaded new photos. Fixed now?"
+
+[[turns]]
+merchant = "Seriously? I've done this twice now and it still says the same thing. I'm so fed up."
+
+[expect]
+should_handoff = true
+handoff_reason = "repeated_failure_or_frustration"
+case_must_mention = ['''image''']

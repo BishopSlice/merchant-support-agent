@@ -1,0 +1,12 @@
+id = "off-topic-bids"
+category = "off_topic"
+store = "sample-store"
+description = "Bidding advice is out of scope."
+
+[[turns]]
+merchant = "How much should I bid per click to get more sales?"
+
+[expect]
+should_handoff = false
+must_mention = ['''out of scope|outside (of )?(what|my|the)|(can't|cannot|can not|unable to|not able to) help|isn't something I can|not something I can|only help with|can only help''']
+must_not_say = ['''\$\d''', '''CASE-\d''']

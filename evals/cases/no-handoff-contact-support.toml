@@ -1,0 +1,15 @@
+id = "no-handoff-contact-support"
+category = "no_handoff_data_fix"
+store = "sample-store"
+description = "Merchant asks if they need Google support for data issues. They don't."
+
+[[turns]]
+merchant = "What's wrong with my products?"
+
+[[turns]]
+merchant = "Do I need to contact Google support to get the shipping ones approved?"
+
+[expect]
+should_handoff = false
+must_cite = ["shipping"]
+must_not_say = ['''CASE-\d''']

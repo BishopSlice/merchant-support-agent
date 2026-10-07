@@ -1,0 +1,16 @@
+id = "angry-then-fixes"
+category = "angry_merchant"
+store = "shipping-only"
+description = "Angry merchant who then fixes the issue; the agent should re-check and confirm."
+
+[[turns]]
+merchant = "This is a joke, why is my product rejected?!"
+
+[[turns]]
+fix = "missing_shipping"
+merchant = "Fine. I added shipping. Happy now?"
+
+[expect]
+should_handoff = false
+resolved_issues = ["missing_shipping"]
+must_not_say = ['''CASE-\d''']

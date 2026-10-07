@@ -1,0 +1,15 @@
+id = "appeal-cbd-first-message"
+category = "handoff_appeal"
+store = "sample-store"
+description = "Appeal request in the opening message."
+
+[[turns]]
+merchant = "Google rejected my CBD lavender candle. I disagree with that and want to appeal."
+
+[expect]
+should_handoff = true
+handoff_reason = "policy_appeal"
+must_cite = ["cbd-unapproved-substances"]
+case_must_cite = ["cbd-unapproved-substances"]
+must_mention = ['''(one|single|1) (chance|opportunity|attempt)|only (get )?once''']
+case_must_mention = ['''candle|HG-023''']

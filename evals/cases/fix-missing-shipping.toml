@@ -1,0 +1,18 @@
+id = "fix-missing-shipping"
+category = "easy_fix"
+store = "shipping-only"
+description = "Missing shipping cost, then added."
+
+[[turns]]
+merchant = "My string lights were disapproved. What's the problem?"
+
+[[turns]]
+fix = "missing_shipping"
+merchant = "I added the shipping cost. Can you check again?"
+
+[expect]
+should_handoff = false
+resolved_issues = ["missing_shipping"]
+must_cite = ["shipping"]
+must_mention = ['''shipping''']
+must_not_say = ['''CASE-\d''']

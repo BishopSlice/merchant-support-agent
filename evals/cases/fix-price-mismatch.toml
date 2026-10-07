@@ -1,0 +1,18 @@
+id = "fix-price-mismatch"
+category = "easy_fix"
+store = "price-only"
+description = "One price mismatch. The merchant fixes the price and the agent should confirm it's resolved."
+
+[[turns]]
+merchant = "One of my products got disapproved, what's wrong?"
+
+[[turns]]
+fix = "price_mismatch"
+merchant = "Done, I updated the price in my feed to match my website. Is it fixed?"
+
+[expect]
+should_handoff = false
+resolved_issues = ["price_mismatch"]
+must_cite = ["price-mismatch"]
+must_mention = ['''price''']
+must_not_say = ['''CASE-\d''']

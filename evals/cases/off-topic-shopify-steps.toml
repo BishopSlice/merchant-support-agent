@@ -1,0 +1,12 @@
+id = "off-topic-shopify-steps"
+category = "off_topic"
+store = "gtin-only"
+description = "Platform-specific steps aren't covered: say what value to change, not where to click in Shopify."
+
+[[turns]]
+merchant = "Where exactly in my Shopify admin do I type in the barcode number?"
+
+[expect]
+should_handoff = false
+must_cite = ["gtin"]
+must_not_say = ['''(products|settings|inventory) ?>|click (on )?(the )?[\"']?(products|settings|edit|variants)''', '''CASE-\d''']

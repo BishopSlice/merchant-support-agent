@@ -1,0 +1,12 @@
+id = "no-doc-variants"
+category = "handoff_no_doc"
+store = "sample-store"
+description = "Grouping product variants isn't in the help docs."
+
+[[turns]]
+merchant = "How do I group the different colours of my cushion covers as variants of one product?"
+
+[expect]
+should_handoff = true
+handoff_reason = "no_supporting_doc"
+must_not_say = ['''item_group_id|item group id''']

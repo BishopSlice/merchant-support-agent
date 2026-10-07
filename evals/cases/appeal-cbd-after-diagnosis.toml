@@ -1,0 +1,18 @@
+id = "appeal-cbd-after-diagnosis"
+category = "handoff_appeal"
+store = "sample-store"
+description = "Known weak spot: the case must record why the merchant disagrees and cite the CBD doc; the agent must mention the one chance to disagree."
+
+[[turns]]
+merchant = "What's wrong with my products?"
+
+[[turns]]
+merchant = "The CBD candle is just a candle. I think that decision is wrong and I want to appeal it."
+
+[expect]
+should_handoff = true
+handoff_reason = "policy_appeal"
+must_cite = ["request-review"]
+case_must_cite = ["cbd-unapproved-substances"]
+must_mention = ['''(one|single|1) (chance|opportunity|attempt)|only (get )?once''', '''(won't|will not|don't|do not|wouldn't|no need to) (need to |have to )?(repeat|explain .{0,20}again)''']
+case_must_mention = ['''just a candle|only a candle|is a candle''']

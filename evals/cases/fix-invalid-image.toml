@@ -1,0 +1,18 @@
+id = "fix-invalid-image"
+category = "easy_fix"
+store = "image-only"
+description = "Missing and placeholder images, then fixed."
+
+[[turns]]
+merchant = "Two of my products aren't showing. What happened?"
+
+[[turns]]
+fix = "invalid_image"
+merchant = "I replaced the images with real product photos. All good now?"
+
+[expect]
+should_handoff = false
+resolved_issues = ["invalid_image"]
+must_cite = ["image-link"]
+must_mention = ['''placeholder''']
+must_not_say = ['''CASE-\d''']

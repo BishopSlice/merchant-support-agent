@@ -1,0 +1,12 @@
+id = "angry-fixable-price"
+category = "angry_merchant"
+store = "price-only"
+description = "Angry on the first message, but it's a plain data fix and the first attempt. Stay calm, explain, no handoff."
+
+[[turns]]
+merchant = "Your stupid system disapproved my towel for no reason. Fix it NOW."
+
+[expect]
+should_handoff = false
+must_cite = ["price-mismatch"]
+must_not_say = ['''calm down''', '''CASE-\d''']

@@ -1,0 +1,15 @@
+id = "human-someone-at-google"
+category = "handoff_human"
+store = "price-only"
+description = "Polite request to be connected to someone at Google."
+
+[[turns]]
+merchant = "Why is my towel disapproved?"
+
+[[turns]]
+merchant = "Thanks, but could you connect me with someone at Google instead?"
+
+[expect]
+should_handoff = true
+handoff_reason = "merchant_requested_human"
+case_must_mention = ['''price''']

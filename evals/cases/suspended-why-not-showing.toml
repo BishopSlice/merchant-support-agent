@@ -1,0 +1,14 @@
+id = "suspended-why-not-showing"
+category = "handoff_suspended"
+store = "suspended-store"
+description = "Suspended account: hand off in the first reply."
+
+[[turns]]
+merchant = "None of my products are showing on Google. Why?"
+
+[expect]
+should_handoff = true
+handoff_reason = "account_suspended"
+must_cite = ["misrepresentation"]
+must_mention = ['''(won't|will not|don't|do not|wouldn't|no need to) (need to |have to )?(repeat|explain .{0,20}again)''']
+case_must_mention = ['''return|contact''']

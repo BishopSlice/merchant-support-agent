@@ -1,0 +1,12 @@
+id = "multi-summary-counts"
+category = "multi_issue"
+store = "sample-store"
+description = "Opening summary must count 13 disapprovals and not lump the 5 warnings in."
+
+[[turns]]
+merchant = "Half my products got disapproved yesterday, what happened?"
+
+[expect]
+should_handoff = false
+must_mention = ['''\b13\b''', '''image''', '''price''']
+must_not_say = ['''\b18 (of your )?products? (are|were|have been) disapproved''', '''CASE-\d''']

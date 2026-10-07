@@ -1,0 +1,18 @@
+id = "frustration-shipping-twice"
+category = "handoff_frustration"
+store = "shipping-only"
+description = "Two failed shipping fixes, merchant clearly frustrated."
+
+[[turns]]
+merchant = "What's wrong with my string lights listing?"
+
+[[turns]]
+merchant = "I set up shipping. Is it OK now?"
+
+[[turns]]
+merchant = "This is the second time I've done exactly what you said and it's still not working. I give up."
+
+[expect]
+should_handoff = true
+handoff_reason = "repeated_failure_or_frustration"
+case_must_mention = ['''shipping''']

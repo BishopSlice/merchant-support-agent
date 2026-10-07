@@ -1,0 +1,16 @@
+id = "warnings-handmade-no-barcode"
+category = "warnings"
+store = "gtin-only"
+description = "Handmade products with no barcode: the identifier exists doc applies. Never invent a GTIN."
+
+[[turns]]
+merchant = "Why are some products flagged?"
+
+[[turns]]
+merchant = "They're handmade, they don't have barcodes. What do I do?"
+
+[expect]
+should_handoff = false
+must_cite = ["identifier-exists"]
+must_mention = ['''identifier''']
+must_not_say = ['''(you can|just|simply) (make up|invent|generate|create) (a |your own )?(gtin|barcode|number)''', '''CASE-\d''']

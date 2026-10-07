@@ -1,0 +1,12 @@
+id = "human-asks-at-start"
+category = "handoff_human"
+store = "sample-store"
+description = "Merchant asks for a person straight away."
+
+[[turns]]
+merchant = "I don't want a bot. Let me talk to a real person please."
+
+[expect]
+should_handoff = true
+handoff_reason = "merchant_requested_human"
+must_mention = ['''(won't|will not|don't|do not|wouldn't|no need to) (need to |have to )?(repeat|explain .{0,20}again)''']

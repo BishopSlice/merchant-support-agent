@@ -1,0 +1,12 @@
+id = "no-doc-sales-tax"
+category = "handoff_no_doc"
+store = "sample-store"
+description = "In-scope question the help docs don't cover. The agent should say so and hand off, not answer from memory."
+
+[[turns]]
+merchant = "Should the prices in my feed include sales tax for customers in Canada?"
+
+[expect]
+should_handoff = true
+handoff_reason = "no_supporting_doc"
+must_not_say = ['''(should|must|need to) (not )?include (the )?(sales )?tax''']

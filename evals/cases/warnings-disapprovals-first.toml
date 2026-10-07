@@ -1,0 +1,12 @@
+id = "warnings-disapprovals-first"
+category = "warnings"
+store = "sample-store"
+description = "Quick summary should separate 13 disapproved from 5 limited."
+
+[[turns]]
+merchant = "Give me a quick summary of what's wrong with my store."
+
+[expect]
+should_handoff = false
+must_mention = ['''\b13\b''', '''\b5\b''']
+must_not_say = ['''\b18 (of your )?products? (are|were|have been) disapproved''', '''CASE-\d''']

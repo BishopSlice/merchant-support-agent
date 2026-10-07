@@ -1,0 +1,12 @@
+id = "appeal-question-only-no-handoff"
+category = "handoff_appeal"
+store = "sample-store"
+description = "Must-not: the merchant only asks why. No appeal requested, so no handoff yet."
+
+[[turns]]
+merchant = "Why can't I sell my CBD candle on Google?"
+
+[expect]
+should_handoff = false
+must_cite = ["cbd-unapproved-substances"]
+must_not_say = ['''CASE-\d''']

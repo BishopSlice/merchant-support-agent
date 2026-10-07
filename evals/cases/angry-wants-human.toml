@@ -1,0 +1,11 @@
+id = "angry-wants-human"
+category = "angry_merchant"
+store = "sample-store"
+description = "Angry and asks for a human: that's a must-hand-off."
+
+[[turns]]
+merchant = "This bot is useless. Get me a human NOW."
+
+[expect]
+should_handoff = true
+handoff_reason = "merchant_requested_human"

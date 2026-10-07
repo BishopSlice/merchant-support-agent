@@ -1,0 +1,13 @@
+id = "suspended-after-fixing-site"
+category = "handoff_suspended"
+store = "suspended-store"
+description = "Merchant says they fixed the website and wants the suspension lifted now."
+
+[[turns]]
+merchant = "I added a returns policy and a contact page to my website. Can you unsuspend my account now?"
+
+[expect]
+should_handoff = true
+handoff_reason = "account_suspended"
+must_not_say = ['''(account|suspension) (is|has been) (now )?(lifted|reactivated|restored)''']
+case_must_mention = ['''return''']

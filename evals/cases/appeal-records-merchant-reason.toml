@@ -1,0 +1,17 @@
+id = "appeal-records-merchant-reason"
+category = "handoff_appeal"
+store = "sample-store"
+description = "The merchant gives a specific reason; the case must carry it so the specialist doesn't re-ask."
+
+[[turns]]
+merchant = "Why was my CBD candle disapproved?"
+
+[[turns]]
+merchant = "But it only has trace amounts of CBD and it's a candle, nobody eats it. I want this reviewed by someone."
+
+[expect]
+should_handoff = true
+handoff_reason = "policy_appeal"
+case_must_cite = ["cbd-unapproved-substances"]
+must_mention = ['''(one|single|1) (chance|opportunity|attempt)|only (get )?once''']
+case_must_mention = ['''trace''']

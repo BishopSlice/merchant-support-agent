@@ -1,0 +1,18 @@
+id = "frustration-price-twice"
+category = "handoff_frustration"
+store = "price-only"
+description = "Merchant says they fixed it but didn't; second failure plus frustration should trigger a handoff."
+
+[[turns]]
+merchant = "My towel got disapproved, why?"
+
+[[turns]]
+merchant = "I fixed the price. Check again."
+
+[[turns]]
+merchant = "I ALREADY fixed it twice and it's still broken. This is ridiculous."
+
+[expect]
+should_handoff = true
+handoff_reason = "repeated_failure_or_frustration"
+case_must_mention = ['''price''']

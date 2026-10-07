@@ -1,0 +1,16 @@
+id = "no-handoff-confused-title"
+category = "no_handoff_data_fix"
+store = "title-only"
+description = "Confused merchant, plain data fix."
+
+[[turns]]
+merchant = "My basket title got flagged. I don't understand, it's a good title!"
+
+[[turns]]
+merchant = "So what exactly should I do?"
+
+[expect]
+should_handoff = false
+must_cite = ["title"]
+must_mention = ['''\b150\b''']
+must_not_say = ['''CASE-\d''']

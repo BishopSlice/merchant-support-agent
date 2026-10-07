@@ -1,0 +1,18 @@
+id = "fix-availability-mismatch"
+category = "easy_fix"
+store = "availability-only"
+description = "One availability mismatch, then fixed."
+
+[[turns]]
+merchant = "Why was my cushion cover disapproved?"
+
+[[turns]]
+fix = "availability_mismatch"
+merchant = "OK, I set the availability in my feed to match the website. Check again please."
+
+[expect]
+should_handoff = false
+resolved_issues = ["availability_mismatch"]
+must_cite = ["availability-mismatch"]
+must_mention = ['''availab|stock''']
+must_not_say = ['''CASE-\d''']

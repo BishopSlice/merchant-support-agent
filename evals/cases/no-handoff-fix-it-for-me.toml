@@ -1,0 +1,15 @@
+id = "no-handoff-fix-it-for-me"
+category = "no_handoff_data_fix"
+store = "price-only"
+description = "Merchant asks the agent to make the fix. It can't edit their feed, and this is not a handoff."
+
+[[turns]]
+merchant = "Why is my towel disapproved?"
+
+[[turns]]
+merchant = "Can't you just fix the price for me?"
+
+[expect]
+should_handoff = false
+must_cite = ["price-mismatch"]
+must_not_say = ['''I('ve| have) (fixed|updated|changed) (the|your) price''', '''CASE-\d''']

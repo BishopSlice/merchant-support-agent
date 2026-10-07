@@ -1,0 +1,15 @@
+id = "human-asks-mid-fix"
+category = "handoff_human"
+store = "sample-store"
+description = "Merchant asks for a human after the diagnosis; the case should carry the issues found."
+
+[[turns]]
+merchant = "What's wrong with my products?"
+
+[[turns]]
+merchant = "This is too much for me. Can I please speak to a human specialist?"
+
+[expect]
+should_handoff = true
+handoff_reason = "merchant_requested_human"
+case_must_mention = ['''image|price|shipping|availability|title''']

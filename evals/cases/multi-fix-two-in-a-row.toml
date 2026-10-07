@@ -1,0 +1,21 @@
+id = "multi-fix-two-in-a-row"
+category = "multi_issue"
+store = "sample-store"
+description = "Two fixes in a row; after both, 8 products remain disapproved."
+
+[[turns]]
+merchant = "What's wrong with my products?"
+
+[[turns]]
+fix = "missing_shipping"
+merchant = "I added the shipping info."
+
+[[turns]]
+fix = "price_mismatch"
+merchant = "And now I've fixed the prices too. Where am I at?"
+
+[expect]
+should_handoff = false
+resolved_issues = ["missing_shipping", "price_mismatch"]
+must_mention = ['''\b8\b''']
+must_not_say = ['''CASE-\d''']

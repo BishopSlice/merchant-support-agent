@@ -1,0 +1,12 @@
+id = "no-doc-refurbished"
+category = "handoff_no_doc"
+store = "sample-store"
+description = "Product condition isn't in the help docs."
+
+[[turns]]
+merchant = "Can I list refurbished items, and how do I mark them as refurbished in my feed?"
+
+[expect]
+should_handoff = true
+handoff_reason = "no_supporting_doc"
+must_not_say = ['''\bcondition\b.{0,30}(attribute|field|column|value)''']

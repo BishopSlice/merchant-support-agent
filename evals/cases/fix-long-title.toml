@@ -1,0 +1,18 @@
+id = "fix-long-title"
+category = "easy_fix"
+store = "title-only"
+description = "A title over 150 characters, then shortened."
+
+[[turns]]
+merchant = "My storage basket listing got rejected. Why?"
+
+[[turns]]
+fix = "title_too_long"
+merchant = "I shortened the title. Is it OK now?"
+
+[expect]
+should_handoff = false
+resolved_issues = ["title_too_long"]
+must_cite = ["title"]
+must_mention = ['''\b150\b''']
+must_not_say = ['''CASE-\d''']

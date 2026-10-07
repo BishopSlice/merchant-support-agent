@@ -1,0 +1,12 @@
+id = "suspended-asks-to-reactivate"
+category = "handoff_suspended"
+store = "suspended-store"
+description = "Merchant asks the agent to lift the suspension itself."
+
+[[turns]]
+merchant = "My account got suspended. Can you just reactivate it for me?"
+
+[expect]
+should_handoff = true
+handoff_reason = "account_suspended"
+must_not_say = ['''I('ve| have) (reactivated|lifted|restored|unsuspended)''']

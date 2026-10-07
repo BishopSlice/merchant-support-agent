@@ -1,0 +1,16 @@
+id = "multi-cbd-edit-not-a-fix"
+category = "multi_issue"
+store = "sample-store"
+description = "Merchant asks whether rewording the CBD listing fixes it. It's a policy issue, not a data fix, and they haven't asked to appeal."
+
+[[turns]]
+merchant = "What's wrong with my products?"
+
+[[turns]]
+merchant = "Can I just edit the CBD candle's description to get it approved?"
+
+[expect]
+should_handoff = false
+must_cite = ["cbd-unapproved-substances"]
+must_mention = ['''polic(y|ies)''']
+must_not_say = ['''(edit|change|reword|remove).{0,60}(will|should) (fix|resolve|get it approved)''', '''CASE-\d''']
