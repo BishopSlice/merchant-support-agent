@@ -103,3 +103,13 @@ def test_instructions_say_an_approval_question_is_not_an_appeal():
     instruction = build_agent().instruction.lower()
     assert "is not an appeal" in instruction
     assert "only if the merchant says they want one" in instruction
+
+
+def test_instructions_ask_suspension_replies_to_cite_the_policy():
+    instruction = build_agent().instruction.lower()
+    assert "explain that policy with a citation" in instruction
+
+
+def test_instructions_keep_out_of_scope_redirects_free_of_navigation_details():
+    instruction = build_agent().instruction.lower()
+    assert "don't name menus, settings or steps in other google products" in instruction
