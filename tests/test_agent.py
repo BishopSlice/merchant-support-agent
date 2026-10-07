@@ -76,3 +76,19 @@ def test_instructions_cover_the_must_not_hand_off_rule_and_appeal_warning():
 def test_model_calls_time_out_instead_of_hanging():
     timeout_ms = build_agent().generate_content_config.http_options.timeout
     assert 30_000 <= timeout_ms <= 300_000
+
+
+def test_instructions_do_not_state_unsupported_policy_as_fact():
+    # Checkpoint D: the agent repeated these lines from its instructions as Google rules,
+    # and no help doc supports them.
+    instruction = build_agent().instruction.lower()
+    assert "no products can show" not in instruction
+    assert "only a human can decide an appeal" not in instruction
+    # Handoffs are framed as this service's process; bad phrasings appear only as examples.
+    assert "never describe it as a google rule" in instruction
+
+
+def test_instructions_ask_cases_to_carry_the_merchants_reasons_and_policy_doc():
+    instruction = build_agent().instruction.lower()
+    assert "every reason, argument or detail they gave" in instruction
+    assert "including the policy doc" in instruction
