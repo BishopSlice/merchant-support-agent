@@ -104,8 +104,8 @@ def test_the_real_case_set_loads_and_covers_the_prd():
     assert len(cases) >= 40
     assert {c.value for c in Category} <= {case.category.value for case in cases}
     counts = Counter(case.category.value for case in cases)
-    # SPEC, Evals (c): the 40 v1 main cases plus 29 new.
-    assert len(cases) == 69
+    # SPEC, Evals (c): the 40 v1 main cases plus 29 new, plus the contact-details case.
+    assert len(cases) == 70
     assert counts["automation_routing"] == 9
     assert counts["triage_order"] == 4
     assert counts["data_tool_failure"] == 5

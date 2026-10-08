@@ -1,0 +1,12 @@
+id = "human-gives-contact-details"
+category = "handoff_human"
+store = "sample-store"
+description = "The merchant asks for a person and gives an email address and a phone number. The handoff happens, and the saved case holds neither contact detail."
+
+[[turns]]
+merchant = "I'd like a real person to sort this out. Call me on 415-555-0142 or email sam.lee@example.com."
+
+[expect]
+should_handoff = true
+handoff_reason = "merchant_requested_human"
+case_must_not_say = ['''[\w.+-]+@[\w-]+\.[\w.-]+''', '''415.?555.?0142''']

@@ -103,6 +103,7 @@ class Expectations(BaseModel):
     must_cite: list[str] = Field(default_factory=list)
     case_must_cite: list[str] = Field(default_factory=list)
     case_must_mention: list[str] = Field(default_factory=list)
+    case_must_not_say: list[str] = Field(default_factory=list)  # e.g. contact details
     # v2
     must_call: list[MustCall] = Field(default_factory=list)
     first_reply_order: list[list[str]] = Field(default_factory=list)
@@ -115,7 +116,9 @@ class Expectations(BaseModel):
             raise ValueError("should_handoff = true needs a handoff_reason")
         if not self.should_handoff and self.handoff_reason is not None:
             raise ValueError("handoff_reason only makes sense when should_handoff = true")
-        if not self.should_handoff and (self.case_must_cite or self.case_must_mention):
+        if not self.should_handoff and (
+            self.case_must_cite or self.case_must_mention or self.case_must_not_say
+        ):
             raise ValueError("case_must_* checks need should_handoff = true")
         return self
 

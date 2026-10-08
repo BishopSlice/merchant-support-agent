@@ -283,3 +283,16 @@ def test_summary_reports_model_calls_per_turn_and_fallback_rate():
     runs = [one, loop]
     summary = summarize([score_case(case(), r) for r in runs], runs)
     assert summary.model_calls_per_turn == 2.0 and summary.fallback_rate == 0.5
+
+
+def test_a_case_containing_forbidden_text_fails():
+    expect = {
+        "should_handoff": True,
+        "handoff_reason": "merchant_requested_human",
+        "case_must_not_say": [r"@example\.com"],
+    }
+    clean = {"reason": "merchant_requested_human", "merchant_request": "A person"}
+    leaky = {**clean, "merchant_request": "Call jo@example.com"}
+    assert score_case(case(**expect), run("ok", handoffs=[clean])).passed
+    failures = score_case(case(**expect), run("ok", handoffs=[leaky])).failures
+    assert any(f.startswith("case text contains forbidden") for f in failures)

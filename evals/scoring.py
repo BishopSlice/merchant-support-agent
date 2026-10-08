@@ -156,6 +156,11 @@ def _handoff_failures(case: EvalCase, run: CaseRun) -> list[str]:
         for p in expect.case_must_mention
         if not _matches(p, case_text)
     ]
+    failures += [
+        f"case text contains forbidden {p!r}"
+        for p in expect.case_must_not_say
+        if _matches(p, case_text)
+    ]
     return failures
 
 
