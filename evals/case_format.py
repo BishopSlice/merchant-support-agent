@@ -7,10 +7,12 @@ import re
 import tomllib
 from enum import StrEnum
 from pathlib import Path
+from typing import Literal
 
 from pydantic import BaseModel, Field, ValidationError, model_validator
 
 from merchant_agent.config import PROJECT_ROOT
+from merchant_agent.data import ALLOWED_TOOLS
 from merchant_agent.demo import FIXABLE_ISSUE_TYPES
 from merchant_agent.models import HandoffReason, IssueType
 from merchant_agent.tools.help_search import load_help_docs
@@ -38,6 +40,46 @@ class Category(StrEnum):
     ANGRY_MERCHANT = "angry_merchant"
     OFF_TOPIC = "off_topic"
     PROMPT_INJECTION = "prompt_injection"
+    # v2
+    AUTOMATION_ROUTING = "automation_routing"
+    TRIAGE_ORDER = "triage_order"
+    DATA_TOOL_FAILURE = "data_tool_failure"
+    ENTRY_CONTEXT = "entry_context"
+    CASE_PREVIEW = "case_preview"
+
+
+class Tag(StrEnum):
+    """Metrics a case counts towards, beyond its category (SPEC, Evals e)."""
+
+    AUTOMATION_ROUTING = "automation_routing"
+    TRIAGE = "triage"
+    TOOL_CALLS = "tool_calls"
+    GRACEFUL_FAILURE = "graceful_failure"
+    INJECTION = "injection"
+    CONTEXT = "context"
+    PREVIEW = "preview"
+
+
+class EntryContext(BaseModel):
+    """The issue row the side panel was opened from."""
+
+    product: str
+    issue_code: IssueType
+
+
+class DataFailure(BaseModel):
+    """Make one data tool fail in this case, to test graceful failure."""
+
+    tool: str
+    kind: Literal["quota", "timeout", "empty", "malformed", "error"]
+
+
+class MustCall(BaseModel):
+    """A tool call the agent must make: arguments are regexes, turn (1-based) is optional."""
+
+    tool: str
+    args: dict[str, str] = Field(default_factory=dict)
+    turn: int | None = None
 
 
 class ScriptedTurn(BaseModel):
@@ -58,6 +100,11 @@ class Expectations(BaseModel):
     must_cite: list[str] = Field(default_factory=list)
     case_must_cite: list[str] = Field(default_factory=list)
     case_must_mention: list[str] = Field(default_factory=list)
+    # v2
+    must_call: list[MustCall] = Field(default_factory=list)
+    first_reply_order: list[list[str]] = Field(default_factory=list)
+    must_not_invent: bool = False
+    preview_must_match: bool = False
 
     @model_validator(mode="after")
     def _handoff_fields_agree(self) -> "Expectations":
@@ -79,6 +126,13 @@ class EvalCase(BaseModel):
     description: str
     turns: list[ScriptedTurn] = Field(min_length=1)
     expect: Expectations
+    tags: list[Tag] = Field(default_factory=list)
+    entry_context: EntryContext | None = None
+    data_failure: DataFailure | None = None
+
+
+# Every tool the agent may call: the MCP read tools plus our own.
+AGENT_TOOLS = ALLOWED_TOOLS | {"search_help_docs", "create_handoff_case"}
 
 
 class CaseError(ValueError):
@@ -104,7 +158,14 @@ def _problems(case: EvalCase, file_name: str, stores: set[str], docs: set[str]) 
     for doc_id in case.expect.must_cite + case.expect.case_must_cite:
         if doc_id not in docs:
             problems.append(f"unknown help doc {doc_id!r}")
+    for call in case.expect.must_call:
+        if call.tool not in AGENT_TOOLS:
+            problems.append(f"must_call tool {call.tool!r} is not an allowed tool")
+    if case.data_failure and case.data_failure.tool not in ALLOWED_TOOLS:
+        problems.append(f"data_failure tool {case.data_failure.tool!r} is not an allowed tool")
     patterns = case.expect.must_mention + case.expect.must_not_say + case.expect.case_must_mention
+    patterns += [p for call in case.expect.must_call for p in call.args.values()]
+    patterns += [p for group in case.expect.first_reply_order for p in group]
     for pattern in patterns:
         try:
             re.compile(pattern)

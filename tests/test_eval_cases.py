@@ -102,7 +102,15 @@ def test_the_real_case_set_loads_and_covers_the_prd():
 
     cases = load_cases()
     assert len(cases) >= 40
-    assert {case.category for case in cases} == set(Category)
+    # The v2 categories get their cases in Task 17, which tightens this to set(Category).
+    v2_only = {
+        "automation_routing",
+        "triage_order",
+        "data_tool_failure",
+        "entry_context",
+        "case_preview",
+    }
+    assert {c.value for c in Category} - v2_only <= {case.category.value for case in cases}
     reasons = Counter(case.expect.handoff_reason for case in cases if case.expect.should_handoff)
     for reason in HandoffReason:
         assert reasons[reason] >= 3, f"fewer than 3 cases expect {reason}"
@@ -197,9 +205,76 @@ def test_warning_count_accepts_the_merchant_api_definition():
     # (6 have a missing GTIN), not v1's "5 products with warnings only".
     reply = "13 products are disapproved. 6 products have a missing barcode warning."
     assert _mentions_all("warnings-disapprovals-first", reply)
-    assert _mentions_all("warnings-disapprovals-first", "13 disapproved; 5 products only have warnings.")
+    assert _mentions_all(
+        "warnings-disapprovals-first", "13 disapproved; 5 products only have warnings."
+    )
 
 
 def test_demoted_counts_as_explaining_a_warning():
     # Pre-registered before any v2 run: the data now uses Google's term DEMOTED.
-    assert _mentions_all("warnings-gtin-only", "2 products are demoted because they lack a barcode.")
+    assert _mentions_all(
+        "warnings-gtin-only", "2 products are demoted because they lack a barcode."
+    )
+
+
+# --- v2 case fields ---
+
+V2_CASE = """
+id = "v2-case"
+category = "entry_context"
+store = "price-only"
+description = "Opened from a price issue row."
+tags = ["context", "tool_calls"]
+
+[entry_context]
+product = "HG-004"
+issue_code = "price_mismatch"
+
+[data_failure]
+tool = "list_account_issues"
+kind = "timeout"
+
+[[turns]]
+merchant = "How do I fix this?"
+
+[expect]
+should_handoff = false
+must_not_invent = true
+first_reply_order = [['''price'''], ['''shipping''', '''image''']]
+
+[[expect.must_call]]
+tool = "get_product_by_name"
+args = {name = '''en~US~HG-004$'''}
+turn = 1
+"""
+
+
+def test_v2_fields_load(tmp_path):
+    (tmp_path / "v2-case.toml").write_text(V2_CASE)
+    [case] = load_cases(tmp_path)
+    assert case.entry_context.product == "HG-004"
+    assert case.data_failure.kind == "timeout"
+    assert case.expect.must_call[0].tool == "get_product_by_name"
+    assert case.expect.first_reply_order == [["price"], ["shipping", "image"]]
+    assert case.tags == ["context", "tool_calls"]
+
+
+@pytest.mark.parametrize(
+    ("change", "problem"),
+    [
+        (('tool = "get_product_by_name"', 'tool = "create_data_source"'), "not an allowed tool"),
+        (('tool = "list_account_issues"', 'tool = "report_search"'), "not an allowed tool"),
+        (('kind = "timeout"', 'kind = "gremlins"'), "kind"),
+        (('tags = ["context", "tool_calls"]', 'tags = ["vibes"]'), "tag"),
+        (
+            ("""args = {name = '''en~US~HG-004$'''}""", """args = {name = '''(unclosed'''}"""),
+            "bad pattern",
+        ),
+        (('issue_code = "price_mismatch"', 'issue_code = "not_a_code"'), "issue_code"),
+    ],
+)
+def test_invalid_v2_fields_are_reported(tmp_path, change, problem):
+    (tmp_path / "v2-case.toml").write_text(V2_CASE.replace(*change))
+    with pytest.raises(CaseError) as error:
+        load_cases(tmp_path)
+    assert problem in str(error.value)
