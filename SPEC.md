@@ -85,7 +85,7 @@ So only price and availability mismatches are automation-solvable in our issue s
 ### Tool safety
 
 - **Allowlist.** The agent is given only `list_products`, `get_product_by_name`, `list_account_issues`, `list_aggregate_product_statuses`, `get_automatic_improvements`, `search_help_docs` and `create_handoff_case`.
-- **Never exposed:** all data-source tools (`create_data_source`, `fetch_data_source`, `get_file_upload`, `get_data_source`, `list_data_sources`) and `report_search`, which isn't needed. Google's MCP page itself recommends tool filtering over exposing the whole toolset.
+- **Never exposed:** all data-source tools (`create_data_source`, `fetch_data_source`, `get_file_upload`, `get_data_source`, `list_data_sources`), plus the read tools the agent doesn't need (`report_search`, `list_accounts` and `list_programs`), to keep the surface minimal. Google's MCP page itself recommends tool filtering over exposing the whole toolset.
 - **The account comes from the session**, never from the model, as in v1.
 - **The mock raises an error** if any tool outside the allowlist is called, so a leak fails loudly in tests and evals.
 
@@ -190,7 +190,7 @@ The v1 suite (47 cases, rules plus an AI grader plus a human hand-check) stays t
    - product `name` follows the documented format
 2. **Read-only allowlist, a hard gate:**
    - the agent's declared tool set equals the allowlist exactly
-   - `create_data_source`, `fetch_data_source`, `get_file_upload`, `get_data_source`, `list_data_sources` and `report_search` are absent
+   - `create_data_source`, `fetch_data_source`, `get_file_upload`, `get_data_source`, `list_data_sources`, `report_search`, `list_accounts` and `list_programs` are absent
    - calling any of them on the mock raises an error
    - an eval-level check counts write calls across every run, and it must be 0
 3. **Right tool, right arguments.** A per-case expectation, `must_call`, lists required tool calls with argument patterns, for example `get_product_by_name(name="accounts/sample/products/en~US~HG-004")` in an entry-context case and `get_automatic_improvements` before automation advice. It's scored per case and rolled up as tool-call correctness.
