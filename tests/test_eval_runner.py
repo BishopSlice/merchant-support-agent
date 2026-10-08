@@ -183,6 +183,14 @@ def test_entry_context_reaches_the_session_state():
         "product_name": "accounts/price-only/products/en~US~HG-004",
         "issue_code": "price_mismatch",
     }
+    note = StateCapturingRunner.seen_state["entry_note"]
+    assert "accounts/price-only/products/en~US~HG-004" in note
+    assert "price_mismatch" in note
+
+
+def test_sessions_without_entry_context_say_the_chat_came_from_help():
+    run_with(make_case([{"merchant": "Hello"}], store="price-only"))
+    assert "Help" in StateCapturingRunner.seen_state["entry_note"]
 
 
 @pytest.mark.parametrize(

@@ -138,3 +138,10 @@ def test_agent_version_changes_when_a_tool_docstring_changes(monkeypatch):
     before = agent_module.agent_version()
     monkeypatch.setattr(merchant_tools.list_products, "__doc__", "A different description.")
     assert agent_module.agent_version() != before
+
+
+def test_instructions_carry_the_entry_note_and_say_not_to_re_ask():
+    from merchant_agent.agent import INSTRUCTION
+
+    assert "{entry_note}" in INSTRUCTION
+    assert "get_product_by_name" in INSTRUCTION.split("{entry_note}")[1].split("\n\n")[0]

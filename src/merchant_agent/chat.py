@@ -81,10 +81,26 @@ def new_runner() -> InMemoryRunner:
     return InMemoryRunner(agent=build_agent(), app_name=APP_NAME)
 
 
+def entry_note(entry_context: dict | None) -> str:
+    """One line for the agent's instructions saying where the merchant opened the chat."""
+    if not entry_context:
+        return "The merchant opened this chat from Help, not from a specific issue."
+    return (
+        "The merchant opened this chat from the issue row for product "
+        f"{entry_context['product_name']} (issue code {entry_context['issue_code']})."
+    )
+
+
 async def new_session(runner: Runner, store_id: str, extra_state: dict | None = None) -> str:
-    """Start a conversation as the owner of a store and return its session id."""
+    """Start a conversation as the owner of a store and return its session id.
+
+    extra_state can carry "entry_context" ({product_name, issue_code}) when the side panel was
+    opened from an issue row; the agent sees it as the "entry_note" line in its instructions.
+    """
+    state = {"store_id": store_id, **(extra_state or {})}
+    state["entry_note"] = entry_note(state.get("entry_context"))
     session = await runner.session_service.create_session(
-        app_name=APP_NAME, user_id=USER_ID, state={"store_id": store_id, **(extra_state or {})}
+        app_name=APP_NAME, user_id=USER_ID, state=state
     )
     return session.id
 
