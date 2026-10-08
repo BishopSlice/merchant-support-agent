@@ -145,3 +145,10 @@ def test_instructions_carry_the_entry_note_and_say_not_to_re_ask():
 
     assert "{entry_note}" in INSTRUCTION
     assert "get_product_by_name" in INSTRUCTION.split("{entry_note}")[1].split("\n\n")[0]
+
+
+def test_instructions_route_mismatches_to_automatic_item_updates():
+    instruction = build_agent().instruction
+    assert "get_automatic_improvements" in instruction
+    assert "automatic item updates" in instruction.lower()
+    assert "already on" in instruction.lower()
