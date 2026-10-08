@@ -70,3 +70,37 @@ Check each against its free tier when billing is set up. I haven't verified thei
 - **Build.** `gcloud run deploy --source .` builds the repo's `Dockerfile` with Cloud Build. It hasn't been built here, because building and pushing wait for the go-ahead. The Dockerfile's structure is checked by tests: every `evals` module the app imports, the replays and the /ops seed must be copied in, and no secret is baked in.
 - **Run.** The container runs as a non-root user and starts `uvicorn merchant_agent.web.api:app --host 0.0.0.0 --port ${PORT}`.
 - **Replays.** These are recorded from the release candidate (agent version `60e5bc0b3211`), and a test fails if they go stale.
+
+## Deploying automatically on every push to GitHub
+
+`cloudbuild.yaml` runs on every push to `main`:
+1. **Tests and lint.** Model calls are blocked in tests, and a failure stops the deploy.
+2. **Build** the image.
+3. **Push** it to Artifact Registry.
+4. **Deploy** it to Cloud Run, with the same settings as `deploy/cloudrun.sh`. A test keeps the two files in step.
+
+**One-time setup.** Connecting GitHub needs Vikrant's own sign-in, so this is done in the console.
+
+1. **Let the build's service account deploy.** New projects run Cloud Build as the Compute Engine default service account, which already reads the three secrets:
+
+   ```bash
+   PROJECT_ID=merchant-agent-demo-vn
+   NUMBER=$(gcloud projects describe $PROJECT_ID --format='value(projectNumber)')
+   SA="${NUMBER}-compute@developer.gserviceaccount.com"
+   for role in roles/run.admin roles/iam.serviceAccountUser roles/artifactregistry.writer roles/logging.logWriter; do
+     gcloud projects add-iam-policy-binding $PROJECT_ID --member="serviceAccount:$SA" --role=$role --condition=None
+   done
+   ```
+
+2. **Create the trigger.** In the console, open Cloud Build, then Triggers, then **Create trigger**:
+   - **Name:** `deploy-on-push`. **Region:** `us-central1`.
+   - **Event:** Push to a branch.
+   - **Source:** Repository, then **Connect new repository**. Choose GitHub, authorise it, and pick `BishopSlice/merchant-support-agent`.
+   - **Branch:** `^main$`.
+   - **Configuration:** Cloud Build configuration file, at `cloudbuild.yaml`.
+   - **Service account:** the Compute Engine default service account (`NUMBER-compute@developer.gserviceaccount.com`).
+   - Then **Create**.
+
+3. **Test it.** On the trigger, press **Run**, or push any commit. Build history shows the four steps, and the URL stays the same.
+
+**Cost:** each build takes a few minutes of Cloud Build time. Check its free build minutes against your billing account, because I haven't verified the current figure.

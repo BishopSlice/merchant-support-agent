@@ -37,3 +37,25 @@ def test_the_image_includes_the_replays_and_the_ops_seed():
     dockerfile = (PROJECT_ROOT / "Dockerfile").read_text()
     assert "COPY replays" in dockerfile
     assert "deploy/ops-seed.sqlite" in dockerfile
+
+
+def test_cloud_build_deploys_with_the_same_settings_as_the_deploy_script():
+    import re
+
+    def code(path):  # without comment lines, which also mention the flags
+        lines = path.read_text().splitlines()
+        return "\n".join(line for line in lines if not line.lstrip().startswith("#"))
+
+    script = code(PROJECT_ROOT / "deploy" / "cloudrun.sh")
+    build = code(PROJECT_ROOT / "cloudbuild.yaml")
+    flags = ["min-instances", "max-instances", "cpu", "memory", "concurrency", "timeout"]
+    for flag in flags:
+        [in_script] = re.findall(rf"--{flag}[ =](\S+)", script)
+        [in_build] = re.findall(rf"--{flag}[ =](\S+)", build)
+        assert in_script == in_build, flag
+    for flag in ["--cpu-throttling", "--cpu-boost", "--allow-unauthenticated"]:
+        assert flag in script and flag in build
+    env = re.search(r'--set-env-vars "([^"]+)"', script).group(1)
+    secrets = re.search(r'--set-secrets "([^"]+)"', script).group(1)
+    assert f"--set-env-vars={env}" in build and f"--set-secrets={secrets}" in build
+    assert "pytest" in build  # a failing test stops the deploy

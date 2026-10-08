@@ -1,0 +1,57 @@
+# Continuous deployment: on every push to main, Cloud Build runs the tests, builds the image
+# and deploys it to Cloud Run with the same settings as deploy/cloudrun.sh (scale to zero,
+# one instance, request billing, secrets from Secret Manager).
+# A failing test stops the deploy. Connected through a Cloud Build trigger (see docs/deploy.md).
+steps:
+  - id: test
+    name: python:3.13-slim
+    entrypoint: bash
+    args:
+      - -c
+      - pip install --quiet uv==0.11.17 && uv sync --frozen && uv run pytest -q && uv run ruff check .
+
+  - id: build
+    name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - -t
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/${_SERVICE}:$COMMIT_SHA
+      - .
+
+  - id: push
+    name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/${_SERVICE}:$COMMIT_SHA
+
+  - id: deploy
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - ${_SERVICE}
+      - --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/${_SERVICE}:$COMMIT_SHA
+      - --region=${_REGION}
+      # The same settings as deploy/cloudrun.sh (a test keeps the two in step).
+      - --allow-unauthenticated
+      - --min-instances=0
+      - --max-instances=1
+      - --cpu=1
+      - --memory=512Mi
+      - --concurrency=20
+      - --cpu-throttling
+      - --cpu-boost
+      - --timeout=120
+      - --set-env-vars=MODEL_NAME=gemini-3.6-flash,GRADER_MODEL=gemini-3.6-flash,SECURE_COOKIES=1,SESSION_CAP=30,DAILY_CAP=400,GRADING_DAILY_BUDGET_USD=0.50
+      - --set-secrets=GOOGLE_API_KEY=gemini-api-key:latest,ACCESS_CODE=access-code:latest,OPS_CODE=ops-code:latest
+
+substitutions:
+  _REGION: us-central1
+  _SERVICE: merchant-support-agent
+
+images:
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/${_SERVICE}:$COMMIT_SHA
+
+options:
+  logging: CLOUD_LOGGING_ONLY
