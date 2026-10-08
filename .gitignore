@@ -11,3 +11,4 @@ runtime/
 .agents/
 .claude/
 skills-lock.json
+.impeccable/
