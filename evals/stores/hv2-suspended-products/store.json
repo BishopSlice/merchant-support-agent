@@ -1,0 +1,13 @@
+{
+  "store_id": "hv2-suspended-products",
+  "name": "Held-out v2: suspended shop with product issues",
+  "country": "US",
+  "account_status": "suspended",
+  "suspension_reason": "Misrepresentation: the business address is not shown anywhere on the website.",
+  "automatic_improvements": {
+    "price_updates": false,
+    "availability_updates": false,
+    "image_improvements": false,
+    "shipping_improvements": false
+  }
+}
