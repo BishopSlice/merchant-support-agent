@@ -52,6 +52,7 @@ def test_issue_severity_attribute_and_documentation_are_mapped():
 
 def test_destination_status_reflects_disapprovals_only():
     listed = products()
+
     def destination(offer_id):
         return listed[offer_id]["productStatus"]["destinationStatuses"][0]
 
@@ -72,12 +73,18 @@ def test_get_product_by_name_returns_one_product():
     name = product_name("sample-store", "HG-023")
     product = MCP.call("get_product_by_name", name=name)
     assert product["offerId"] == "HG-023"
-    assert [i["code"] for i in product["productStatus"]["itemLevelIssues"]] == ["restricted_product"]
+    assert [i["code"] for i in product["productStatus"]["itemLevelIssues"]] == [
+        "restricted_product"
+    ]
 
 
 @pytest.mark.parametrize(
     "name",
-    ["accounts/sample-store/products/en~US~NOPE", "not-a-product-name", "accounts/nowhere/products/en~US~HG-001"],
+    [
+        "accounts/sample-store/products/en~US~NOPE",
+        "not-a-product-name",
+        "accounts/nowhere/products/en~US~HG-001",
+    ],
 )
 def test_get_product_by_name_reports_unknown_products_as_errors(name):
     assert "error" in MCP.call("get_product_by_name", name=name)
@@ -150,3 +157,8 @@ def test_write_and_unneeded_mcp_tools_are_blocked():
 def test_calling_a_tool_outside_the_allowlist_raises(tool):
     with pytest.raises(ToolNotAllowedError):
         MCP.call(tool, account="sample-store")
+
+
+def test_a_disapproved_product_is_not_also_listed_as_approved():
+    status = products()["HG-004"]["productStatus"]["destinationStatuses"][0]
+    assert status["approvedCountries"] == []

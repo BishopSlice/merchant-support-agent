@@ -204,7 +204,10 @@ def test_uniquely_agent_resolved_rate_excludes_automation_solvable_fixes():
 def test_scorecard_shows_the_v2_metrics_with_targets_and_hard_gates():
     from evals.report import render_scorecard
 
-    c, r = case("automation_routing", tags=["automation_routing"]), run("ok", call("create_data_source"))
+    c, r = (
+        case("automation_routing", tags=["automation_routing"]),
+        run("ok", call("create_data_source")),
+    )
     summary = summarize([score_case(c, r)], [r])
     card = render_scorecard({"Run": "x", "Agent version": "abc123"}, summary, [score_case(c, r)])
     assert "## v2 metrics" in card
@@ -213,3 +216,21 @@ def test_scorecard_shows_the_v2_metrics_with_targets_and_hard_gates():
     assert "| Latency p50 per turn | 2.0 s | 8 s or less | met |" in card
     assert "| Graceful-failure rate (hard gate) | n/a | 100% | not measured |" in card
     assert "- Agent version: abc123" in card
+
+
+def test_an_id_mentioned_only_in_an_error_message_is_still_invented():
+    failed = call("get_product_by_name", {}, {"error": "No product 'HG-030' in this account"})
+    failures = score_case(
+        case(must_not_invent=True), run("HG-030 has a price problem.", failed)
+    ).failures
+    assert "invented product id HG-030" in failures
+
+
+def test_latency_percentiles_use_nearest_rank_and_skip_unrecorded_turns():
+    turns = [
+        TurnRecord(merchant="m", reply="r", seconds=s) for s in (1.0, 2.0, 3.0, 4.0, 10.0, 0.0)
+    ]
+    timed = CaseRun(case_id="c1", category="multi_issue", turns=turns)
+    summary = summarize([score_case(case(), timed)], [timed])
+    assert summary.latency_p50_seconds == 3.0  # the 0.0 turn (not recorded) is ignored
+    assert summary.latency_p95_seconds == 10.0

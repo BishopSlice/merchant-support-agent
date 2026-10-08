@@ -129,3 +129,12 @@ def test_agent_version_is_stable_and_changes_with_what_the_model_sees(monkeypatc
     monkeypatch.undo()
     monkeypatch.setenv("MODEL_NAME", "another-model")
     assert agent_module.agent_version() != first
+
+
+def test_agent_version_changes_when_a_tool_docstring_changes(monkeypatch):
+    from merchant_agent import agent as agent_module
+    from merchant_agent.tools import merchant_tools
+
+    before = agent_module.agent_version()
+    monkeypatch.setattr(merchant_tools.list_products, "__doc__", "A different description.")
+    assert agent_module.agent_version() != before
