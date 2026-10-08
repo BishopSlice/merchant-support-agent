@@ -56,6 +56,18 @@ The misses were:
 
 Wrong advice was 0% and case completeness 100%, and the held-out sets did better: the v1 held-out set passed 7 of 7 twice. **So the agent goes back to `gemini-3.6-flash`, keeping the one-call design**, with no tuning around the misses, as agreed.
 
+**E2 on Flash with the one-call design (8 Oct, `20261008-165526` to `20261008-180539`):** each set was run twice.
+
+| | Main run 1 | Main run 2 | v1 held-out (both runs) | v2 held-out (both runs) |
+|---|---|---|---|---|
+| Cases passed | 68 of 69 | 68 of 69 | 7 of 7 | 8 of 8 |
+| Median latency | 13.4 s | 10.7 s | 8.7 and 10.2 s | 11.6 and 10.6 s |
+| Cost per conversation | $0.0135 | $0.0135 | about $0.012 | about $0.012 |
+
+- **Model calls per turn:** 1.00 in every run, with 2% fallback on the main set.
+- **Targets and gates:** every quality target and hard gate was met, except triage on the main set (75%). In both runs `triage-suspended-then-products` handed off on the suspension without summarising the product issues.
+- **Latency:** still above 8 s. The single call does all the thinking, about 2,000 output tokens per turn.
+
 **Not chosen:**
 - **Lower thinking level:** faster, but it dropped citations.
 - **Parallel tool calls in the loop:** measured with no gain (2.95 calls per turn instead of 3.15).
