@@ -1,0 +1,16 @@
+id = "auto-irrelevant-shipping"
+category = "automation_routing"
+store = "v2-shipping-auto-on"
+description = "Shipping improvements are on, but the string lights have no shipping cost at all. The automation estimates delivery times; it doesn't set a cost."
+tags = ["tool_calls"]
+
+[[turns]]
+merchant = "My string lights are disapproved over shipping. Isn't there an automatic setting for that already?"
+
+[expect]
+should_handoff = false
+must_cite = ["shipping"]
+must_not_say = ['''(turn|switch)(ing)? on .{0,30}automatic (item )?updates|enabl(e|ing) .{0,30}automatic (item )?updates''', '''(shipping improvements?|automation) (will|should|can) (fix|add|set|fill)''', '''CASE-\d''']
+
+[[expect.must_call]]
+tool = "get_automatic_improvements"

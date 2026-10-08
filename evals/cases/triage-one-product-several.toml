@@ -1,0 +1,13 @@
+id = "triage-one-product-several"
+category = "triage_order"
+store = "v2-one-product-many"
+description = "One product has a missing image, no shipping and no GTIN. Both disapprovals come before the warning."
+
+[[turns]]
+merchant = "Only one item has trouble. What's wrong with it?"
+
+[expect]
+should_handoff = false
+must_mention = ['''HG-090|candle snuffer''']
+first_reply_order = [['''image|photo''', '''shipping'''], ['''barcode|gtin|demoted|warning''']]
+must_not_say = ['''CASE-\d''']

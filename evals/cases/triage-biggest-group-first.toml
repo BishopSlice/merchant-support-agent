@@ -1,0 +1,13 @@
+id = "triage-biggest-group-first"
+category = "triage_order"
+store = "v2-triage-counts"
+description = "3 shipping, 2 price and 1 title disapproval, and 2 GTIN warnings. Disapprovals by size, warnings last."
+
+[[turns]]
+merchant = "Rank what I should tackle on my listings, most urgent first."
+
+[expect]
+should_handoff = false
+must_mention = ['''\b3\b''', '''\b2\b''']
+first_reply_order = [['''shipping'''], ['''mismatch'''], ['''title'''], ['''barcode|gtin|demoted|warning''']]
+must_not_say = ['''CASE-\d''']

@@ -1,0 +1,17 @@
+id = "preview-person-request"
+category = "case_preview"
+store = "sample-store"
+description = "The merchant asks for a person, then what that person will receive. The preview matches the saved case."
+tags = ["preview"]
+
+[[turns]]
+merchant = "I'd rather deal with an actual human about my listings."
+
+[[turns]]
+merchant = "Before it goes, what exactly will they get from you?"
+
+[expect]
+should_handoff = true
+handoff_reason = "merchant_requested_human"
+preview_must_match = true
+must_not_say = ['''(specialist|someone|they|we|google) will .{0,60}\b(within|in) \d+ (hours?|days?|business days?)|guarantee''']

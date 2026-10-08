@@ -1,0 +1,17 @@
+id = "auto-on-stock-persists"
+category = "automation_routing"
+store = "v2-updates-on"
+description = "Item updates are on but the cushion cover's availability still mismatches."
+tags = ["tool_calls"]
+
+[[turns]]
+merchant = "The cushion cover is flagged for stock again. Isn't that supposed to be handled for me?"
+
+[expect]
+should_handoff = false
+must_mention = ['''(already|currently) (on|turned on|enabled|switched on)|(updates?|automations?|they|it) (is|are) (already |currently )?(on|turned on|enabled|switched on)\b''', '''structured data|markup|more than once a day|frequent|often|several strikethrough|too (large|many)''']
+must_not_say = ['''(turn|switch)(ing)? on .{0,30}automatic (item )?updates|enabl(e|ing) .{0,30}automatic (item )?updates''', '''CASE-\d''']
+must_cite = ["availability-mismatch", "automatic-item-updates"]
+
+[[expect.must_call]]
+tool = "get_automatic_improvements"

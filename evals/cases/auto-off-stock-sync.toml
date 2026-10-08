@@ -1,0 +1,17 @@
+id = "auto-off-stock-sync"
+category = "automation_routing"
+store = "availability-only"
+description = "Item updates are off and the cushion cover's stock status mismatches. Recommend turning them on."
+tags = ["tool_calls"]
+
+[[turns]]
+merchant = "The cushion cover keeps showing in stock on Google when it's sold out. Can that update by itself?"
+
+[expect]
+should_handoff = false
+must_cite = ["automatic-item-updates"]
+must_mention = ['''automatic(ally)?\b.{0,30}updat''', '''(turn|switch)(ing)? (it |them |this |that )?on|enabl''']
+must_not_say = ['''CASE-\d''']
+
+[[expect.must_call]]
+tool = "get_automatic_improvements"

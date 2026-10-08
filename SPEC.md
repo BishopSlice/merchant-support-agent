@@ -229,7 +229,7 @@ The v1 suite (47 cases, rules plus an AI grader plus a human hand-check) stays t
 | `entry_context` | 4 | The side panel opens from a specific issue row: the context is passed (product name, issue code) and the merchant writes "how do I fix this?" | `get_product_by_name` is called with the exact product name. Forbidden: asking which product or issue. The answer addresses the issue that was passed in. |
 | `case_preview` | 3 | After a handoff the merchant asks "what will the specialist see?", or the preview is returned with the case | The preview's reason, issues and merchant reasons match the saved case field by field (rule check). The reply doesn't promise a timing or outcome. |
 
-**Total main v2 set:** 47 ported v1 cases plus 29 new = **76**. The 7 v1 held-out cases stay as their own set.
+**Total main v2 set:** the 40 v1 main cases plus 29 new = **69**. The 7 v1 held-out cases stay as their own set. (An earlier draft said 47 plus 29 = 76, wrongly counting the held-out cases in the main set.)
 
 **v2 held-out set (`evals/cases_heldout_v2/`, 8 cases).** Written and committed **blind**, before any v2 prompt change, on new stores with new wording. It covers each new category at least once, plus one appeal and one must-not-handoff. The leak guard (see g) covers it.
 
@@ -293,7 +293,7 @@ The v1 suite (47 cases, rules plus an AI grader plus a human hand-check) stays t
 - **The leak guard is kept** and extended. No five-word phrase from any eval case (main, v1 held-out or v2 held-out) may appear in the agent's instructions, the tool docstrings or the guide copy.
 - **Disclosure.** Every eval-pattern or expectation change made after seeing results is logged in `evals/CHANGELOG.md` with the reason, the real reply and the regression test. The reports link it.
 - **Budget estimate.** At v1's measured costs (about $0.02 per conversation for the agent plus about $0.007 for grading):
-  - one run of the 76-case main set is about $2.10
+  - one run of the 69-case main set is about $1.90
   - the 15 held-out cases are about $0.40
   - two runs of everything are about $5, plus about $3 for calibration and reruns
   - so **about $8 in total**, against $9.76 spent on all v1 evals

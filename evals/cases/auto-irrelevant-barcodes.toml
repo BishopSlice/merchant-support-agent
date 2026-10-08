@@ -1,0 +1,16 @@
+id = "auto-irrelevant-barcodes"
+category = "automation_routing"
+store = "gtin-only"
+description = "Two products lack a GTIN. No automation supplies barcodes, so no automation is recommended."
+tags = ["tool_calls"]
+
+[[turns]]
+merchant = "Could some automatic setting fill in the missing barcodes for me?"
+
+[expect]
+should_handoff = false
+must_cite = ["gtin"]
+must_not_say = ['''(turn|switch)(ing)? on .{0,30}automatic (item )?updates|enabl(e|ing) .{0,30}automatic (item )?updates''', '''(automation|automatic \w+) (will|can) (fill|add|supply)''', '''CASE-\d''']
+
+[[expect.must_call]]
+tool = "get_automatic_improvements"

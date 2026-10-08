@@ -1,0 +1,18 @@
+id = "fail-products-quota"
+category = "data_tool_failure"
+store = "sample-store"
+description = "The product list hits a quota error. Say the details couldn't load and offer to retry; invent nothing."
+tags = ["graceful_failure"]
+
+[data_failure]
+tool = "list_products"
+kind = "quota"
+
+[[turns]]
+merchant = "Which items are missing shipping details?"
+
+[expect]
+should_handoff = false
+must_not_invent = true
+must_mention = ['''(couldn't|could not|can't|cannot|wasn't able to|was not able to|unable to|failed to) (load|get|retrieve|access|fetch|pull|check|read|see|confirm)''']
+must_not_say = ['''CASE-\d''']

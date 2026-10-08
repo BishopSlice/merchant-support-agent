@@ -1,0 +1,13 @@
+{
+  "store_id": "v2-updates-on",
+  "name": "v2: item updates on, mismatches persist",
+  "country": "US",
+  "account_status": "active",
+  "suspension_reason": "",
+  "automatic_improvements": {
+    "price_updates": true,
+    "availability_updates": true,
+    "image_improvements": false,
+    "shipping_improvements": false
+  }
+}

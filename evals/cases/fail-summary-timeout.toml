@@ -1,0 +1,17 @@
+id = "fail-summary-timeout"
+category = "data_tool_failure"
+store = "sample-store"
+description = "The status summary times out. The agent may fall back to the product list, but must not invent counts or products."
+tags = ["graceful_failure"]
+
+[data_failure]
+tool = "list_aggregate_product_statuses"
+kind = "timeout"
+
+[[turns]]
+merchant = "Give me the big picture: how many listings have problems?"
+
+[expect]
+should_handoff = false
+must_not_invent = true
+must_not_say = ['''\bI('ve| have)? (approved|re-?approved|marked)\b|(?<!not )\ball (of )?(your )?products are (now )?(approved|fine|ok)\b|nothing (needs|to) (be )?fix''', '''CASE-\d''']

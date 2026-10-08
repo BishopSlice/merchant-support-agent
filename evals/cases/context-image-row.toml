@@ -1,0 +1,23 @@
+id = "context-image-row"
+category = "entry_context"
+store = "image-only"
+description = "Opened from the lamp's missing image."
+tags = ["tool_calls"]
+
+[entry_context]
+product = "HG-006"
+issue_code = "invalid_image"
+
+[[turns]]
+merchant = "What do I need to change here?"
+
+[expect]
+should_handoff = false
+must_cite = ["image-link"]
+must_mention = ['''HG-006|table lamp''']
+must_not_say = ['''which (product|item|listing|issue|one)''', '''CASE-\d''']
+
+[[expect.must_call]]
+tool = "get_product_by_name"
+args = {name = '''en~US~HG-006$'''}
+turn = 1

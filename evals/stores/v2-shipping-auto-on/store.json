@@ -1,0 +1,13 @@
+{
+  "store_id": "v2-shipping-auto-on",
+  "name": "v2: shipping improvements on, shipping cost missing",
+  "country": "US",
+  "account_status": "active",
+  "suspension_reason": "",
+  "automatic_improvements": {
+    "price_updates": false,
+    "availability_updates": false,
+    "image_improvements": false,
+    "shipping_improvements": true
+  }
+}

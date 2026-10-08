@@ -1,0 +1,17 @@
+id = "auto-irrelevant-photos"
+category = "automation_routing"
+store = "v2-images-auto-on"
+description = "Image improvements are on, but one image is missing and one is a placeholder. The automation only removes overlays; it can't supply a photo."
+tags = ["tool_calls"]
+
+[[turns]]
+merchant = "Is there any automatic option that could deal with my lamp and shelf pictures?"
+
+[expect]
+should_handoff = false
+must_cite = ["image-link"]
+must_mention = ['''HG-006|table lamp''', '''HG-013|wall shelf''']
+must_not_say = ['''(turn|switch)(ing)? on .{0,30}automatic (item )?updates|enabl(e|ing) .{0,30}automatic (item )?updates''', '''(image improvements?|automation) (will|should|can) (fix|add|create|replace|supply)''', '''CASE-\d''']
+
+[[expect.must_call]]
+tool = "get_automatic_improvements"

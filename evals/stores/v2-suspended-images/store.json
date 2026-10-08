@@ -1,0 +1,13 @@
+{
+  "store_id": "v2-suspended-images",
+  "name": "v2: suspended, with image issues (for a partial data failure)",
+  "country": "US",
+  "account_status": "suspended",
+  "suspension_reason": "Misrepresentation: the website does not show a business phone number or email.",
+  "automatic_improvements": {
+    "price_updates": false,
+    "availability_updates": false,
+    "image_improvements": false,
+    "shipping_improvements": false
+  }
+}

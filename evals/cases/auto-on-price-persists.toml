@@ -1,0 +1,17 @@
+id = "auto-on-price-persists"
+category = "automation_routing"
+store = "v2-updates-on"
+description = "Item updates are on but the towel's price still mismatches. Explain why it can persist; don't recommend turning on what's on."
+tags = ["tool_calls"]
+
+[[turns]]
+merchant = "Why is my bath towel still disapproved for its price?"
+
+[expect]
+should_handoff = false
+must_mention = ['''(already|currently) (on|turned on|enabled|switched on)|(updates?|automations?|they|it) (is|are) (already |currently )?(on|turned on|enabled|switched on)\b''', '''structured data|markup|more than once a day|frequent|often|several strikethrough|too (large|many)''']
+must_not_say = ['''(turn|switch)(ing)? on .{0,30}automatic (item )?updates|enabl(e|ing) .{0,30}automatic (item )?updates''', '''CASE-\d''']
+must_cite = ["price-mismatch", "automatic-item-updates"]
+
+[[expect.must_call]]
+tool = "get_automatic_improvements"

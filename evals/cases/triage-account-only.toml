@@ -1,0 +1,13 @@
+id = "triage-account-only"
+category = "triage_order"
+store = "suspended-store"
+description = "Only an account issue. It's named first and handed off; no product issues are made up."
+
+[[turns]]
+merchant = "What should I fix first?"
+
+[expect]
+should_handoff = true
+handoff_reason = "account_suspended"
+first_reply_order = [['''suspend'''], ['''specialist''']]
+must_not_invent = true

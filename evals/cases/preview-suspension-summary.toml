@@ -1,0 +1,17 @@
+id = "preview-suspension-summary"
+category = "case_preview"
+store = "suspended-store"
+description = "A suspension handoff, then the merchant asks what the case says. The preview matches and no timing or outcome is promised."
+tags = ["preview"]
+
+[[turns]]
+merchant = "Google suspended me. What happens now?"
+
+[[turns]]
+merchant = "What does the case you made say about my situation?"
+
+[expect]
+should_handoff = true
+handoff_reason = "account_suspended"
+preview_must_match = true
+must_not_say = ['''(specialist|someone|they|we|google) will .{0,60}\b(within|in) \d+ (hours?|days?|business days?)|guarantee''', '''will (definitely |certainly )?be (reinstated|unsuspended|restored)''']

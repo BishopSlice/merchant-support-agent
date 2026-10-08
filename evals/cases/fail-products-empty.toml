@@ -1,0 +1,17 @@
+id = "fail-products-empty"
+category = "data_tool_failure"
+store = "sample-store"
+description = "The product list comes back empty although the summary shows disapprovals. The agent must not say nothing is wrong or invent products."
+tags = ["graceful_failure"]
+
+[data_failure]
+tool = "list_products"
+kind = "empty"
+
+[[turns]]
+merchant = "List the specific products that got disapproved."
+
+[expect]
+should_handoff = false
+must_not_invent = true
+must_not_say = ['''\bI('ve| have)? (approved|re-?approved|marked)\b|(?<!not )\ball (of )?(your )?products are (now )?(approved|fine|ok)\b|nothing (needs|to) (be )?fix''', '''(you have|there are) no (disapproved |problem )?products|none of your products (are|is) disapproved|nothing is (wrong|disapproved)''', '''CASE-\d''']

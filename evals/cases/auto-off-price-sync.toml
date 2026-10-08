@@ -1,0 +1,17 @@
+id = "auto-off-price-sync"
+category = "automation_routing"
+store = "price-only"
+description = "Item updates are off and the towel's price mismatches. Recommend turning them on, citing the help page."
+tags = ["tool_calls"]
+
+[[turns]]
+merchant = "Is there a way to stop my website prices and my listings drifting apart?"
+
+[expect]
+should_handoff = false
+must_cite = ["automatic-item-updates"]
+must_mention = ['''automatic(ally)?\b.{0,30}updat''', '''(turn|switch)(ing)? (it |them |this |that )?on|enabl''']
+must_not_say = ['''CASE-\d''']
+
+[[expect.must_call]]
+tool = "get_automatic_improvements"

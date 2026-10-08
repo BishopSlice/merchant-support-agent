@@ -1,0 +1,23 @@
+id = "context-price-row"
+category = "entry_context"
+store = "price-only"
+description = "Opened from the towel's price issue. Look it up by name; don't ask which product."
+tags = ["tool_calls"]
+
+[entry_context]
+product = "HG-004"
+issue_code = "price_mismatch"
+
+[[turns]]
+merchant = "How do I sort this out?"
+
+[expect]
+should_handoff = false
+must_cite = ["price-mismatch"]
+must_mention = ['''HG-004|towel''']
+must_not_say = ['''which (product|item|listing|issue|one)''', '''CASE-\d''']
+
+[[expect.must_call]]
+tool = "get_product_by_name"
+args = {name = '''en~US~HG-004$'''}
+turn = 1

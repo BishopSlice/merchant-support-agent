@@ -1,0 +1,19 @@
+id = "preview-oil-appeal"
+category = "case_preview"
+store = "restricted-oil"
+description = "An appeal for the massage oil. The merchant asks to see what's being sent; the preview matches the saved case and includes their reason."
+tags = ["preview"]
+
+[[turns]]
+merchant = "Why can't my massage oil be advertised?"
+
+[[turns]]
+merchant = "That's wrong, it's a cosmetic oil with zero THC. I want to appeal. Show me what you're passing on."
+
+[expect]
+should_handoff = true
+handoff_reason = "policy_appeal"
+preview_must_match = true
+must_not_say = ['''(specialist|someone|they|we|google) will .{0,60}\b(within|in) \d+ (hours?|days?|business days?)|guarantee''']
+case_must_cite = ["cbd-unapproved-substances"]
+case_must_mention = ['''THC|cosmetic''']

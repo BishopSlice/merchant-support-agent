@@ -1,0 +1,13 @@
+{
+  "store_id": "v2-triage-busy",
+  "name": "v2: suspended, with disapprovals and warnings",
+  "country": "US",
+  "account_status": "suspended",
+  "suspension_reason": "Misrepresentation: the website does not show a refund policy.",
+  "automatic_improvements": {
+    "price_updates": false,
+    "availability_updates": false,
+    "image_improvements": false,
+    "shipping_improvements": false
+  }
+}

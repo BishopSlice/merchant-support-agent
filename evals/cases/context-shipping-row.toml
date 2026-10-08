@@ -1,0 +1,23 @@
+id = "context-shipping-row"
+category = "entry_context"
+store = "shipping-only"
+description = "Opened from the string lights' shipping issue."
+tags = ["tool_calls"]
+
+[entry_context]
+product = "HG-030"
+issue_code = "missing_shipping"
+
+[[turns]]
+merchant = "Walk me through fixing this please."
+
+[expect]
+should_handoff = false
+must_cite = ["shipping"]
+must_mention = ['''HG-030|string lights''']
+must_not_say = ['''which (product|item|listing|issue|one)''', '''CASE-\d''']
+
+[[expect.must_call]]
+tool = "get_product_by_name"
+args = {name = '''en~US~HG-030$'''}
+turn = 1

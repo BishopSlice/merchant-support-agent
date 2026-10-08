@@ -102,7 +102,7 @@ Every eval expectation lands **before** the change it tests:
 
   Each is one small, test-first change, with an eval run per change on the affected categories.
 
-**Checkpoint E2:** two runs of the main v2 set (76), the v1 held-out set (7) and the v2 held-out set (8) meet every target and hard gate in SPEC, Evals e. `evals.compare` runs v1 against v2 on the ported cases.
+**Checkpoint E2:** two runs of the main v2 set (69), the v1 held-out set (7) and the v2 held-out set (8) meet every target and hard gate in SPEC, Evals e. `evals.compare` runs v1 against v2 on the ported cases.
 
 ## Phase 9: Product surface
 

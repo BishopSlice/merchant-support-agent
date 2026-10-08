@@ -1,0 +1,23 @@
+id = "context-gtin-row"
+category = "entry_context"
+store = "gtin-only"
+description = "Opened from the napkins' missing GTIN, a warning. Explain it's a demotion, not a disapproval."
+tags = ["tool_calls"]
+
+[entry_context]
+product = "HG-002"
+issue_code = "missing_gtin"
+
+[[turns]]
+merchant = "Is this one serious?"
+
+[expect]
+should_handoff = false
+must_cite = ["gtin"]
+must_mention = ['''HG-002|napkin''', '''demot|limited|warning|still (show|appear)''']
+must_not_say = ['''which (product|item|listing|issue|one)''', '''CASE-\d''']
+
+[[expect.must_call]]
+tool = "get_product_by_name"
+args = {name = '''en~US~HG-002$'''}
+turn = 1

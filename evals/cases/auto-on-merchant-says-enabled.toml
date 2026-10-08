@@ -1,0 +1,17 @@
+id = "auto-on-merchant-says-enabled"
+category = "automation_routing"
+store = "v2-updates-on"
+description = "The merchant says they enabled automatic updates and asks why problems remain. Confirm from the data and explain the limits."
+tags = ["tool_calls"]
+
+[[turns]]
+merchant = "I switched on the automatic updates weeks ago. Why do I still have price and stock problems?"
+
+[expect]
+should_handoff = false
+must_cite = ["automatic-item-updates"]
+must_mention = ['''structured data|markup|more than once a day|frequent|often|several strikethrough|too (large|many)''']
+must_not_say = ['''(turn|switch)(ing)? on .{0,30}automatic (item )?updates|enabl(e|ing) .{0,30}automatic (item )?updates''', '''CASE-\d''']
+
+[[expect.must_call]]
+tool = "get_automatic_improvements"

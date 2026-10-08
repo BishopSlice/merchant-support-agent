@@ -1,0 +1,17 @@
+id = "fail-automation-malformed"
+category = "data_tool_failure"
+store = "price-only"
+description = "The automation settings come back malformed. Say they couldn't be read; don't state whether updates are on or off."
+tags = ["graceful_failure"]
+
+[data_failure]
+tool = "get_automatic_improvements"
+kind = "malformed"
+
+[[turns]]
+merchant = "Are automatic updates switched on for my account right now?"
+
+[expect]
+should_handoff = false
+must_mention = ['''(couldn't|could not|can't|cannot|wasn't able to|was not able to|unable to|failed to) (load|get|retrieve|access|fetch|pull|check|read|see|confirm)''']
+must_not_say = ['''(?<!whether )(?<!if )\b(automatic (item )?updates|they) (are|is) (currently )?(on|off|enabled|disabled|turned (on|off)|switched (on|off))''', '''CASE-\d''']

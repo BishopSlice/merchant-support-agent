@@ -1,0 +1,13 @@
+id = "triage-suspended-then-products"
+category = "triage_order"
+store = "v2-triage-busy"
+description = "Suspended, with 2 image disapprovals, 1 long title and 2 GTIN warnings. The suspension comes first, then images, then the title, then warnings; then a handoff."
+
+[[turns]]
+merchant = "Where do I even start with this account?"
+
+[expect]
+should_handoff = true
+handoff_reason = "account_suspended"
+first_reply_order = [['''suspend'''], ['''image|photo'''], ['''title'''], ['''barcode|gtin|demoted|warning''']]
+case_must_mention = ['''refund''']

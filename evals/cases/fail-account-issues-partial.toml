@@ -1,0 +1,18 @@
+id = "fail-account-issues-partial"
+category = "data_tool_failure"
+store = "v2-suspended-images"
+description = "Products load but account issues fail. Report the image issue, say the account status couldn't be checked, and don't claim the account is fine."
+tags = ["graceful_failure"]
+
+[data_failure]
+tool = "list_account_issues"
+kind = "error"
+
+[[turns]]
+merchant = "Run me through everything wrong with my store."
+
+[expect]
+should_handoff = false
+must_not_invent = true
+must_mention = ['''image|photo''', '''(couldn't|could not|can't|cannot|wasn't able to|was not able to|unable to|failed to) (load|get|retrieve|access|fetch|pull|check|read|see|confirm)''']
+must_not_say = ['''not suspended|no account(-level)? issues|account is (fine|healthy|in good standing)''', '''CASE-\d''']
