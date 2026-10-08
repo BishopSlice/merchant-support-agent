@@ -46,7 +46,7 @@ Details for each task are in `tasks/plan.md`.
 - [x] Task 21: Retire Streamlit
 - [ ] Checkpoint F: merchant journey in the shell, product checks
 - [x] Task 21a: Shared metrics module and event store (event writes measured at about 0.4 ms per turn, after the reply)
-- [ ] Task 21b: Tracing (OpenTelemetry needs approval). Waiting; the event store already gives per-turn tool calls for the trace view, but not per-call timings
+- [x] Task 21b: Tracing with OpenTelemetry (approved 8 Oct): step-by-step spans per turn in the event store and the /ops trace view
 - [x] Task 21c: Feedback and sampled grading
 - [x] Task 21d: The /ops page, with plain SVG charts (no chart library needed). Panels 1 to 4 and traces; panel 5 (releases) not built
 - [ ] Checkpoint F2: /ops correct, definitions match the evals, no added wait
