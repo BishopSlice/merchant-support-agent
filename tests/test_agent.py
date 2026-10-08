@@ -2,27 +2,28 @@ from types import SimpleNamespace
 
 import pytest
 
-from merchant_agent.agent import build_agent, check_feed, create_handoff_case
+from merchant_agent.agent import build_agent, create_handoff_case
 from merchant_agent.models import HandoffReason
 from merchant_agent.tools.handoff import get_case
 
 
-def test_check_feed_tool_reads_store_from_session_state():
-    context = SimpleNamespace(state={"store_id": "sample-store"})
-    result = check_feed(context)
-    assert result["store_id"] == "sample-store"
-    assert result["total_products"] == 30
+def test_agent_has_the_mcp_data_tools_help_search_and_handoff(monkeypatch):
+    from merchant_agent.data import BLOCKED_TOOLS
 
-
-def test_agent_has_feed_check_help_search_and_handoff_tools(monkeypatch):
     monkeypatch.setenv("MODEL_NAME", "test-model")
     agent = build_agent()
     assert agent.model.model == "test-model"
-    assert [tool.__name__ for tool in agent.tools] == [
-        "check_feed",
+    names = [tool.__name__ for tool in agent.tools]
+    assert names == [
+        "list_products",
+        "get_product_by_name",
+        "list_account_issues",
+        "list_aggregate_product_statuses",
+        "get_automatic_improvements",
         "search_help_docs",
         "create_handoff_case",
     ]
+    assert not set(names) & BLOCKED_TOOLS  # hard gate: no write or unneeded MCP tools
     assert "{store_id}" in agent.instruction
 
 
@@ -41,8 +42,8 @@ def test_model_retries_when_rate_limited():
 
 def test_instructions_put_disapprovals_before_warnings():
     instruction = build_agent().instruction
-    assert "disapproved_products" in instruction
-    assert instruction.index("disapproved") < instruction.index("limited")
+    assert "DISAPPROVED" in instruction and "DEMOTED" in instruction
+    assert instruction.index("DISAPPROVED") < instruction.index("DEMOTED")
 
 
 def test_handoff_tool_files_the_case_under_the_session_store(monkeypatch, tmp_path):
