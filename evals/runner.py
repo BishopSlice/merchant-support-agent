@@ -9,6 +9,7 @@ from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from dataclasses import asdict
 from pathlib import Path
+from typing import Any
 
 import httpx
 from google.adk import Runner
@@ -17,10 +18,11 @@ from google.genai.errors import APIError
 from evals.case_format import EVAL_STORES_DIR, EvalCase
 from evals.records import CaseRun, TokenUsage, ToolCallRecord, TurnRecord
 from merchant_agent.agent import agent_version
-from merchant_agent.chat import Usage, new_runner, new_session, run_turn
+from merchant_agent.chat import Usage
 from merchant_agent.config import PROJECT_ROOT, ModelPrice, cost_usd, get_settings
 from merchant_agent.data import FailingMerchantData
 from merchant_agent.demo import apply_fix
+from merchant_agent.engine import DEFAULT, Conversation
 from merchant_agent.events import EventStore, turn_checks
 from merchant_agent.merchant_api import product_name
 from merchant_agent.tools import merchant_tools
@@ -76,35 +78,43 @@ def _data_source(case: EvalCase) -> Iterator[None]:
 
 
 async def run_case(
-    case: EvalCase, price: ModelPrice, runner_factory: Callable[[], Runner] = new_runner
+    case: EvalCase,
+    price: ModelPrice,
+    runner_factory: Callable[[], Runner] | None = None,
+    answer: Any = DEFAULT,
 ) -> CaseRun:
     """Play a case's scripted turns against the agent and record everything that happened."""
     record = CaseRun(case_id=case.id, category=case.category.value, agent_version=agent_version())
     total = Usage()
     started = time.monotonic()
     with isolated_workspace(), _data_source(case):
-        runner = runner_factory()
+        conversation = Conversation(
+            case.store,
+            _session_state(case).get("entry_context"),
+            runner_factory=runner_factory,
+            answer=answer,
+        )
         try:
-            session_id = await new_session(runner, case.store, _session_state(case))
             for scripted in case.turns:
                 turn_record = TurnRecord(merchant=scripted.merchant)
                 if scripted.fix:
                     turn_record.fix = scripted.fix.value
                     turn_record.fixed_product_ids = apply_fix(case.store, scripted.fix)
                 record.turns.append(turn_record)
-                turn = await run_turn(runner, session_id, scripted.merchant)
+                turn = await conversation.ask(scripted.merchant)
                 turn_record.reply = turn.reply
                 turn_record.tool_calls = [
-                    ToolCallRecord(name=c.name, args=c.args, response=c.response)
+                    ToolCallRecord(name=c.name, args=c.args, response=c.response, by=c.by)
                     for c in turn.tool_calls
                 ]
+                turn_record.path = turn.path
                 turn_record.usage = TokenUsage(**asdict(turn.usage))
                 turn_record.seconds = turn.seconds
                 total += turn.usage
         except (APIError, httpx.HTTPError) as error:  # model or network errors: resume reruns these
             record.status, record.error = "error", f"{type(error).__name__}: {error}"
         finally:
-            await runner.close()
+            await conversation.close()
         # Oldest first, so the last entry is the most recent handoff.
         record.handoff_cases = [json.loads(c.model_dump_json()) for c in reversed(list_cases())]
     record.usage = TokenUsage(**asdict(total))

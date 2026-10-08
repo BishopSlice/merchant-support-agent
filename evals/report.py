@@ -89,6 +89,20 @@ def _v2_rows(summary: Summary) -> list[str]:
             _at_most(cost, 0.03),
         ),
         _plain_row(
+            "Model calls per turn",
+            "n/a"
+            if summary.model_calls_per_turn is None
+            else f"{summary.model_calls_per_turn:.2f}",
+            "about 1 (ADR 0008)",
+            "n/a",
+        ),
+        _plain_row(
+            "Fallback to the tool loop",
+            _pct(summary.fallback_rate),
+            "tracked, no target",
+            "n/a",
+        ),
+        _plain_row(
             "Uniquely agent-resolved rate",
             _pct(summary.uniquely_agent_resolved_rate),
             "tracked, no target",

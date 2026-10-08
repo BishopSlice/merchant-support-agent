@@ -24,6 +24,7 @@ class ToolCall:
     name: str
     args: dict
     response: Any
+    by: str = "model"  # "code" when code made the call itself (ADR 0008)
 
 
 @dataclass
@@ -63,6 +64,7 @@ class Turn:
     tool_calls: list[ToolCall] = field(default_factory=list)
     usage: Usage = field(default_factory=Usage)
     seconds: float = 0.0  # wall-clock time for the whole turn
+    path: str = "tool_loop"  # "one_call", "fallback" (tool loop after the pre-step) or "tool_loop"
 
     @property
     def case_ids(self) -> list[str]:

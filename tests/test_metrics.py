@@ -74,3 +74,27 @@ def test_uniquely_agent_resolved_rate_excludes_automation_solvable_fixes():
 
 def test_invalid_citations():
     assert metrics.invalid_citations(["gtin", "made-up"], {"gtin"}) == ["made-up"]
+
+
+@dataclass
+class Usage:
+    model_calls: int
+
+
+@dataclass
+class PathTurn:
+    usage: Usage
+    path: str
+
+
+def test_model_calls_per_turn_and_fallback_rate():
+    turns = [
+        PathTurn(Usage(1), "one_call"),
+        PathTurn(Usage(1), "one_call"),
+        PathTurn(Usage(4), "fallback"),
+    ]
+    assert metrics.model_calls_per_turn(turns) == 2.0
+    assert metrics.fallback_rate(turns) == 1 / 3
+    assert metrics.model_calls_per_turn([]) is None
+    # The old tool loop is neither: it has no pre-step to fall back from.
+    assert metrics.fallback_rate([PathTurn(Usage(3), "tool_loop")]) is None

@@ -76,7 +76,7 @@ def make_client(env, runner=FakeRunner, **overrides) -> TestClient:
         "grade_sample_rate": 0.0,  # tests that grade set it and pass a fake grader
     }
     config = WebConfig(**(fields | overrides))
-    return TestClient(create_app(config, runner_factory=runner))
+    return TestClient(create_app(config, runner_factory=runner, answer=None))
 
 
 @pytest.fixture
@@ -386,3 +386,20 @@ def test_ops_needs_its_own_code_not_the_specialists(env):
 def test_ops_is_off_without_a_configured_code(env):
     with make_client(env) as c:
         assert c.post("/api/ops/login", json={"code": ""}).status_code == 403
+
+
+def test_chat_answers_in_one_model_call_with_context_loaded_by_code(env):
+    from test_engine import FakeAnswer
+
+    fake = FakeAnswer()
+    config = WebConfig(access_code="let-me-in", replays_dir=env / "replays", grade_sample_rate=0)
+    with TestClient(create_app(config, runner_factory=ExplodingRunner, answer=fake)) as c:
+        body = {
+            "message": "How do I fix this?",
+            "entry_context": {"offer_id": "HG-004", "issue_code": "price_mismatch"},
+            "new_conversation": True,
+        }
+        data = c.post("/api/chat", json=body, headers=ACCESS).json()
+    assert data["path"] == "one_call" and len(fake.prompts) == 1
+    assert "en~US~HG-004" in fake.prompts[0]
+    assert any("product statuses" in step.lower() for step in data["steps"])

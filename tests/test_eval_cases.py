@@ -188,7 +188,9 @@ def test_agent_instructions_do_not_quote_eval_cases():
         words = re.findall(r"[a-z']+", text.lower())
         return {" ".join(words[i : i + 5]) for i in range(len(words) - 4)}
 
-    prompt = phrases(INSTRUCTION)
+    from merchant_agent.answer import ANSWER_INSTRUCTION
+
+    prompt = phrases(INSTRUCTION) | phrases(ANSWER_INSTRUCTION)
     from evals.case_format import HELDOUT_V2_DIR
 
     for case in load_cases() + load_cases(HELDOUT_DIR) + load_cases(HELDOUT_V2_DIR):

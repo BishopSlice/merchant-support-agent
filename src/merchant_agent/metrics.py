@@ -130,3 +130,16 @@ def uniquely_agent_resolved_rate(resolved_issue_sets: Iterable[Iterable[str]]) -
 def invalid_citations(cited_doc_ids: Iterable[str], known_doc_ids: set[str]) -> list[str]:
     """Cited doc ids that don't exist."""
     return [doc_id for doc_id in cited_doc_ids if doc_id not in known_doc_ids]
+
+
+def model_calls_per_turn(turns: Iterable[Any]) -> float | None:
+    """Mean model calls per turn (ADR 0008 aims for one)."""
+    calls = [t.usage.model_calls for t in turns]
+    return rate(sum(calls), len(calls))
+
+
+def fallback_rate(turns: Iterable[Any]) -> float | None:
+    """Of turns that went through the one-call pre-step, the share that fell back to the
+    tool loop. Turns from the old tool-loop agent aren't counted."""
+    paths = [t.path for t in turns if t.path in ("one_call", "fallback")]
+    return rate(paths.count("fallback"), len(paths))

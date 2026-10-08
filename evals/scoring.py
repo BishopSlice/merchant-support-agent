@@ -225,6 +225,7 @@ PREVIEW_FIELDS = (
     "suggested_next_step",
     "cited_doc_ids",
     "account_issues",
+    "product_issues",
     "automation",
 )
 
@@ -318,6 +319,8 @@ class Summary(BaseModel):
     latency_p50_seconds: float | None = None
     latency_p95_seconds: float | None = None
     uniquely_agent_resolved_rate: float | None = None
+    model_calls_per_turn: float | None = None
+    fallback_rate: float | None = None
 
 
 def _group_rate(done: list[CaseScore], tag: Tag, category: Category) -> float | None:
@@ -375,4 +378,8 @@ def summarize(scores: list[CaseScore], runs: list[CaseRun]) -> Summary:
         uniquely_agent_resolved_rate=metrics.uniquely_agent_resolved_rate(
             s.resolved_issues for s in resolved
         ),
+        model_calls_per_turn=metrics.model_calls_per_turn(
+            t for r in finished_runs for t in r.turns
+        ),
+        fallback_rate=metrics.fallback_rate(t for r in finished_runs for t in r.turns),
     )

@@ -189,7 +189,14 @@ def agent_version() -> str:
 
     Replays and eval runs record it, so a stale transcript can be detected.
     """
-    parts = [INSTRUCTION, get_settings().model_name]
+    from merchant_agent import answer  # imported here: answer imports chat, which imports this
+
+    parts = [
+        INSTRUCTION,
+        answer.ANSWER_INSTRUCTION,
+        answer.schema_text(),
+        get_settings().model_name,
+    ]
     for tool in _tools():
         parts += [tool.__name__, str(inspect.signature(tool)), inspect.getdoc(tool) or ""]
     return hashlib.sha256("\n".join(parts).encode()).hexdigest()[:12]

@@ -271,3 +271,15 @@ def test_markdown_emphasis_does_not_hide_a_required_phrase():
     reply = "Automatic price updates are already turned **on** for your account."
     expect = {"must_mention": [r"(already|currently) (on|turned on|enabled|switched on)"]}
     assert score_case(case(**expect), run(reply)).passed
+
+
+def test_summary_reports_model_calls_per_turn_and_fallback_rate():
+    from evals.scoring import summarize
+
+    one = run("a")
+    one.turns[0].usage.model_calls, one.turns[0].path = 1, "one_call"
+    loop = run("b")
+    loop.turns[0].usage.model_calls, loop.turns[0].path = 3, "fallback"
+    runs = [one, loop]
+    summary = summarize([score_case(case(), r) for r in runs], runs)
+    assert summary.model_calls_per_turn == 2.0 and summary.fallback_rate == 0.5

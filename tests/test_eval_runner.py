@@ -81,7 +81,12 @@ def make_case(turns, store="shipping-only") -> EvalCase:
 
 def run(case, **fake_kwargs):
     return asyncio.run(
-        run_case(case, PRICE, runner_factory=lambda: FakeAgentRunner(case.store, **fake_kwargs))
+        run_case(
+            case,
+            PRICE,
+            runner_factory=lambda: FakeAgentRunner(case.store, **fake_kwargs),
+            answer=None,
+        )
     )
 
 
@@ -172,7 +177,7 @@ class StateCapturingRunner(FakeAgentRunner):
 
 def run_with(case):
     return asyncio.run(
-        run_case(case, PRICE, runner_factory=lambda: StateCapturingRunner(case.store))
+        run_case(case, PRICE, runner_factory=lambda: StateCapturingRunner(case.store), answer=None)
     )
 
 

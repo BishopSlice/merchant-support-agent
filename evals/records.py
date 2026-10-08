@@ -9,6 +9,7 @@ class ToolCallRecord(BaseModel):
     name: str
     args: dict
     response: dict | list | str | None = None
+    by: str = "model"  # "code" when code made the call itself (ADR 0008)
 
 
 class TokenUsage(BaseModel):
@@ -30,6 +31,7 @@ class TurnRecord(BaseModel):
     tool_calls: list[ToolCallRecord] = Field(default_factory=list)
     usage: TokenUsage = Field(default_factory=TokenUsage)
     seconds: float = 0.0  # wall-clock time for the agent's reply
+    path: str = "tool_loop"  # "one_call", "fallback" or "tool_loop" (ADR 0008)
 
 
 class CaseRun(BaseModel):

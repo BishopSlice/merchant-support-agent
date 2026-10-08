@@ -35,9 +35,10 @@ from pydantic import BaseModel, ConfigDict, StringConstraints
 from evals.records import TokenUsage, ToolCallRecord, TurnRecord
 from merchant_agent import ops
 from merchant_agent.agent import agent_version
-from merchant_agent.chat import describe_tool_call, new_runner, new_session, run_turn
+from merchant_agent.chat import describe_tool_call
 from merchant_agent.config import MODEL_PRICES, PROJECT_ROOT, cost_usd, get_settings
 from merchant_agent.data import MockMerchantMcp
+from merchant_agent.engine import DEFAULT, Conversation
 from merchant_agent.events import EventStore, turn_checks
 from merchant_agent.merchant_api import product_name
 from merchant_agent.models import IssueType
@@ -137,8 +138,7 @@ class WebSession:
     store_id: str
     created: datetime
     messages: int = 0
-    runner: Any = None
-    conversation: str | None = None
+    conversation: Conversation | None = None  # the open panel conversation
     event_conversation: str | None = None  # this conversation's id in the event store
     sampled: bool = False  # chosen for AI grading when the conversation started
     transcript: list[TurnRecord] = field(default_factory=list)  # this conversation, for grading
@@ -220,7 +220,9 @@ def _issues_view(store_id: str) -> dict:
 
 
 def create_app(
-    config: WebConfig | None = None, runner_factory: Callable[[], Any] = new_runner
+    config: WebConfig | None = None,
+    runner_factory: Callable[[], Any] | None = None,
+    answer: Any = DEFAULT,
 ) -> FastAPI:
     """Build the app. Tests pass a fake runner factory so the model is never called."""
     config = config or WebConfig.from_env()
@@ -289,16 +291,18 @@ def create_app(
         current.messages += 1
         sessions.add_today()
 
-        if current.runner is None:
-            current.runner = runner_factory()
         if body.new_conversation or current.conversation is None:
-            extra = {}
+            entry = None
             if body.entry_context:
-                extra["entry_context"] = {
+                entry = {
                     "product_name": product_name(current.store_id, body.entry_context.offer_id),
                     "issue_code": body.entry_context.issue_code.value,
                 }
-            current.conversation = await new_session(current.runner, current.store_id, extra)
+            if current.conversation is not None:
+                await current.conversation.close()
+            current.conversation = Conversation(
+                current.store_id, entry, runner_factory=runner_factory, answer=answer
+            )
             current.event_conversation = secrets.token_hex(16)
             current.sampled = grader.sample()
             current.transcript = []
@@ -312,7 +316,7 @@ def create_app(
                 conversation_id=current.event_conversation,
             )
         try:
-            turn = await run_turn(current.runner, current.conversation, body.message)
+            turn = await current.conversation.ask(body.message)
         except (APIError, httpx.HTTPError) as error:
             raise HTTPException(503, "The assistant is unavailable right now.") from error
 
@@ -326,11 +330,12 @@ def create_app(
                 merchant=body.message,
                 reply=turn.reply,
                 tool_calls=[
-                    ToolCallRecord(name=c.name, args=c.args, response=c.response)
+                    ToolCallRecord(name=c.name, args=c.args, response=c.response, by=c.by)
                     for c in turn.tool_calls
                 ],
                 usage=TokenUsage(**asdict(turn.usage)),
                 seconds=turn.seconds,
+                path=turn.path,
             )
         )
         background.add_task(
@@ -364,6 +369,7 @@ def create_app(
             "remaining": config.session_cap - current.messages,
             "turn_id": turn_id,
             "seconds": turn.seconds,
+            "path": turn.path,
         }
 
     @app.post("/api/feedback")

@@ -168,3 +168,12 @@ def test_instructions_ground_what_happens_after_a_fix_and_appeals():
     assert "what happens after a fix" in instruction
     assert "mention appeals or reviews only with a citation" in instruction
     assert "reaches fewer shoppers" not in instruction
+
+
+def test_agent_version_covers_the_one_call_instructions(monkeypatch):
+    from merchant_agent import agent as agent_module
+    from merchant_agent import answer
+
+    before = agent_module.agent_version()
+    monkeypatch.setattr(answer, "ANSWER_INSTRUCTION", answer.ANSWER_INSTRUCTION + " ")
+    assert agent_module.agent_version() != before
