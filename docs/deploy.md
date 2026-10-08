@@ -81,16 +81,24 @@ Check each against its free tier when billing is set up. I haven't verified thei
 
 **One-time setup.** Connecting GitHub needs Vikrant's own sign-in, so this is done in the console.
 
-1. **Let the build's service account deploy.** New projects run Cloud Build as the Compute Engine default service account, which already reads the three secrets:
+1. **Let the build's service account deploy, and let the app read its secrets.** New projects run both Cloud Build and the app as the Compute Engine default service account:
 
    ```bash
    PROJECT_ID=merchant-agent-demo-vn
    NUMBER=$(gcloud projects describe $PROJECT_ID --format='value(projectNumber)')
    SA="${NUMBER}-compute@developer.gserviceaccount.com"
-   for role in roles/run.admin roles/iam.serviceAccountUser roles/artifactregistry.writer roles/logging.logWriter; do
+   for role in roles/run.admin roles/iam.serviceAccountUser roles/artifactregistry.writer roles/logging.logWriter roles/secretmanager.secretAccessor; do
      gcloud projects add-iam-policy-binding $PROJECT_ID --member="serviceAccount:$SA" --role=$role --condition=None
    done
    ```
+
+   The automatic deploy doesn't change who can open the site. So make it public once (it's safe to repeat):
+
+   ```bash
+   gcloud run services add-iam-policy-binding merchant-support-agent --region=us-central1 --member=allUsers --role=roles/run.invoker
+   ```
+
+   **Learned on the first run (8 Oct):** the deploy step failed because the app's service account couldn't read the secrets. Setting public access on every build also failed. The secret-reader role and the one-off public-access command above fix both.
 
 2. **Create the trigger.** In the console, open Cloud Build, then Triggers, then **Create trigger**:
    - **Name:** `deploy-on-push`. **Region:** `us-central1`.

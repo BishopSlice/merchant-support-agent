@@ -53,8 +53,10 @@ def test_cloud_build_deploys_with_the_same_settings_as_the_deploy_script():
         [in_script] = re.findall(rf"--{flag}[ =](\S+)", script)
         [in_build] = re.findall(rf"--{flag}[ =](\S+)", build)
         assert in_script == in_build, flag
-    for flag in ["--cpu-throttling", "--cpu-boost", "--allow-unauthenticated"]:
+    for flag in ["--cpu-throttling", "--cpu-boost"]:
         assert flag in script and flag in build
+    # Public access is granted once (deploy script or setup), never on each build.
+    assert "--allow-unauthenticated" in script and "--allow-unauthenticated" not in build
     env = re.search(r'--set-env-vars "([^"]+)"', script).group(1)
     secrets = re.search(r'--set-secrets "([^"]+)"', script).group(1)
     assert f"--set-env-vars={env}" in build and f"--set-secrets={secrets}" in build

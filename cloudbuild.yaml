@@ -33,8 +33,9 @@ steps:
       - ${_SERVICE}
       - --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/${_SERVICE}:$COMMIT_SHA
       - --region=${_REGION}
-      # The same settings as deploy/cloudrun.sh (a test keeps the two in step).
-      - --allow-unauthenticated
+      # The same settings as deploy/cloudrun.sh (a test keeps the two in step). Public access
+      # isn't set here: it stays on the service once granted, and setting it on each build
+      # needs an IAM permission the build account doesn't have.
       - --min-instances=0
       - --max-instances=1
       - --cpu=1
