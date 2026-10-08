@@ -1,0 +1,104 @@
+{
+ "id": "cbd-appeal-preview",
+ "title": "Appeal a policy disapproval and see the case preview",
+ "agent_version": "60e5bc0b3211",
+ "model": "gemini-3.6-flash",
+ "store": "sample-store",
+ "entry_context": null,
+ "turns": [
+  {
+   "merchant": "Why was my CBD candle disapproved?",
+   "fix": null,
+   "steps": [
+    "Checked account issues: none.",
+    "Checked product statuses: 13 disapproved, 7 kinds of issue.",
+    "Listed all products: 30 found.",
+    "Checked automatic improvements: price updates off, availability updates off.",
+    "Searched the help docs for \"Why was my CBD candle disapproved?\": found CBD and other unapproved substances.",
+    "Searched the help docs for \"(docs for the store's issues)\": found Product barcode number (GTIN), Products that have no barcode (identifier exists), Price in the feed does not match the website, Automatic item updates for price and availability, What happens after you fix a product, Product image link, Automatic image improvements, Product title, Availability in the feed does not match the website, Shipping costs, CBD and other unapproved substances, Requesting a review or appealing a decision."
+   ],
+   "reply": "Your product HG-023 \"CBD Infused Lavender Relaxation Candle, 6 oz\" was disapproved because Google's healthcare policy places cannabidiol (CBD) on its list of unapproved pharmaceuticals and supplements. Products containing or mentioning CBD are not allowed in Shopping ads or free listings ([CBD and other unapproved substances](https://support.google.com/merchants/answer/6165956)).\n\nThis is a policy restriction rather than a data entry issue, so editing the product text won't resolve it. If you believe this product was flagged in error, an appeal can be submitted ([Requesting a review or appealing a decision](https://support.google.com/merchants/answer/13585221)). Please let me know if you want to proceed with an appeal or if you would like to review the other product issues in your store.",
+   "case": null,
+   "seconds": 8.22
+  },
+  {
+   "merchant": "It's a scented candle with no THC, so I think that's wrong. I'd like to appeal. What will the specialist see?",
+   "fix": null,
+   "steps": [
+    "Checked account issues: none.",
+    "Checked product statuses: 13 disapproved, 7 kinds of issue.",
+    "Listed all products: 30 found.",
+    "Checked automatic improvements: price updates off, availability updates off.",
+    "Searched the help docs for \"It's a scented candle with no THC, so I think that's wrong. I'd like to appeal. What will the specialist see?\": found Requesting a review or appealing a decision.",
+    "Searched the help docs for \"(docs for the store's issues)\": found Product barcode number (GTIN), Products that have no barcode (identifier exists), Price in the feed does not match the website, Automatic item updates for price and availability, What happens after you fix a product, Product image link, Automatic image improvements, Product title, Availability in the feed does not match the website, Shipping costs, CBD and other unapproved substances, Requesting a review or appealing a decision.",
+    "Handed off to a specialist: case CASE-20261008-184036-45311f (policy_appeal)."
+   ],
+   "reply": "Google's policy prohibits products containing or mentioning cannabidiol (CBD) in Shopping ads and free listings ([CBD and other unapproved substances](https://support.google.com/merchants/answer/6165956)). Since you disagree with this disapproval, you can request a review, but please keep in mind that you may only get one chance to disagree before a waiting period starts ([Requesting a review or appealing a decision](https://support.google.com/merchants/answer/13585221)).\n\nThis needs a specialist, so I've passed it on under case number CASE-20261008-184036-45311f. A specialist will review it, and the case already includes everything from this conversation\u2014including that your product is a scented candle with no THC\u2014so you won't need to repeat yourself.",
+   "case": {
+    "status": "created",
+    "case_id": "CASE-20261008-184036-45311f",
+    "preview": {
+     "reason": "policy_appeal",
+     "issues_found": [
+      "restricted_product: HG-023"
+     ],
+     "already_tried": [
+      "Explained CBD healthcare policy and review process"
+     ],
+     "merchant_request": "The merchant wants to appeal the disapproval of their CBD candle.",
+     "merchant_reasons": [
+      "It is a scented candle with no THC, so they believe the disapproval is incorrect."
+     ],
+     "suggested_next_step": "Review product HG-023 for policy compliance or assist with the formal appeal process.",
+     "cited_doc_ids": [
+      "cbd-unapproved-substances",
+      "request-review"
+     ],
+     "account_issues": [],
+     "product_issues": {
+      "missing_gtin": [
+       "HG-002",
+       "HG-007",
+       "HG-011",
+       "HG-019",
+       "HG-024",
+       "HG-028"
+      ],
+      "price_mismatch": [
+       "HG-004",
+       "HG-015",
+       "HG-021"
+      ],
+      "invalid_image": [
+       "HG-006",
+       "HG-013",
+       "HG-027"
+      ],
+      "title_too_long": [
+       "HG-009",
+       "HG-017"
+      ],
+      "availability_mismatch": [
+       "HG-012",
+       "HG-025"
+      ],
+      "missing_shipping": [
+       "HG-019",
+       "HG-030"
+      ],
+      "restricted_product": [
+       "HG-023"
+      ]
+     },
+     "automation": {
+      "price_updates": false,
+      "availability_updates": false,
+      "image_improvements": false,
+      "shipping_improvements": false
+     }
+    }
+   },
+   "seconds": 5.54
+  }
+ ]
+}

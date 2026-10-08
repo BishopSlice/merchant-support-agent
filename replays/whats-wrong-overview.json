@@ -1,0 +1,25 @@
+{
+ "id": "whats-wrong-overview",
+ "title": "Ask what's wrong, from Help",
+ "agent_version": "60e5bc0b3211",
+ "model": "gemini-3.6-flash",
+ "store": "sample-store",
+ "entry_context": null,
+ "turns": [
+  {
+   "merchant": "What's wrong with my products?",
+   "fix": null,
+   "steps": [
+    "Checked account issues: none.",
+    "Checked product statuses: 13 disapproved, 7 kinds of issue.",
+    "Listed all products: 30 found.",
+    "Checked automatic improvements: price updates off, availability updates off.",
+    "Searched the help docs for \"What's wrong with my products?\": no matching doc.",
+    "Searched the help docs for \"(docs for the store's issues)\": found Product barcode number (GTIN), Products that have no barcode (identifier exists), Price in the feed does not match the website, Automatic item updates for price and availability, What happens after you fix a product, Product image link, Automatic image improvements, Product title, Availability in the feed does not match the website, Shipping costs, CBD and other unapproved substances, Requesting a review or appealing a decision."
+   ],
+   "reply": "Here is an overview of your account status:\n\n- **Account issues:** None.\n- **Disapprovals:** 13 products are disapproved. The main causes are price mismatches (3 products), invalid image links (3 products), titles being too long (2 products), availability mismatches (2 products), missing shipping information (2 products), and restricted product policies (1 product).\n- **Warnings:** 6 products have warnings (demoted) for missing GTINs (product barcode numbers).\n\nLet's address the largest disapproval issue first: **Price Mismatches** (3 products).\n\nThe price listed in your product feed must match the price on your product page and at checkout ([Price in the feed does not match the website](https://support.google.com/merchants/answer/12159029)). The affected products are:\n\n1. **HG-004 \"Waffle Weave Bath Towel, Sage\"**: Feed shows 32.00 USD, but the product page shows 36.00 USD.\n2. **HG-015 \"Pour Over Coffee Set, Glass and Copper\"**: Feed shows 58.00 USD, but the product page shows 64.00 USD.\n3. **HG-021 \"Stainless Steel Kettle, 1.7 L\"**: Feed shows 48.00 USD, but the product page shows 44.00 USD.\n\n**How to fix:**\nUpdate the price in your product feed so it matches the website exactly, then re-upload your data. Google's crawler will recheck the pages within a few hours or days ([Price in the feed does not match the website](https://support.google.com/merchants/answer/12159029)).\n\nAdditionally, your automatic price updates setting is currently turned off. Turning on automatic item updates for price under Products > Automations can help update small price mismatches automatically using structured data on your website ([Automatic item updates for price and availability](https://support.google.com/merchants/answer/3246284)).\n\nWould you like to move on to the next issue?",
+   "case": null,
+   "seconds": 8.46
+  }
+ ]
+}

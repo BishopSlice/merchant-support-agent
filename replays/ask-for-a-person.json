@@ -1,0 +1,88 @@
+{
+ "id": "ask-for-a-person",
+ "title": "Ask for a person",
+ "agent_version": "60e5bc0b3211",
+ "model": "gemini-3.6-flash",
+ "store": "sample-store",
+ "entry_context": null,
+ "turns": [
+  {
+   "merchant": "Can I talk to someone at Google about my account, please?",
+   "fix": null,
+   "steps": [
+    "Checked account issues: none.",
+    "Checked product statuses: 13 disapproved, 7 kinds of issue.",
+    "Listed all products: 30 found.",
+    "Checked automatic improvements: price updates off, availability updates off.",
+    "Searched the help docs for \"Can I talk to someone at Google about my account, please?\": found Misrepresentation and account suspension.",
+    "Searched the help docs for \"(docs for the store's issues)\": found Product barcode number (GTIN), Products that have no barcode (identifier exists), Price in the feed does not match the website, Automatic item updates for price and availability, What happens after you fix a product, Product image link, Automatic image improvements, Product title, Availability in the feed does not match the website, Shipping costs, CBD and other unapproved substances, Requesting a review or appealing a decision, Misrepresentation and account suspension.",
+    "Handed off to a specialist: case CASE-20261008-184045-b0c853 (merchant_requested_human)."
+   ],
+   "reply": "You currently have no account-level issues. You have 13 disapproved products (mainly due to price mismatches, invalid or placeholder images, titles that are too long, availability mismatches, missing shipping details, and a restricted product policy issue) and 6 products with warnings for missing product barcode numbers (GTINs).\n\nThis needs a specialist, so I've passed it on. Your case number is CASE-20261008-184045-b0c853. A specialist will review it shortly. This case already includes everything from this conversation, so you won't need to repeat yourself.",
+   "case": {
+    "status": "created",
+    "case_id": "CASE-20261008-184045-b0c853",
+    "preview": {
+     "reason": "merchant_requested_human",
+     "issues_found": [
+      "price_mismatch: HG-004, HG-015, HG-021",
+      "invalid_image: HG-006, HG-013, HG-027",
+      "title_too_long: HG-009, HG-017",
+      "availability_mismatch: HG-012, HG-025",
+      "missing_shipping: HG-019, HG-030",
+      "restricted_product: HG-023",
+      "missing_gtin: HG-002, HG-007, HG-011, HG-019, HG-024, HG-028"
+     ],
+     "already_tried": [],
+     "merchant_request": "The merchant requested to speak to a person at Google about their account.",
+     "merchant_reasons": [],
+     "suggested_next_step": "A specialist should contact the merchant to assist with their account and product disapproval questions.",
+     "cited_doc_ids": [],
+     "account_issues": [],
+     "product_issues": {
+      "missing_gtin": [
+       "HG-002",
+       "HG-007",
+       "HG-011",
+       "HG-019",
+       "HG-024",
+       "HG-028"
+      ],
+      "price_mismatch": [
+       "HG-004",
+       "HG-015",
+       "HG-021"
+      ],
+      "invalid_image": [
+       "HG-006",
+       "HG-013",
+       "HG-027"
+      ],
+      "title_too_long": [
+       "HG-009",
+       "HG-017"
+      ],
+      "availability_mismatch": [
+       "HG-012",
+       "HG-025"
+      ],
+      "missing_shipping": [
+       "HG-019",
+       "HG-030"
+      ],
+      "restricted_product": [
+       "HG-023"
+      ]
+     },
+     "automation": {
+      "price_updates": false,
+      "availability_updates": false,
+      "image_improvements": false,
+      "shipping_improvements": false
+     }
+    }
+   },
+   "seconds": 8.71
+  }
+ ]
+}
