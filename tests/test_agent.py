@@ -152,3 +152,10 @@ def test_instructions_route_mismatches_to_automatic_item_updates():
     assert "get_automatic_improvements" in instruction
     assert "automatic item updates" in instruction.lower()
     assert "already on" in instruction.lower()
+
+
+def test_instructions_set_the_triage_order_and_graceful_failure():
+    instruction = build_agent().instruction.lower()
+    assert "account issues first" in instruction
+    assert "couldn't load that data" in instruction
+    assert "never fill the gap" in instruction
