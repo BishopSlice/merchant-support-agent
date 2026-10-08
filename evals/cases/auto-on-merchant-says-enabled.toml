@@ -10,7 +10,7 @@ merchant = "I switched on the automatic updates weeks ago. Why do I still have p
 [expect]
 should_handoff = false
 must_cite = ["automatic-item-updates"]
-must_mention = ['''structured data|markup|more than once a day|frequent|often|several strikethrough|too (large|many)''']
+must_mention = ['''structured data|markup|more than once a day|frequent|often|several strikethrough|too (large|many)|occasional|not a replacement''']
 must_not_say = ['''(turn|switch)(ing)? on .{0,30}automatic (item )?updates|enabl(e|ing) .{0,30}automatic (item )?updates''', '''CASE-\d''']
 
 [[expect.must_call]]

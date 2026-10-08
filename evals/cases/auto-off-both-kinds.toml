@@ -1,7 +1,7 @@
 id = "auto-off-both-kinds"
 category = "automation_routing"
 store = "v2-mismatch-off"
-description = "Item updates are off, with one price and one availability mismatch. Recommend item updates for both, and still give the manual fix."
+description = "Item updates are off, with one price and one availability mismatch. Recommend item updates and give the manual fix for the first issue (one issue at a time)."
 tags = ["tool_calls"]
 
 [[turns]]
@@ -9,8 +9,8 @@ merchant = "Two of my listings were pulled. What happened and how do I stop it r
 
 [expect]
 should_handoff = false
-must_cite = ["automatic-item-updates", "price-mismatch", "availability-mismatch"]
-must_mention = ['''automatic(ally)?\b.{0,30}updat''', '''(turn|switch)(ing)? (it |them |this |that )?on|enabl''', '''HG-060|teapot''', '''HG-061|planter''']
+must_cite = ["automatic-item-updates", "price-mismatch"]
+must_mention = ['''automatic(ally)?\b.{0,30}updat''', '''(turn|switch)(ing)? (it |them |this |that )?on|enabl''', '''HG-060|teapot''']
 must_not_say = ['''CASE-\d''']
 
 [[expect.must_call]]

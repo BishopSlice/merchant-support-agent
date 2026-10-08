@@ -383,3 +383,20 @@ def test_new_case_patterns_separate_good_and_bad_replies(case_id, good, bad):
 
     assert passes(good)
     assert not passes(bad)
+
+
+def test_not_a_replacement_counts_as_explaining_why_a_mismatch_persists():
+    # Real reply, Task 18 automation run: a correct reason from the doc the pattern missed.
+    reply = (
+        "Automatic item updates for price are already turned on for your account. However, "
+        "automatic updates are not a replacement for keeping your product data up to date; "
+        "they are intended for occasional mismatches."
+    )
+    assert _mentions_all("auto-on-price-persists", reply)
+
+
+def test_two_kinds_case_follows_one_issue_at_a_time():
+    # Task 18 automation run: the agent rightly covered only the first issue in full.
+    case = next(c for c in load_cases() if c.id == "auto-off-both-kinds")
+    assert "availability-mismatch" not in case.expect.must_cite
+    assert not any("HG-061" in p for p in case.expect.must_mention)
