@@ -7,7 +7,8 @@ from collections import defaultdict
 from pydantic import BaseModel, Field
 
 from evals.case_format import Category, EvalCase
-from evals.records import CaseRun
+from evals.records import CaseRun, ToolCallRecord
+from merchant_agent.models import IssueType
 from merchant_agent.tools.help_search import load_help_docs
 
 # Cases where the merchant's problem is a data fix they can make: the denominator for the
@@ -56,20 +57,54 @@ def _resolution_failures(case: EvalCase, run: CaseRun) -> list[str]:
     if not case.expect.resolved_issues:
         return []
     last_fix = _last_fix_index(run)
-    later_checks = [
-        call.response
+    calls = [
+        call
         for turn in run.turns[last_fix if last_fix is not None else 0 :]
         for call in turn.tool_calls
-        if call.name == "check_feed" and isinstance(call.response, dict)
+        if call.name in DATA_CHECK_TOOLS and isinstance(call.response, dict)
     ]
-    if not later_checks:
-        return ["did not re-run check_feed after the last fix"]
-    remaining = {group["issue_type"] for group in later_checks[-1].get("issue_groups", [])}
-    return [
-        f"{issue.value} still flagged in the last feed check"
-        for issue in case.expect.resolved_issues
-        if issue.value in remaining
-    ]
+    if not calls:
+        return ["did not re-run a data check after the last fix"]
+    flagged: dict[str, bool] = {}  # issue code -> still present, per the latest check showing it
+    for call in calls:
+        flagged.update(_issues_seen(call))
+    failures = []
+    for issue in case.expect.resolved_issues:
+        if issue.value not in flagged:
+            failures.append(f"did not re-check {issue.value} after the last fix")
+        elif flagged[issue.value]:
+            failures.append(f"{issue.value} still flagged in the last data check")
+    return failures
+
+
+# Tools whose results show which issues remain: v1's check_feed, and v2's MCP-shaped tools.
+DATA_CHECK_TOOLS = {"check_feed", "list_aggregate_product_statuses", "list_products"}
+ALL_ISSUE_CODES = {issue.value for issue in IssueType}
+
+
+def _issues_seen(call: ToolCallRecord) -> dict[str, bool]:
+    """Which issue codes one data call shows as present or absent.
+
+    v1's check_feed and the aggregate statuses list every remaining issue, so any code they
+    don't mention is gone. A product list filtered to one issue code only speaks for that code.
+    """
+    response = call.response
+    if call.name == "check_feed":
+        present = {group["issue_type"] for group in response.get("issue_groups", [])}
+    elif call.name == "list_aggregate_product_statuses":
+        statuses = response.get("aggregateProductStatuses", [])
+        present = {i["code"] for status in statuses for i in status.get("itemLevelIssues", [])}
+    else:
+        present = {
+            i["code"]
+            for product in response.get("products", [])
+            for i in product.get("productStatus", {}).get("itemLevelIssues", [])
+        }
+        if code := call.args.get("issue_code"):
+            return {code: code in present}
+    if "error" in response:
+        return {}
+    return {code: code in present for code in ALL_ISSUE_CODES | present}
 
 
 def _reply_failures(case: EvalCase, run: CaseRun) -> list[str]:

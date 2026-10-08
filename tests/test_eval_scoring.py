@@ -70,13 +70,13 @@ def test_no_recheck_after_the_fix_fails():
     )
     score = score_case(make_case(resolved_issues=["missing_shipping"]), run)
     assert not score.passed
-    assert "did not re-run check_feed after the last fix" in score.failures
+    assert "did not re-run a data check after the last fix" in score.failures
 
 
 def test_issue_still_present_in_the_last_check_fails():
     run = make_run(["x", "y"], [[feed_check("missing_shipping")], [feed_check("missing_shipping")]])
     score = score_case(make_case(resolved_issues=["missing_shipping"]), run)
-    assert "missing_shipping still flagged in the last feed check" in score.failures
+    assert "missing_shipping still flagged in the last data check" in score.failures
 
 
 def test_mention_checks_are_case_insensitive_regexes_over_all_replies():
@@ -198,3 +198,47 @@ def test_summary_metrics():
     assert summary.cases == 6 and summary.errors == 0
     assert round(summary.cost_per_case_usd, 6) == 0.01
     assert summary.pass_rate_by_category["easy_fix"] == 0.5
+
+
+# --- v2: re-checks through the MCP-shaped data tools ---
+
+
+def aggregate(*codes: str) -> ToolCallRecord:
+    issues = [{"code": c, "productCount": "1"} for c in codes]
+    response = {"aggregateProductStatuses": [{"itemLevelIssues": issues}]}
+    return ToolCallRecord(name="list_aggregate_product_statuses", args={}, response=response)
+
+
+def products_call(issue_code: str = "", *codes: str) -> ToolCallRecord:
+    products = [{"productStatus": {"itemLevelIssues": [{"code": c}]}} for c in codes]
+    args = {"issue_code": issue_code} if issue_code else {}
+    return ToolCallRecord(name="list_products", args=args, response={"products": products})
+
+
+def test_an_aggregate_recheck_counts_as_rechecking():
+    run = make_run(["x", "fixed"], [[aggregate("missing_shipping")], [aggregate()]])
+    assert score_case(make_case(resolved_issues=["missing_shipping"]), run).passed
+
+
+def test_an_aggregate_recheck_that_still_shows_the_issue_fails():
+    run = make_run(["x", "y"], [[aggregate("missing_shipping")], [aggregate("missing_shipping")]])
+    failures = score_case(make_case(resolved_issues=["missing_shipping"]), run).failures
+    assert "missing_shipping still flagged in the last data check" in failures
+
+
+def test_a_filtered_product_list_rechecks_only_its_own_issue_code():
+    empty = make_run(
+        ["x", "fixed"], [[aggregate("missing_shipping")], [products_call("missing_shipping")]]
+    )
+    assert score_case(make_case(resolved_issues=["missing_shipping"]), empty).passed
+    other = make_run(
+        ["x", "fixed"], [[aggregate("missing_shipping")], [products_call("invalid_image")]]
+    )
+    failures = score_case(make_case(resolved_issues=["missing_shipping"]), other).failures
+    assert "did not re-check missing_shipping after the last fix" in failures
+
+
+def test_no_data_call_after_the_fix_fails():
+    run = make_run(["x", "fixed"], [[aggregate("missing_shipping")], []])
+    failures = score_case(make_case(resolved_issues=["missing_shipping"]), run).failures
+    assert "did not re-run a data check after the last fix" in failures
