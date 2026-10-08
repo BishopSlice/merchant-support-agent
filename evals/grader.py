@@ -17,21 +17,13 @@ from pydantic import BaseModel, Field, ValidationError
 from evals.records import CaseRun, TokenUsage
 from merchant_agent.chat import Usage
 from merchant_agent.config import PROJECT_ROOT, ModelPrice, cost_usd, get_settings
+from merchant_agent.metrics import DATA_TOOL_NAMES
 from merchant_agent.tools.help_search import load_help_docs
 
 if TYPE_CHECKING:
     from evals.run import RunFile
 
 RUBRICS_DIR = PROJECT_ROOT / "evals" / "rubrics"
-# Tool results that are facts about the merchant's own data (v1's check_feed and v2's MCP tools).
-DATA_TOOL_NAMES = {
-    "check_feed",
-    "list_products",
-    "get_product_by_name",
-    "list_account_issues",
-    "list_aggregate_product_statuses",
-    "get_automatic_improvements",
-}
 
 
 class ReplyVerdict(BaseModel):

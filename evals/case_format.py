@@ -14,6 +14,7 @@ from pydantic import BaseModel, Field, ValidationError, model_validator
 from merchant_agent.config import PROJECT_ROOT
 from merchant_agent.data import ALLOWED_TOOLS
 from merchant_agent.demo import FIXABLE_ISSUE_TYPES
+from merchant_agent.metrics import AGENT_TOOLS
 from merchant_agent.models import HandoffReason, IssueType
 from merchant_agent.tools.help_search import load_help_docs
 
@@ -131,10 +132,6 @@ class EvalCase(BaseModel):
     tags: list[Tag] = Field(default_factory=list)
     entry_context: EntryContext | None = None
     data_failure: DataFailure | None = None
-
-
-# Every tool the agent may call: the MCP read tools plus our own.
-AGENT_TOOLS = ALLOWED_TOOLS | {"search_help_docs", "create_handoff_case"}
 
 
 class CaseError(ValueError):
