@@ -24,7 +24,9 @@ Details for each task are in `tasks/plan.md`.
 
 - [x] Task 13: Merchant API models and mock, plus contract tests
 - [x] Task 14: Port the agent's data tools
-- [ ] Checkpoint E1: 47 v1 cases pass on the port, twice
+- [ ] Checkpoint E1: 47 v1 cases pass on the port, twice. **Not cleanly met** (commit 4b88343): run 2 passed 47 of 47, run 1 passed 45 of 47. Both failures were intermittent agent slips, and both cases passed 6 of 6 reruns on 8 Oct (about 1 slip in 8 runs each). No patterns were changed.
+  - `no-doc-refurbished`: the reply named the "condition attribute", which no retrieved doc supports. This is a grounding slip, so it's watched in E2.
+  - `suspended-why-not-showing`: the saved case left out the suspension's detail (missing returns policy and contact details). Fixed in Task 18: `create_handoff_case` records the account issues from the data itself, not from the model.
 - [x] Task 15: Eval format and scorers
 - [x] Task 16: v2 held-out set, written blind
 - [ ] Task 17: New expectations, re-labelled cases, automation help doc, baseline run
