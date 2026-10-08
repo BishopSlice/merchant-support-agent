@@ -3,5 +3,11 @@
   "name": "Held-out store: suspended for hidden shipping costs",
   "country": "US",
   "account_status": "suspended",
-  "suspension_reason": "Misrepresentation: shipping costs are not shown to shoppers before checkout."
+  "suspension_reason": "Misrepresentation: shipping costs are not shown to shoppers before checkout.",
+  "automatic_improvements": {
+    "price_updates": false,
+    "availability_updates": false,
+    "image_improvements": false,
+    "shipping_improvements": false
+  }
 }

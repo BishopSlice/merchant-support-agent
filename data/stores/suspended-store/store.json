@@ -3,5 +3,11 @@
   "name": "Pine & Pebble Home",
   "country": "US",
   "account_status": "suspended",
-  "suspension_reason": "Misrepresentation: the website is missing a returns policy and business contact details."
+  "suspension_reason": "Misrepresentation: the website is missing a returns policy and business contact details.",
+  "automatic_improvements": {
+    "price_updates": false,
+    "availability_updates": false,
+    "image_improvements": false,
+    "shipping_improvements": false
+  }
 }

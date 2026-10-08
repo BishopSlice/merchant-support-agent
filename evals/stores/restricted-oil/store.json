@@ -3,5 +3,11 @@
   "name": "Held-out store: hemp extract product",
   "country": "US",
   "account_status": "active",
-  "suspension_reason": ""
+  "suspension_reason": "",
+  "automatic_improvements": {
+    "price_updates": false,
+    "availability_updates": false,
+    "image_improvements": false,
+    "shipping_improvements": false
+  }
 }

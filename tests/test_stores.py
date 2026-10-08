@@ -37,3 +37,30 @@ def test_list_stores_finds_both_sample_stores():
     from merchant_agent.stores import list_stores
 
     assert list_stores() == ["sample-store", "suspended-store"]
+
+
+def test_every_store_declares_its_automation_settings():
+    """Google defaults item updates to on, so each store must state its settings explicitly."""
+    import json
+
+    from merchant_agent.config import PROJECT_ROOT
+
+    paths = list((PROJECT_ROOT / "data" / "stores").glob("*/store.json")) + list(
+        (PROJECT_ROOT / "evals" / "stores").glob("*/store.json")
+    )
+    assert paths
+    for path in paths:
+        settings = json.loads(path.read_text()).get("automatic_improvements")
+        assert settings is not None, path
+        assert set(settings) == {
+            "price_updates",
+            "availability_updates",
+            "image_improvements",
+            "shipping_improvements",
+        }, path
+
+
+def test_v1_stores_keep_item_updates_off_so_their_mismatches_stay_visible():
+    store = load_store("sample-store")
+    assert store.automatic_improvements.price_updates is False
+    assert store.automatic_improvements.availability_updates is False

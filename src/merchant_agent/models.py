@@ -14,6 +14,19 @@ class AccountStatus(StrEnum):
     SUSPENDED = "suspended"
 
 
+class AutomationSettings(BaseModel):
+    """Which Merchant Center automatic improvements are on for a store.
+
+    Maps to the Merchant API's AutomaticImprovements resource: price and availability
+    item updates, automatic image improvements, and automatic shipping improvements.
+    """
+
+    price_updates: bool
+    availability_updates: bool
+    image_improvements: bool
+    shipping_improvements: bool
+
+
 class Store(BaseModel):
     """A merchant's store and the state of its Merchant Center account."""
 
@@ -22,6 +35,7 @@ class Store(BaseModel):
     country: str = "US"
     account_status: AccountStatus = AccountStatus.ACTIVE
     suspension_reason: str = ""
+    automatic_improvements: AutomationSettings | None = None
 
 
 class Product(BaseModel):
