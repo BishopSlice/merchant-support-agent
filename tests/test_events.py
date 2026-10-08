@@ -116,3 +116,55 @@ def test_recording_a_turn_is_fast(store):
         store.record_turn(conversation, "hi", Turn("hello", [Call("list_products")]), cost_usd=0.0)
     per_turn_ms = (time.perf_counter() - started) / 50 * 1000
     assert per_turn_ms < 50
+
+
+def test_tool_responses_are_kept_capped_and_purged_with_the_text(store):
+    conversation = store.start_conversation(
+        source="live", store_id="s", agent_version="a", model="m"
+    )
+    big = Call("list_products", {}, {"products": ["x" * 30_000]})
+    store.record_turn(conversation, "hi", Turn("hello", [big]), cost_usd=0.0)
+    [(response,)] = rows(store, "select response from tool_calls")
+    assert len(response) <= 20_000
+    store.purge_old_text(now=datetime.now(UTC) + timedelta(days=31))
+    assert rows(store, "select response from tool_calls") == [(None,)]
+
+
+def test_an_older_database_gains_the_response_column(tmp_path):
+    path = tmp_path / "old.sqlite"
+    with sqlite3.connect(path) as db:
+        db.execute(
+            "create table tool_calls (turn_id text, name text, args text, ok int, error text)"
+        )
+    store = EventStore(path)
+    columns = [r[1] for r in rows(store, "pragma table_info(tool_calls)")]
+    assert "response" in columns
+
+
+def test_turn_checks_use_the_whole_conversation():
+    from merchant_agent.events import turn_checks
+
+    loaded = Turn(
+        "2 products",
+        [
+            Call(
+                "list_products",
+                {},
+                {
+                    "products": [
+                        {"offerId": "HG-001", "productStatus": {"itemLevelIssues": []}},
+                        {"offerId": "HG-002", "productStatus": {"itemLevelIssues": []}},
+                    ]
+                },
+            )
+        ],
+    )
+    later = Turn(
+        "HG-001 is fine, but HG-099 is broken", [Call("list_account_issues", {}, {"error": "x"})]
+    )
+    checks = turn_checks([loaded, later])
+    assert checks == {
+        "write_calls": [],
+        "tool_failed": True,
+        "invented": ["invented product id HG-099"],
+    }

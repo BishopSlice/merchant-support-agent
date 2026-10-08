@@ -37,7 +37,7 @@ from merchant_agent.agent import agent_version
 from merchant_agent.chat import describe_tool_call, new_runner, new_session, run_turn
 from merchant_agent.config import MODEL_PRICES, PROJECT_ROOT, cost_usd, get_settings
 from merchant_agent.data import MockMerchantMcp
-from merchant_agent.events import EventStore
+from merchant_agent.events import EventStore, turn_checks
 from merchant_agent.merchant_api import product_name
 from merchant_agent.models import IssueType
 from merchant_agent.stores import load_feed, load_store, store_dir
@@ -315,9 +315,6 @@ def create_app(
         turn_id = secrets.token_hex(16)
         model = get_settings().model_name
         cost = cost_usd(turn.usage, MODEL_PRICES[model]) if model in MODEL_PRICES else 0.0
-        background.add_task(
-            events.record_turn, current.event_conversation, body.message, turn, cost, turn_id
-        )
         current.turn_ids.add(turn_id)
         current.transcript.append(
             TurnRecord(
@@ -330,6 +327,15 @@ def create_app(
                 usage=TokenUsage(**asdict(turn.usage)),
                 seconds=turn.seconds,
             )
+        )
+        background.add_task(
+            events.record_turn,
+            current.event_conversation,
+            body.message,
+            turn,
+            cost,
+            turn_id,
+            turn_checks(current.transcript),
         )
         if current.sampled:
             background.add_task(

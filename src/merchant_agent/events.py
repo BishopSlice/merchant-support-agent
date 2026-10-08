@@ -12,10 +12,12 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
+from merchant_agent import metrics
 from merchant_agent.models import _EMAIL, _PHONE
 
 SOURCES = {"live", "eval", "replay"}
 TEXT_RETENTION = timedelta(days=30)
+MAX_RESPONSE_CHARS = 20_000  # tool responses are kept for the safety checks, capped
 
 SCHEMA = """
 create table if not exists conversations (
@@ -38,14 +40,16 @@ create table if not exists turns (
   model_calls integer not null,
   input_tokens integer not null,
   output_tokens integer not null,
-  cost_usd real not null
+  cost_usd real not null,
+  checks text
 );
 create table if not exists tool_calls (
   turn_id text not null references turns(id),
   name text not null,
   args text,
   ok integer not null,
-  error text
+  error text,
+  response text
 );
 create table if not exists handoffs (
   turn_id text not null references turns(id),
@@ -72,6 +76,18 @@ def mask(text: str) -> str:
     return _PHONE.sub("[phone]", _EMAIL.sub("[email]", text))
 
 
+def turn_checks(conversation: list) -> dict:
+    """Safety checks for the last turn of a conversation, using every turn so far: calls
+    outside the allowlist, whether a data tool failed, and data the reply invented."""
+    last = conversation[-1:]
+    invented_before = set(metrics.invented_data(conversation[:-1]))
+    return {
+        "write_calls": metrics.write_calls(last),
+        "tool_failed": metrics.tool_failed(last),
+        "invented": [p for p in metrics.invented_data(conversation) if p not in invented_before],
+    }
+
+
 def _now() -> str:
     return datetime.now(UTC).isoformat()
 
@@ -82,6 +98,12 @@ class EventStore:
         path.parent.mkdir(parents=True, exist_ok=True)
         with self._db() as db:
             db.executescript(SCHEMA)
+            columns = [row[1] for row in db.execute("pragma table_info(tool_calls)")]
+            if "response" not in columns:  # databases made before responses were stored
+                db.execute("alter table tool_calls add column response text")
+            turn_columns = [row[1] for row in db.execute("pragma table_info(turns)")]
+            if turn_columns and "checks" not in turn_columns:
+                db.execute("alter table turns add column checks text")
 
     def _db(self) -> sqlite3.Connection:
         db = sqlite3.connect(self.path)
@@ -120,14 +142,26 @@ class EventStore:
         return conversation_id
 
     def record_turn(
-        self, conversation_id: str, merchant: str, turn: Any, cost_usd: float, turn_id: str = ""
+        self,
+        conversation_id: str,
+        merchant: str,
+        turn: Any,
+        cost_usd: float,
+        turn_id: str = "",
+        checks: dict | None = None,
     ) -> str:
-        """Store one turn (masked) with its tool calls and any handoff; return the turn id."""
+        """Store one turn (masked) with its tool calls and any handoff; return the turn id.
+
+        checks holds the safety checks worked out by the caller, who has the whole
+        conversation (see turn_checks).
+        """
         turn_id = turn_id or uuid.uuid4().hex
         usage = turn.usage
         with self._db() as db:
             db.execute(
-                "insert into turns values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                "insert into turns (id, conversation_id, at, merchant, reply, seconds, "
+                "model_calls, input_tokens, output_tokens, cost_usd, checks) "
+                "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 (
                     turn_id,
                     conversation_id,
@@ -139,19 +173,22 @@ class EventStore:
                     usage.input_tokens,
                     usage.output_tokens,
                     cost_usd,
+                    json.dumps(checks or {}),
                 ),
             )
             for call in turn.tool_calls:
                 response = call.response if isinstance(call.response, dict) else {}
                 error = response.get("error")
                 db.execute(
-                    "insert into tool_calls values (?, ?, ?, ?, ?)",
+                    "insert into tool_calls (turn_id, name, args, ok, error, response) "
+                    "values (?, ?, ?, ?, ?, ?)",
                     (
                         turn_id,
                         call.name,
                         mask(json.dumps(call.args, default=str)),
                         int(isinstance(call.response, dict) and error is None),
                         mask(str(error)) if error is not None else None,
+                        mask(json.dumps(call.response, default=str))[:MAX_RESPONSE_CHARS],
                     ),
                 )
                 if call.name == "create_handoff_case" and response.get("status") == "created":
@@ -197,7 +234,7 @@ class EventStore:
                 (cutoff,),
             ).rowcount
             db.execute(
-                "update tool_calls set args = null "
+                "update tool_calls set args = null, response = null "
                 "where turn_id in (select id from turns where at < ?)",
                 (cutoff,),
             )

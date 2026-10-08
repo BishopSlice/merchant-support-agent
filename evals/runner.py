@@ -21,7 +21,7 @@ from merchant_agent.chat import Usage, new_runner, new_session, run_turn
 from merchant_agent.config import PROJECT_ROOT, ModelPrice, cost_usd, get_settings
 from merchant_agent.data import FailingMerchantData
 from merchant_agent.demo import apply_fix
-from merchant_agent.events import EventStore
+from merchant_agent.events import EventStore, turn_checks
 from merchant_agent.merchant_api import product_name
 from merchant_agent.tools import merchant_tools
 from merchant_agent.tools.handoff import list_cases
@@ -122,6 +122,7 @@ def log_events(store: EventStore, record: CaseRun, price: ModelPrice, run_label:
         model=get_settings().model_name,
         label=f"{run_label}/{record.case_id}",
     )
-    for turn in record.turns:
+    for number, turn in enumerate(record.turns, start=1):
         cost = cost_usd(Usage(**turn.usage.model_dump()), price)
-        store.record_turn(conversation, turn.merchant, turn, cost)
+        checks = turn_checks(record.turns[:number])
+        store.record_turn(conversation, turn.merchant, turn, cost, checks=checks)
