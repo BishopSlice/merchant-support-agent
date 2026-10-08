@@ -63,3 +63,80 @@ We build in thin vertical slices. The riskiest piece is getting a real Gemini ag
 | Gemini free-tier rate limits slow evals | Medium | Small eval batches, retry with backoff, cache results |
 | AI grader is unreliable | Medium | Hand-check a sample; keep rule-based scores as the main numbers |
 | Two days is tight | Medium | Phases 1 to 3 are the must-have; Phase 4 trims to 20 cases if needed |
+
+---
+
+# v2 plan
+
+_Draft for review, 8 Oct 2026. Based on PRD v2, SPEC v2 and ADRs 0003 to 0006. v1 (Tasks 1 to 12) is above. The tick boxes there weren't kept up to date; `tasks/todo.md` is the record._
+
+## Ordering principle
+
+Every eval expectation lands **before** the change it tests:
+- **Data layer first.** The MCP-shaped data layer is built, and v1 behaviour is proven unchanged on it.
+- **Then the evals.** The eval extensions, a blind held-out set and the new expectations are committed.
+- **Then the agent.** The agent changes only after that.
+- **Then the UI.** The new UI comes after the agent passes its gates, so the screenshots and replays show final behaviour.
+
+## Phase 6: MCP-shaped data layer (no behaviour change)
+
+- [ ] **Task 13: Merchant API models and mock.** `merchant_api` pydantic models for the documented resources; the `MerchantData` interface; `MockMerchantMcp` built on the v1 stores and feed rules; explicit automation settings for every store. Contract tests (SPEC, Evals d1 and d2): documented fixtures, the severity enum, the name format, the read-only allowlist, and an error on non-allowlisted calls.
+- [ ] **Task 14: Port the agent's data tools.** Replace `check_feed` with the allowlisted MCP-shaped tools, with no change to the agent's instructions beyond naming them. Add per-turn latency to `chat`. Port the 47 v1 cases.
+
+**Checkpoint E1:** pytest exits 0, and two runs of the 47 ported v1 cases pass (the regression gate in SPEC, Evals a). That shows the port changed nothing.
+
+## Phase 7: Evals first (spec before prompt)
+
+- [ ] **Task 15: Eval format and scorers.** Test-first support for `must_call` (tool and argument patterns), mock failure injection, entry context, the triage order rule, case-preview checks, the write-call counter, the no-invented-data check, latency p50 and p95, and new metrics in the scorecard.
+- [ ] **Task 16: v2 held-out set, written blind.** 8 cases on new stores, committed before any prompt change. The leak guard is extended to it.
+- [ ] **Task 17: New expectations and cases.** The `automatic-item-updates` help doc, written from its source page and verified against it. The six re-labelled v1 cases. 29 new main cases (SPEC, Evals c). Rubric updates, calibrated on v1 transcripts. A baseline run on the unchanged agent, so the "before" picture is recorded.
+
+## Phase 8: Agent v2
+
+- [ ] **Task 18: Agent behaviour.**
+  - Automation routing (check `get_automatic_improvements` first)
+  - The triage order
+  - Graceful failure when data tools fail
+  - Using entry context instead of re-asking
+  - `create_handoff_case` returning the merchant-facing preview and recording the automation state
+
+  Each is one small, test-first change, with an eval run per change on the affected categories.
+
+**Checkpoint E2:** two runs of the main v2 set (76), the v1 held-out set (7) and the v2 held-out set (8) meet every target and hard gate in SPEC, Evals e. `evals.compare` runs v1 against v2 on the ported cases.
+
+## Phase 9: Product surface
+
+- [ ] **Task 19: FastAPI app.** Endpoints, per-session isolated demo data, the access code, session and daily caps, replay serving, the specialist demo login. API tests for all of it (SPEC, Evals f).
+- [ ] **Task 20: Material Web shell.**
+  - App bar and disabled nav
+  - Needs attention table
+  - Edit product dialog
+  - Agent side panel with "Help me fix this" and a Help entry
+  - Case preview
+  - Specialist page
+  - The "Concept prototype" label
+
+  Follow the frontend-ui-engineering skill. Browser checks: the merchant journey, keyboard, contrast script, the branding test, phone width. Screenshots.
+- [ ] **Task 21: Retire Streamlit.** Remove the Streamlit app and guide after Task 20's checks pass, then remove the dependency, in separate commits. Update the README commands.
+
+**Checkpoint F:** the full merchant journey works in the shell in live and replay modes, and all product checks pass.
+
+## Phase 10: Release
+
+- [ ] **Task 22: Replays and hosting.** Record replays from the release candidate, with a freshness test. Container setup. **The host choice and its account and billing are a separate approval.**
+- [ ] **Task 23: Final evals and write-up.** A new 10-item hand-check with Vikrant. Final two runs of every set. The `evals/CHANGELOG.md` disclosure log. Update the README, `docs/v1-results.md` (as history), a new `docs/v2-results.md`, the business case (using the uniquely agent-resolved rate) and the responsible AI page.
+
+**Checkpoint G:** every release gate in SPEC, Evals h passes. Vikrant records the demo video.
+
+## v2 risks
+
+| Risk | Impact | Mitigation |
+|---|---|---|
+| Material Web gaps (maintenance mode) | Medium | Pin a version; fall back to plain elements with Material 3 tokens ([ADR 0003](../docs/decisions/0003-ui-stack-material-web.md)) |
+| The port silently changes agent behaviour | High | Checkpoint E1: 47 v1 cases, two runs, before anything else changes |
+| Overfitting new expectations | Medium | Blind v2 held-out set (Task 16), the leak guard, the disclosure log |
+| Automation advice wrong or unsupported | High | Verified help doc, routing cases, grader rubric update |
+| Hosted demo cost or abuse | Medium | Replay by default; code and caps; separate approval for hosting |
+| The mock drifts from Google's real shapes | Medium | Contract tests from documented fixtures, each citing its source |
+| Scope creep beyond Needs attention | Medium | The PRD non-goals; disabled nav |
+| Eval spend | Low | About $8 estimated for v2 (SPEC, Evals g); reported per run |
