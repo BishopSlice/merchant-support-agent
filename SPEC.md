@@ -184,8 +184,16 @@ The page also lists what a production system would page someone on.
 
 ### Dependencies
 
-- OpenTelemetry already comes with ADK. Declaring it directly, and any chart library, are **pending approval**. Fallback: plain SVG charts drawn by our own code.
-- **Minimum version if time is short:** panels 1, 3 and 4, plus the trace view.
+- OpenTelemetry already comes with ADK. Declaring it directly is **pending approval**, so per-call timings in traces wait for it.
+- **Charts are plain SVG** drawn by our own code, so no chart library is needed.
+- **Built (8 Oct):** panels 1 to 4 and the trace view. Panel 5 (releases) is not built yet.
+
+### As built
+
+- **Safety checks are computed when a turn is written,** from the whole conversation so far, with the shared metrics functions: calls outside the allowlist, data tool failures, and invented data. They're stored with the turn, so the dashboard doesn't need full tool responses. Stored responses are capped and only shown in the trace view.
+- **Not measured on live traffic yet,** and the page says so: resolution (it needs product edits linked to re-checks), injection attempts (covered by the eval injection cases) and model safety blocks.
+- **Sampled grading** picks about 10% of live conversations when they start, and regrades the whole conversation after each turn, until the daily grading budget (default $0.50) is spent. The dashboard uses each conversation's latest grade and shows how many were graded.
+- **Codes:** `ACCESS_CODE` (live chat), `SPECIALIST_CODE` (specialist page) and `OPS_CODE` (/ops) are separate. Without `OPS_CODE`, /ops is off.
 
 ## Evals
 
