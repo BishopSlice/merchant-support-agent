@@ -41,6 +41,9 @@ def test_each_issue_type_finds_a_doc_covering_it_first(issue_type):
         ("why is my account suspended for misrepresentation", "misrepresentation"),
         ("I disagree with the decision and want to appeal", "request-review"),
         ("I fixed it, how long until my products are approved again", "after-a-fix"),
+        ("can Merchant Center update my prices automatically", "automatic-item-updates"),
+        ("turn on automatic item updates", "automatic-item-updates"),
+        ("can my images be fixed automatically", "automatic-image-improvements"),
     ],
 )
 def test_plain_language_questions_find_the_right_doc(query, expected):
@@ -72,3 +75,9 @@ def test_unrelated_questions_return_no_results_and_say_so(query):
     result = search_help_docs(query)
     assert result["results"] == []
     assert "no help doc" in result["message"].lower()
+
+
+@pytest.mark.parametrize("issue_type", ["price_mismatch", "availability_mismatch"])
+def test_automation_doc_does_not_displace_the_issue_doc(issue_type):
+    """The issue doc stays first for an issue code; the automation doc is found by asking for it."""
+    assert top_doc(issue_type) != "automatic-item-updates"
