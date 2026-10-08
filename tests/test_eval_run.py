@@ -13,6 +13,7 @@ from evals.records import CaseRun, ToolCallRecord, TurnRecord
 def results_dir(monkeypatch, tmp_path):
     monkeypatch.setattr(eval_run, "RESULTS_DIR", tmp_path)
     monkeypatch.setenv("MODEL_NAME", "gemini-3.6-flash")
+    monkeypatch.setenv("RUNTIME_DIR", str(tmp_path / "runtime"))  # eval traffic events
     return tmp_path
 
 

@@ -27,10 +27,11 @@ from evals.case_format import (
 from evals.grader import CaseGrade, grade_run, summarize_grades
 from evals.records import CaseRun
 from evals.report import render_scorecard
-from evals.runner import run_case
+from evals.runner import log_events, run_case
 from evals.scoring import score_case, summarize
 from merchant_agent.agent import agent_version
 from merchant_agent.config import MODEL_PRICES, PROJECT_ROOT, ModelPrice, get_settings
+from merchant_agent.events import EventStore
 
 RESULTS_DIR = PROJECT_ROOT / "evals" / "results"
 CASE_SETS = {"main": CASES_DIR, "heldout": HELDOUT_DIR, "heldout_v2": HELDOUT_V2_DIR}
@@ -152,11 +153,14 @@ def main(argv: list[str] | None = None) -> None:
     pending = [c for c in cases if c.id not in run_file.runs or run_file.runs[c.id].status != "ok"]
 
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+    events = EventStore(get_settings().runtime_dir / "events.sqlite")  # /ops: eval traffic
     print(f"Running {len(pending)} of {len(cases)} case(s) with {model} -> {path.name}")
     for number, case in enumerate(pending, start=1):
         record = asyncio.run(run_case(case, run_file.price))
         run_file.runs[case.id] = record
         save(run_file, path)
+        if record.status == "ok":
+            log_events(events, record, run_file.price, run_label=path.stem)
         status = "ok" if record.status == "ok" else f"ERROR {record.error[:80]}"
         cost = f"${record.cost_usd:.4f}"
         print(f"[{number}/{len(pending)}] {case.id}: {status} ({record.seconds}s, {cost})")

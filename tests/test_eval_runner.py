@@ -171,7 +171,9 @@ class StateCapturingRunner(FakeAgentRunner):
 
 
 def run_with(case):
-    return asyncio.run(run_case(case, PRICE, runner_factory=lambda: StateCapturingRunner(case.store)))
+    return asyncio.run(
+        run_case(case, PRICE, runner_factory=lambda: StateCapturingRunner(case.store))
+    )
 
 
 def test_entry_context_reaches_the_session_state():
@@ -216,3 +218,19 @@ def test_data_failures_are_injected_for_one_tool_only(kind, check):
     # ...and the normal data source is back afterwards.
     issues = merchant_tools.merchant_data.call("list_account_issues", account="suspended-store")
     assert issues["accountIssues"][0]["severity"] == "CRITICAL"
+
+
+def test_eval_runs_are_logged_as_eval_traffic(tmp_path):
+    import sqlite3
+
+    from evals.runner import log_events
+    from merchant_agent.events import EventStore
+
+    record = run_with(make_case([{"merchant": "Hello"}, {"merchant": "Again"}], store="price-only"))
+    store = EventStore(tmp_path / "events.sqlite")
+    log_events(store, record, PRICE, run_label="20261008-test")
+    with sqlite3.connect(store.path) as db:
+        assert db.execute("select source, label from conversations").fetchall() == [
+            ("eval", f"20261008-test/{record.case_id}")
+        ]
+        assert db.execute("select count(*) from turns").fetchone() == (2,)

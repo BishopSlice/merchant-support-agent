@@ -18,14 +18,25 @@ from pathlib import Path
 from typing import Annotated, Any, Literal
 
 import httpx
-from fastapi import Cookie, Depends, FastAPI, Header, HTTPException, Request, Response
+from fastapi import (
+    BackgroundTasks,
+    Cookie,
+    Depends,
+    FastAPI,
+    Header,
+    HTTPException,
+    Request,
+    Response,
+)
 from fastapi.staticfiles import StaticFiles
 from google.genai.errors import APIError
 from pydantic import BaseModel, ConfigDict, StringConstraints
 
+from merchant_agent.agent import agent_version
 from merchant_agent.chat import describe_tool_call, new_runner, new_session, run_turn
-from merchant_agent.config import PROJECT_ROOT, get_settings
+from merchant_agent.config import MODEL_PRICES, PROJECT_ROOT, cost_usd, get_settings
 from merchant_agent.data import MockMerchantMcp
+from merchant_agent.events import EventStore
 from merchant_agent.merchant_api import product_name
 from merchant_agent.models import IssueType
 from merchant_agent.stores import load_feed, load_store, store_dir
@@ -113,6 +124,7 @@ class WebSession:
     messages: int = 0
     runner: Any = None
     conversation: str | None = None
+    event_conversation: str | None = None  # this conversation's id in the event store
 
 
 class Sessions:
@@ -195,6 +207,8 @@ def create_app(
     config = config or WebConfig.from_env()
     _working_copy(config)
     sessions = Sessions(config)
+    events = EventStore(get_settings().runtime_dir / "events.sqlite")
+    events.purge_old_text()
     app = FastAPI(title="Merchant support agent (concept prototype)")
 
     def session(response: Response, sid: Annotated[str | None, Cookie()] = None) -> WebSession:
@@ -231,6 +245,7 @@ def create_app(
     async def chat(
         body: ChatIn,
         current: Session,
+        background: BackgroundTasks,
         x_access_code: Annotated[str | None, Header()] = None,
     ) -> dict:
         if not config.access_code:
@@ -256,11 +271,28 @@ def create_app(
                     "issue_code": body.entry_context.issue_code.value,
                 }
             current.conversation = await new_session(current.runner, current.store_id, extra)
+            current.event_conversation = secrets.token_hex(16)
+            background.add_task(
+                events.start_conversation,
+                source="live",
+                store_id=current.store_id,
+                agent_version=agent_version(),
+                model=get_settings().model_name,
+                entry_point="issue_row" if body.entry_context else "help",
+                conversation_id=current.event_conversation,
+            )
         try:
             turn = await run_turn(current.runner, current.conversation, body.message)
         except (APIError, httpx.HTTPError) as error:
             raise HTTPException(503, "The assistant is unavailable right now.") from error
 
+        # Logged after the reply is sent, never during the merchant's wait.
+        turn_id = secrets.token_hex(16)
+        model = get_settings().model_name
+        cost = cost_usd(turn.usage, MODEL_PRICES[model]) if model in MODEL_PRICES else 0.0
+        background.add_task(
+            events.record_turn, current.event_conversation, body.message, turn, cost, turn_id
+        )
         created = [
             c.response
             for c in turn.tool_calls
@@ -273,6 +305,7 @@ def create_app(
             "steps": [describe_tool_call(c) for c in turn.tool_calls],
             "case": created[-1] if created else None,
             "remaining": config.session_cap - current.messages,
+            "turn_id": turn_id,
             "seconds": turn.seconds,
         }
 

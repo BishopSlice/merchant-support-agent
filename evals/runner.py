@@ -18,9 +18,10 @@ from evals.case_format import EVAL_STORES_DIR, EvalCase
 from evals.records import CaseRun, TokenUsage, ToolCallRecord, TurnRecord
 from merchant_agent.agent import agent_version
 from merchant_agent.chat import Usage, new_runner, new_session, run_turn
-from merchant_agent.config import PROJECT_ROOT, ModelPrice, cost_usd
+from merchant_agent.config import PROJECT_ROOT, ModelPrice, cost_usd, get_settings
 from merchant_agent.data import FailingMerchantData
 from merchant_agent.demo import apply_fix
+from merchant_agent.events import EventStore
 from merchant_agent.merchant_api import product_name
 from merchant_agent.tools import merchant_tools
 from merchant_agent.tools.handoff import list_cases
@@ -110,3 +111,17 @@ async def run_case(
     record.cost_usd = cost_usd(total, price)
     record.seconds = round(time.monotonic() - started, 1)
     return record
+
+
+def log_events(store: EventStore, record: CaseRun, price: ModelPrice, run_label: str) -> None:
+    """Log a finished eval case to the event store as eval traffic, labelled run/case."""
+    conversation = store.start_conversation(
+        source="eval",
+        store_id=record.case_id,
+        agent_version=record.agent_version,
+        model=get_settings().model_name,
+        label=f"{run_label}/{record.case_id}",
+    )
+    for turn in record.turns:
+        cost = cost_usd(Usage(**turn.usage.model_dump()), price)
+        store.record_turn(conversation, turn.merchant, turn, cost)

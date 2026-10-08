@@ -264,3 +264,35 @@ def test_pages_carry_the_concept_label_and_no_google_branding(client, path):
     assert not re.search(r"<svg[^>]*aria-label=\"[^\"]*google", text, re.IGNORECASE)
     if path.endswith(".html") or path == "/":
         assert "Concept prototype, not a Google product" in text
+
+
+# --- event store (observability) ---
+
+
+def test_live_turns_are_recorded_after_the_reply_with_source_and_entry_point(client, env):
+    import sqlite3
+
+    body = {
+        "message": "hi from jo@example.com",
+        "entry_context": {"offer_id": "HG-004", "issue_code": "price_mismatch"},
+        "new_conversation": True,
+    }
+    data = client.post("/api/chat", json=body, headers=ACCESS).json()
+    client.post("/api/chat", json={"message": "and again"}, headers=ACCESS)
+    with sqlite3.connect(env / "runtime" / "events.sqlite") as db:
+        conversations = db.execute("select source, entry_point from conversations").fetchall()
+        turns = db.execute("select id, merchant from turns order by at").fetchall()
+    assert conversations == [("live", "issue_row")]
+    assert turns[0][0] == data["turn_id"]
+    assert "[email]" in turns[0][1]
+    assert len(turns) == 2
+
+
+def test_replays_are_never_recorded(env):
+    import sqlite3
+
+    write_replay(env)
+    with make_client(env, runner=ExplodingRunner) as c:
+        c.get("/api/replays/price-fix")
+    with sqlite3.connect(env / "runtime" / "events.sqlite") as db:
+        assert db.execute("select count(*) from turns").fetchone() == (0,)
