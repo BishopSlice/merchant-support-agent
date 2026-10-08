@@ -19,7 +19,10 @@ from evals.records import CaseRun, TokenUsage, ToolCallRecord, TurnRecord
 from merchant_agent.agent import agent_version
 from merchant_agent.chat import Usage, new_runner, new_session, run_turn
 from merchant_agent.config import PROJECT_ROOT, ModelPrice, cost_usd
+from merchant_agent.data import FailingMerchantData
 from merchant_agent.demo import apply_fix
+from merchant_agent.merchant_api import product_name
+from merchant_agent.tools import merchant_tools
 from merchant_agent.tools.handoff import list_cases
 
 
@@ -43,6 +46,34 @@ def isolated_workspace() -> Iterator[Path]:
                     os.environ[key] = value
 
 
+def _session_state(case: EvalCase) -> dict:
+    """Extra session state for a case: the issue row the side panel was opened from."""
+    if not case.entry_context:
+        return {}
+    return {
+        "entry_context": {
+            "product_name": product_name(case.store, case.entry_context.product),
+            "issue_code": case.entry_context.issue_code.value,
+        }
+    }
+
+
+@contextmanager
+def _data_source(case: EvalCase) -> Iterator[None]:
+    """Make the case's chosen data tool fail for the length of the case, then restore it."""
+    if not case.data_failure:
+        yield
+        return
+    original = merchant_tools.merchant_data
+    merchant_tools.merchant_data = FailingMerchantData(
+        original, case.data_failure.tool, case.data_failure.kind
+    )
+    try:
+        yield
+    finally:
+        merchant_tools.merchant_data = original
+
+
 async def run_case(
     case: EvalCase, price: ModelPrice, runner_factory: Callable[[], Runner] = new_runner
 ) -> CaseRun:
@@ -50,10 +81,10 @@ async def run_case(
     record = CaseRun(case_id=case.id, category=case.category.value, agent_version=agent_version())
     total = Usage()
     started = time.monotonic()
-    with isolated_workspace():
+    with isolated_workspace(), _data_source(case):
         runner = runner_factory()
         try:
-            session_id = await new_session(runner, case.store)
+            session_id = await new_session(runner, case.store, _session_state(case))
             for scripted in case.turns:
                 turn_record = TurnRecord(merchant=scripted.merchant)
                 if scripted.fix:

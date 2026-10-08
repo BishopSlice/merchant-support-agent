@@ -81,10 +81,10 @@ def new_runner() -> InMemoryRunner:
     return InMemoryRunner(agent=build_agent(), app_name=APP_NAME)
 
 
-async def new_session(runner: Runner, store_id: str) -> str:
+async def new_session(runner: Runner, store_id: str, extra_state: dict | None = None) -> str:
     """Start a conversation as the owner of a store and return its session id."""
     session = await runner.session_service.create_session(
-        app_name=APP_NAME, user_id=USER_ID, state={"store_id": store_id}
+        app_name=APP_NAME, user_id=USER_ID, state={"store_id": store_id, **(extra_state or {})}
     )
     return session.id
 

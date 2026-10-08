@@ -290,3 +290,42 @@ class MockMerchantMcp:
             productAttributes=_attributes(product),
             productStatus=ProductStatus(destinationStatuses=[destination], itemLevelIssues=issues),
         ).model_dump(mode="json", exclude_none=True)
+
+
+# What each data tool returns when it "succeeds" with nothing, and the key its list lives under.
+_EMPTY = {
+    "list_products": {"products": []},
+    "get_product_by_name": {},
+    "list_account_issues": {"accountIssues": []},
+    "list_aggregate_product_statuses": {"aggregateProductStatuses": []},
+    "get_automatic_improvements": {},
+}
+_FAILURES = {
+    "quota": {"error": "429 RESOURCE_EXHAUSTED: Merchant API quota exceeded. Try again later."},
+    "timeout": {"error": "The request to Merchant Center timed out."},
+    "error": {"error": "500 INTERNAL: Merchant Center couldn't return this data."},
+}
+
+
+class FailingMerchantData:
+    """Wraps a data source so one tool fails in a chosen way (for graceful-failure evals).
+
+    kind is "quota", "timeout" or "error" (an error response), "empty" (a valid but empty
+    response, even though data exists) or "malformed" (a response that isn't the documented
+    shape). Every other tool is passed through unchanged.
+    """
+
+    def __init__(self, base: MockMerchantMcp, tool: str, kind: str) -> None:
+        if tool not in ALLOWED_TOOLS:
+            raise ToolNotAllowedError(f"Can't inject a failure into {tool!r}")
+        self.base, self.tool, self.kind = base, tool, kind
+
+    def call(self, tool: str, **arguments) -> dict:
+        if tool != self.tool:
+            return self.base.call(tool, **arguments)
+        if self.kind == "empty":
+            return dict(_EMPTY[tool])
+        if self.kind == "malformed":
+            key = next(iter(_EMPTY[tool]), "unexpected")
+            return {key: "<html><body>502 Bad Gateway</body></html>"}
+        return dict(_FAILURES[self.kind])

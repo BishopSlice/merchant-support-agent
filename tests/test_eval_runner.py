@@ -2,8 +2,10 @@
 
 import asyncio
 import os
+from typing import ClassVar
 
 import httpx
+import pytest
 from google.adk import Event
 from google.adk.sessions import InMemorySessionService
 from google.genai import types
@@ -144,3 +146,65 @@ def test_runs_record_the_agent_version_and_per_turn_timing():
     record = run(make_case([{"merchant": "a"}, {"merchant": "b"}]))
     assert record.agent_version == agent_version()
     assert all(turn.seconds >= 0 for turn in record.turns)
+
+
+class StateCapturingRunner(FakeAgentRunner):
+    """Records the session state the agent would see, and what the data tools return."""
+
+    seen_state: ClassVar[dict] = {}
+    seen_data: ClassVar[dict] = {}
+
+    async def run_async(self, *, user_id, session_id, new_message):
+        from merchant_agent.tools import merchant_tools
+
+        session = await self.session_service.get_session(
+            app_name="merchant_support", user_id=user_id, session_id=session_id
+        )
+        StateCapturingRunner.seen_state = dict(session.state)
+        StateCapturingRunner.seen_data = merchant_tools.merchant_data.call(
+            "list_account_issues", account=self.store_id
+        )
+        async for event in super().run_async(
+            user_id=user_id, session_id=session_id, new_message=new_message
+        ):
+            yield event
+
+
+def run_with(case):
+    return asyncio.run(run_case(case, PRICE, runner_factory=lambda: StateCapturingRunner(case.store)))
+
+
+def test_entry_context_reaches_the_session_state():
+    case = make_case([{"merchant": "How do I fix this?"}], store="price-only")
+    case.entry_context = {"product": "HG-004", "issue_code": "price_mismatch"}
+    case = EvalCase.model_validate(case.model_dump())
+    run_with(case)
+    assert StateCapturingRunner.seen_state["entry_context"] == {
+        "product_name": "accounts/price-only/products/en~US~HG-004",
+        "issue_code": "price_mismatch",
+    }
+
+
+@pytest.mark.parametrize(
+    ("kind", "check"),
+    [
+        ("quota", lambda r: "429" in r["error"]),
+        ("timeout", lambda r: "timed out" in r["error"]),
+        ("error", lambda r: "error" in r),
+        ("empty", lambda r: r == {"accountIssues": []}),
+        ("malformed", lambda r: not isinstance(r.get("accountIssues", []), list)),
+    ],
+)
+def test_data_failures_are_injected_for_one_tool_only(kind, check):
+    from merchant_agent.tools import merchant_tools
+
+    case = make_case([{"merchant": "hi"}], store="suspended-store")
+    case.data_failure = {"tool": "list_account_issues", "kind": kind}
+    case = EvalCase.model_validate(case.model_dump())
+    record = run_with(case)
+    assert check(StateCapturingRunner.seen_data)
+    # Other tools keep working inside the case...
+    assert record.turns[0].tool_calls[0].response["issue_groups"] is not None
+    # ...and the normal data source is back afterwards.
+    issues = merchant_tools.merchant_data.call("list_account_issues", account="suspended-store")
+    assert issues["accountIssues"][0]["severity"] == "CRITICAL"
