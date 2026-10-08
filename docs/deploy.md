@@ -73,6 +73,8 @@ Check each against its free tier when billing is set up. I haven't verified thei
 
 ## Deploying automatically on every push to GitHub
 
+> **Status (8 Oct): not set up.** The first attempt created the trigger in the wrong project, and Vikrant chose to stop there. Deploy by hand with `PROJECT_ID=YOUR_PROJECT_ID deploy/cloudrun.sh` after each change. The steps below are kept for a later attempt.
+
 `cloudbuild.yaml` runs on every push to `main`:
 1. **Tests and lint.** Model calls are blocked in tests, and a failure stops the deploy.
 2. **Build** the image.
