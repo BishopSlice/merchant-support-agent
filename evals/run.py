@@ -82,6 +82,7 @@ def write_scorecard(run_file: RunFile, cases: list[EvalCase], path: Path) -> str
         "Run": path.stem,
         "Model": run_file.model,
         "Started": f"{run_file.started_at:%Y-%m-%d %H:%M} UTC",
+        "Agent version": run_file.agent_version or "not recorded (pre-v2 run)",
     }
     if run_file.grades:
         grading_cost = sum(grade.cost_usd for grade in run_file.grades.values())

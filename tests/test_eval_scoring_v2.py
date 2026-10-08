@@ -199,3 +199,17 @@ def test_uniquely_agent_resolved_rate_excludes_automation_solvable_fixes():
     summary = summarize([score_case(c, r) for c, r in pairs], [r for _, r in pairs])
     assert summary.resolution_rate == 1.0
     assert summary.uniquely_agent_resolved_rate == 2 / 3
+
+
+def test_scorecard_shows_the_v2_metrics_with_targets_and_hard_gates():
+    from evals.report import render_scorecard
+
+    c, r = case("automation_routing", tags=["automation_routing"]), run("ok", call("create_data_source"))
+    summary = summarize([score_case(c, r)], [r])
+    card = render_scorecard({"Run": "x", "Agent version": "abc123"}, summary, [score_case(c, r)])
+    assert "## v2 metrics" in card
+    assert "| Write calls (hard gate) | 1 | 0 | **missed** |" in card
+    assert "| Automation-routing accuracy | 0% | 95% or higher | **missed** |" in card
+    assert "| Latency p50 per turn | 2.0 s | 8 s or less | met |" in card
+    assert "| Graceful-failure rate (hard gate) | n/a | 100% | not measured |" in card
+    assert "- Agent version: abc123" in card
