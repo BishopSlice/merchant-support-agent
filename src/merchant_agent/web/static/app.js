@@ -249,6 +249,7 @@ function addPreview(caseResult) {
         el("dt", {}, "Your request"), el("dd", {}, p.merchant_request),
         el("dt", {}, "Your reasons"), el("dd", {}, list(p.merchant_reasons)),
         el("dt", {}, "Issues"), el("dd", {}, list([...(p.account_issues || []), ...p.issues_found])),
+        el("dt", {}, "Affected products"), el("dd", {}, list(Object.entries(p.product_issues || {}).map(([code, ids]) => `${code.replaceAll("_", " ")}: ${ids.join(", ")}`))),
         el("dt", {}, "Already tried"), el("dd", {}, list(p.already_tried)),
         el("dt", {}, "Automations"), el("dd", {}, automation),
         el("dt", {}, "Next step"), el("dd", {}, p.suggested_next_step),

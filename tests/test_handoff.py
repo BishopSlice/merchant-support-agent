@@ -215,3 +215,17 @@ def test_case_is_still_saved_when_the_data_cannot_load(monkeypatch):
     result = make_case()
     assert result["status"] == "created"
     assert get_case(result["case_id"]).automation is None
+
+
+def test_case_records_the_affected_products_for_each_issue_from_the_data():
+    # E2 attempt 1: "ask for a person" cases listed issue codes without product ids.
+    case = get_case(make_case(reason="merchant_requested_human", issues_found=[])["case_id"])
+    assert "HG-004" in case.product_issues["price_mismatch"]
+    assert "missing_gtin" in case.product_issues
+
+
+def test_preview_includes_the_affected_products():
+    result = make_case()
+    assert result["preview"]["product_issues"] == json.loads(
+        get_case(result["case_id"]).model_dump_json()
+    )["product_issues"]

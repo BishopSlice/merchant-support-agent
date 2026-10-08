@@ -32,6 +32,7 @@ function renderCase(c) {
       el("dt", {}, "Merchant's reasons"), el("dd", {}, list(c.merchant_reasons)),
       el("dt", {}, "Account issues"), el("dd", {}, list(c.account_issues)),
       el("dt", {}, "Issues found"), el("dd", {}, list(c.issues_found)),
+      el("dt", {}, "Affected products (from data)"), el("dd", {}, list(Object.entries(c.product_issues || {}).map(([code, ids]) => `${code.replaceAll("_", " ")}: ${ids.join(", ")}`))),
       el("dt", {}, "Already tried"), el("dd", {}, list(c.already_tried)),
       el("dt", {}, "Automations"), el("dd", {}, automation),
       el("dt", {}, "Cited help docs"), el("dd", {}, list(c.cited_doc_ids)),

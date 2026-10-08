@@ -120,6 +120,7 @@ class Case(BaseModel):
     cited_doc_ids: list[str] = Field(default_factory=list)
     # Recorded from the store data when the case is created, not written by the model.
     account_issues: list[str] = Field(default_factory=list)
+    product_issues: dict[str, list[str]] = Field(default_factory=dict)  # issue code -> offer ids
     automation: AutomationSettings | None = None
 
     @field_validator("merchant_request", "suggested_next_step")

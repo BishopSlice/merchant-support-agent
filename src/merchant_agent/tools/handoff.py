@@ -27,6 +27,19 @@ def _account_issues(store_id: str) -> list[str]:
         return []
 
 
+def _product_issues(store_id: str) -> dict[str, list[str]]:
+    """Each item-level issue code with the offer ids it affects, or {} if they can't be loaded."""
+    response = merchant_tools.merchant_data.call("list_products", account=store_id)
+    issues: dict[str, list[str]] = {}
+    try:
+        for product in response.get("products", []):
+            for issue in product["productStatus"]["itemLevelIssues"]:
+                issues.setdefault(issue["code"], []).append(product["offerId"])
+    except (AttributeError, KeyError, TypeError):
+        return {}
+    return issues
+
+
 def _automation(store_id: str) -> AutomationSettings | None:
     """The account's automatic improvements, or None if they can't be loaded."""
     response = merchant_tools.merchant_data.call("get_automatic_improvements", account=store_id)
@@ -76,6 +89,7 @@ def create_handoff_case(
             suggested_next_step=suggested_next_step,
             cited_doc_ids=cited_doc_ids,
             account_issues=_account_issues(store_id),
+            product_issues=_product_issues(store_id),
             automation=_automation(store_id),
         )
     except ValidationError as error:
