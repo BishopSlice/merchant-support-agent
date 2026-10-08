@@ -32,6 +32,8 @@ from evals.scoring import score_case, summarize
 from merchant_agent.agent import agent_version
 from merchant_agent.config import MODEL_PRICES, PROJECT_ROOT, ModelPrice, get_settings
 from merchant_agent.events import EventStore
+from merchant_agent.tracing import flush as flush_traces
+from merchant_agent.tracing import setup_tracing
 
 RESULTS_DIR = PROJECT_ROOT / "evals" / "results"
 CASE_SETS = {"main": CASES_DIR, "heldout": HELDOUT_DIR, "heldout_v2": HELDOUT_V2_DIR}
@@ -157,6 +159,7 @@ def main(argv: list[str] | None = None) -> None:
 
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     events = EventStore(get_settings().runtime_dir / "events.sqlite")  # /ops: eval traffic
+    setup_tracing(events)
     print(f"Running {len(pending)} of {len(cases)} case(s) with {model} -> {path.name}")
     for number, case in enumerate(pending, start=1):
         record = asyncio.run(run_case(case, run_file.price))
@@ -170,6 +173,7 @@ def main(argv: list[str] | None = None) -> None:
 
     if not args.no_grade:
         grade_run(run_file, save=lambda: save(run_file, path))
+    flush_traces()
     run_file.finished_at = datetime.now(UTC)
     save(run_file, path)
     scorecard = write_scorecard(run_file, cases, path)

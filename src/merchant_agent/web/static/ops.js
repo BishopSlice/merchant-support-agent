@@ -206,6 +206,11 @@ async function showTrace(id) {
       el("p", {}, el("strong", {}, "Merchant: "), turn.merchant ?? "(text removed after 30 days)"),
       el("p", {}, el("strong", {}, "Agent: "), turn.reply ?? "(text removed after 30 days)"),
       el("p", { class: "note" }, `Checks: write calls ${turn.checks.write_calls?.length || 0}, tool failed ${turn.checks.tool_failed ? "yes" : "no"}, invented ${turn.checks.invented?.length || 0}`),
+      (t.steps?.[i] || []).length
+        ? el("details", {}, el("summary", {}, "Steps and timings"),
+            el("ul", { class: "steps-timing" }, t.steps[i].map((step) =>
+              el("li", { style: `padding-left:${step.depth * 16}px` }, `${step.name}: ${step.duration_ms.toFixed(0)} ms`))))
+        : el("p", { class: "note" }, "No trace recorded for this turn."),
       turn.tool_calls.map((c) => el("details", {},
         el("summary", {}, `${c.ok ? "OK" : "Failed"}: ${c.name}`),
         el("pre", {}, `args: ${pretty(c.args)}\n${c.error ? `error: ${c.error}\n` : ""}response: ${pretty(c.response)}`))),

@@ -223,4 +223,47 @@ def trace(store: EventStore, conversation_id: str) -> dict | None:
     grades = _rows(
         store, "select * from grades where conversation_id = ? order by at", (conversation_id,)
     )
-    return {**dict(conv), "turns": turns, "grades": [dict(g) for g in grades]}
+    return {
+        **dict(conv),
+        "turns": turns,
+        "grades": [dict(g) for g in grades],
+        "steps": _steps(store, conversation_id),
+    }
+
+
+def _steps(store: EventStore, conversation_id: str) -> list[list[dict]]:
+    """Each traced turn's spans in start order, with their depth: the step-by-step timings."""
+    trace_ids = [
+        r["trace_id"]
+        for r in _rows(
+            store,
+            "select trace_id, min(start_ns) as first from spans where conversation_id = ? "
+            "group by trace_id order by first",
+            (conversation_id,),
+        )
+    ]
+    traces = []
+    for trace_id in trace_ids:
+        spans = _rows(
+            store, "select * from spans where trace_id = ? order by start_ns", (trace_id,)
+        )
+        parents = {s["span_id"]: s["parent_id"] for s in spans}
+
+        def depth(span_id: str, parents: dict = parents) -> int:
+            level, parent = 0, parents.get(span_id)
+            while parent in parents:
+                level, parent = level + 1, parents[parent]
+            return level
+
+        traces.append(
+            [
+                {
+                    "name": s["name"],
+                    "depth": depth(s["span_id"]),
+                    "duration_ms": s["duration_ms"],
+                    "attributes": json.loads(s["attributes"] or "{}"),
+                }
+                for s in spans
+            ]
+        )
+    return traces

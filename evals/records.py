@@ -1,5 +1,7 @@
 """What an eval run records for each case: every turn, tool call, created case and token count."""
 
+import uuid
+
 from pydantic import BaseModel, Field
 
 
@@ -40,6 +42,8 @@ class CaseRun(BaseModel):
     case_id: str
     category: str
     agent_version: str = ""  # merchant_agent.agent.agent_version() at run time
+    # Links the case to its events and trace spans on /ops.
+    conversation_id: str = Field(default_factory=lambda: uuid.uuid4().hex)
     status: str = "ok"  # "ok" or "error"
     error: str = ""
     turns: list[TurnRecord] = Field(default_factory=list)

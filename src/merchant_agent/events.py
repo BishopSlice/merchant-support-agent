@@ -62,6 +62,16 @@ create table if not exists feedback (
   value integer not null check (value in (-1, 1)),
   at text not null
 );
+create table if not exists spans (
+  trace_id text not null,
+  span_id text primary key,
+  parent_id text,
+  name text not null,
+  conversation_id text,
+  start_ns integer not null,
+  duration_ms real not null,
+  attributes text
+);
 create table if not exists grades (
   conversation_id text not null references conversations(id),
   wrong_advice_rate real,
@@ -227,6 +237,11 @@ class EventStore:
                 "insert into grades values (?, ?, ?, ?, ?)",
                 (conversation_id, wrong_advice_rate, completeness, cost_usd, _now()),
             )
+
+    def record_spans(self, rows: list[tuple]) -> None:
+        """Store finished trace spans (see merchant_agent.tracing)."""
+        with self._db() as db:
+            db.executemany("insert or replace into spans values (?, ?, ?, ?, ?, ?, ?, ?)", rows)
 
     def purge_old_text(self, now: datetime | None = None) -> int:
         """Remove message text older than 30 days; numbers stay. Returns turns changed."""

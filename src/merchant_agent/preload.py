@@ -11,6 +11,7 @@ from merchant_agent.chat import ToolCall
 from merchant_agent.metrics import AUTOMATION_SOLVABLE
 from merchant_agent.tools import merchant_tools
 from merchant_agent.tools.help_search import load_help_docs, search_help_docs
+from merchant_agent.tracing import tracer
 
 # Docs that go with an issue beyond the doc tagged with its code.
 EXTRA_DOCS = {
@@ -98,7 +99,10 @@ class Preload:
 
 
 def _call(calls: list[ToolCall], tool: str, **arguments) -> dict:
-    response = merchant_tools.merchant_data.call(tool, **arguments)
+    with tracer().start_as_current_span(f"tool.{tool}") as span:
+        response = merchant_tools.merchant_data.call(tool, **arguments)
+        span.set_attribute("app.by", "code")
+        span.set_attribute("app.ok", isinstance(response, dict) and "error" not in response)
     calls.append(ToolCall(name=tool, args=dict(arguments), response=response, by="code"))
     return response if isinstance(response, dict) else {"error": "unreadable response"}
 
@@ -124,6 +128,11 @@ def resolves(message: str, products: list[dict], search_found: bool) -> bool:
 
 def preload(store_id: str, message: str, entry_context: dict | None = None) -> Preload:
     """Run the read tools and the help lookups for one turn, and render them for the prompt."""
+    with tracer().start_as_current_span("preload"):
+        return _preload(store_id, message, entry_context)
+
+
+def _preload(store_id: str, message: str, entry_context: dict | None) -> Preload:
     calls: list[ToolCall] = []
     account = _call(calls, "list_account_issues", account=store_id)
     summary = _call(calls, "list_aggregate_product_statuses", account=store_id)

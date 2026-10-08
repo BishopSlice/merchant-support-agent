@@ -93,6 +93,11 @@ async def run_case(
             _session_state(case).get("entry_context"),
             runner_factory=runner_factory,
             answer=answer,
+            trace={
+                "conversation_id": record.conversation_id,
+                "traffic_source": "eval",
+                "entry_point": "issue_row" if case.entry_context else "help",
+            },
         )
         try:
             for scripted in case.turns:
@@ -126,6 +131,7 @@ async def run_case(
 def log_events(store: EventStore, record: CaseRun, price: ModelPrice, run_label: str) -> None:
     """Log a finished eval case to the event store as eval traffic, labelled run/case."""
     conversation = store.start_conversation(
+        conversation_id=record.conversation_id,
         source="eval",
         store_id=record.case_id,
         agent_version=record.agent_version,

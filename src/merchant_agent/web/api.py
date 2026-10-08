@@ -44,6 +44,7 @@ from merchant_agent.merchant_api import product_name
 from merchant_agent.models import IssueType
 from merchant_agent.stores import load_feed, load_store, store_dir
 from merchant_agent.tools.handoff import list_cases
+from merchant_agent.tracing import setup_tracing
 from merchant_agent.web.sampling import SampledGrader
 
 SESSION_COOKIE = "sid"
@@ -230,6 +231,7 @@ def create_app(
     sessions = Sessions(config)
     events = EventStore(get_settings().runtime_dir / "events.sqlite")
     events.purge_old_text()
+    setup_tracing(events)
     grader = SampledGrader(events, config.grade_sample_rate, config.grading_daily_budget_usd)
     app = FastAPI(title="Merchant support agent (concept prototype)")
     app.state.grade_generate = None  # created on first use; tests set a fake
@@ -300,10 +302,18 @@ def create_app(
                 }
             if current.conversation is not None:
                 await current.conversation.close()
-            current.conversation = Conversation(
-                current.store_id, entry, runner_factory=runner_factory, answer=answer
-            )
             current.event_conversation = secrets.token_hex(16)
+            current.conversation = Conversation(
+                current.store_id,
+                entry,
+                runner_factory=runner_factory,
+                answer=answer,
+                trace={
+                    "conversation_id": current.event_conversation,
+                    "traffic_source": "live",
+                    "entry_point": "issue_row" if entry else "help",
+                },
+            )
             current.sampled = grader.sample()
             current.transcript = []
             background.add_task(

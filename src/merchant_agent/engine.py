@@ -7,10 +7,12 @@ import time
 from collections.abc import Callable
 from typing import Any
 
+from merchant_agent.agent import agent_version
 from merchant_agent.answer import AnswerFn, answer_turn, gemini_answer
 from merchant_agent.chat import Turn, new_runner, new_session, run_turn
 from merchant_agent.config import get_settings
 from merchant_agent.preload import preload
+from merchant_agent.tracing import tracer
 
 DEFAULT = object()  # use Gemini for the one-call path
 
@@ -29,8 +31,11 @@ class Conversation:
         entry_context: dict | None = None,
         runner_factory: Callable[[], Any] | None = None,
         answer: AnswerFn | None | object = DEFAULT,
+        trace: dict | None = None,
     ) -> None:
         self.store_id = store_id
+        # Span tags: conversation_id, traffic_source, entry_point (agent version is added).
+        self.trace = {"agent_version": agent_version(), **(trace or {})}
         self.entry_context = entry_context
         self.runner_factory = runner_factory or (lambda: new_runner())  # looked up when used
         self.answer = gemini_answer(get_settings().model_name) if answer is DEFAULT else answer
@@ -41,6 +46,15 @@ class Conversation:
         self.loop_turns = 0  # turns the tool loop's own session has seen
 
     async def ask(self, message: str) -> Turn:
+        with tracer().start_as_current_span("turn") as span:
+            for key, value in self.trace.items():
+                span.set_attribute(f"app.{key}", value)
+            turn = await self._ask(message)
+            span.set_attribute("app.path", turn.path)
+            span.set_attribute("app.model_calls", turn.usage.model_calls)
+            return turn
+
+    async def _ask(self, message: str) -> Turn:
         started = time.monotonic()
         if self.answer is not None:
             # In a worker thread, so a web server keeps serving others meanwhile.

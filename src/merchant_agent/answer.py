@@ -16,6 +16,7 @@ from pydantic import BaseModel, Field
 from merchant_agent.chat import ToolCall, Turn, Usage
 from merchant_agent.preload import Preload
 from merchant_agent.tools import handoff
+from merchant_agent.tracing import tracer
 
 CASE_PLACEHOLDER = "{CASE_NUMBER}"
 
@@ -189,12 +190,17 @@ def answer_turn(
     """One model call; then code saves any handoff case and fills in its number."""
     started = time.monotonic()
     system = ANSWER_INSTRUCTION.replace("{store_id}", store_id)
-    result, usage = answer(system, prompt_for(history, message, loaded))
+    with tracer().start_as_current_span("model_call") as span:
+        result, usage = answer(system, prompt_for(history, message, loaded))
+        span.set_attribute("app.input_tokens", usage.input_tokens)
+        span.set_attribute("app.output_tokens", usage.output_tokens)
     calls = list(loaded.calls)
     reply = result.reply
     if result.handoff:
         fields = result.handoff.model_dump()
-        response = handoff.create_handoff_case(store_id=store_id, **fields)
+        with tracer().start_as_current_span("handoff") as span:
+            response = handoff.create_handoff_case(store_id=store_id, **fields)
+            span.set_attribute("app.reason", fields["reason"])
         calls.append(
             ToolCall(name="create_handoff_case", args=fields, response=response, by="code")
         )
