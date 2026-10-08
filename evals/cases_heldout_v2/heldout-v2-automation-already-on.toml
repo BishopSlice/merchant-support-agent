@@ -1,0 +1,17 @@
+id = "heldout-v2-automation-already-on"
+category = "automation_routing"
+store = "hv2-garden"
+description = "Item updates are on but an availability mismatch persists. Explain why; don't recommend turning on what is already on."
+tags = ["automation_routing", "tool_calls"]
+
+[[turns]]
+merchant = "My watering can keeps getting flagged for availability. What's going on?"
+
+[expect]
+should_handoff = false
+must_cite = ["availability-mismatch"]
+must_mention = ['''(already|currently|is|are) (on|turned on|enabled|switched on)''']
+must_not_say = ['''(you should|you can|please|recommend(ed)? (that you )?) turn(ing)? on (the )?automatic (item )?updates''', '''CASE-\d''']
+
+[[expect.must_call]]
+tool = "get_automatic_improvements"

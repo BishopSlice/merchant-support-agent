@@ -1,0 +1,23 @@
+id = "heldout-v2-opened-from-price-row"
+category = "entry_context"
+store = "hv2-candles"
+description = "The side panel was opened from HG-501's price issue. The agent looks that product up and doesn't ask which one."
+tags = ["context", "tool_calls"]
+
+[entry_context]
+product = "HG-501"
+issue_code = "price_mismatch"
+
+[[turns]]
+merchant = "Can you explain this one?"
+
+[expect]
+should_handoff = false
+must_cite = ["price-mismatch"]
+must_mention = ['''HG-501|beeswax pillar''']
+must_not_say = ['''which (product|item|listing|issue|one)''', '''CASE-\d''']
+
+[[expect.must_call]]
+tool = "get_product_by_name"
+args = {name = '''en~US~HG-501$'''}
+turn = 1

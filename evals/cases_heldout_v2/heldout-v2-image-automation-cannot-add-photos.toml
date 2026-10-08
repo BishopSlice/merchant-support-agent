@@ -1,0 +1,14 @@
+id = "heldout-v2-image-automation-cannot-add-photos"
+category = "automation_routing"
+store = "hv2-lighting"
+description = "Image improvements are on, but two products have a missing or placeholder photo. The automation can't supply a photo; no handoff."
+tags = ["automation_routing"]
+
+[[turns]]
+merchant = "Image improvements are switched on, so won't Google sort out my lamp photos by itself?"
+
+[expect]
+should_handoff = false
+must_cite = ["image-link"]
+must_mention = ['''(can't|cannot|won't|will not|doesn't|does not|not able to)''', '''HG-521|brass floor lamp''', '''HG-522|paper lantern''']
+must_not_say = ['''(will|should) (fix|add|create|replace|supply) (the |your |these )?(missing |placeholder )?(photos|images|pictures)( automatically| for you)''', '''CASE-\d''']

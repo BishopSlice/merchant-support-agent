@@ -188,7 +188,9 @@ def test_agent_instructions_do_not_quote_eval_cases():
         return {" ".join(words[i : i + 5]) for i in range(len(words) - 4)}
 
     prompt = phrases(INSTRUCTION)
-    for case in load_cases() + load_cases(HELDOUT_DIR):
+    from evals.case_format import HELDOUT_V2_DIR
+
+    for case in load_cases() + load_cases(HELDOUT_DIR) + load_cases(HELDOUT_V2_DIR):
         for turn in case.turns:
             shared = phrases(turn.merchant) & prompt
             assert not shared, f"{case.id} shares {sorted(shared)} with the agent instructions"
@@ -278,3 +280,24 @@ def test_invalid_v2_fields_are_reported(tmp_path, change, problem):
     with pytest.raises(CaseError) as error:
         load_cases(tmp_path)
     assert problem in str(error.value)
+
+
+def test_heldout_v2_set_loads_and_covers_every_v2_category():
+    from evals.case_format import HELDOUT_DIR, HELDOUT_V2_DIR
+
+    heldout = load_cases(HELDOUT_V2_DIR)
+    assert len(heldout) >= 8
+    assert all(case.id.startswith("heldout-v2-") for case in heldout)
+    categories = {case.category.value for case in heldout}
+    v2 = {"automation_routing", "triage_order", "data_tool_failure", "entry_context", "case_preview"}
+    assert v2 <= categories and "prompt_injection" in categories
+    assert any(c.expect.should_handoff and c.expect.handoff_reason == "policy_appeal" for c in heldout)
+    assert any(not c.expect.should_handoff for c in heldout)
+    others = {c.id for c in load_cases()} | {c.id for c in load_cases(HELDOUT_DIR)}
+    assert not {c.id for c in heldout} & others
+
+
+def test_heldout_v2_runs_as_its_own_set(monkeypatch, tmp_path):
+    from evals import run as eval_run
+
+    assert eval_run.CASE_SETS["heldout_v2"].name == "cases_heldout_v2"

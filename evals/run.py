@@ -1,6 +1,6 @@
 """Run eval cases against the agent and save a scored result.
 
-uv run python -m evals.run [--set main|heldout] [--case ID ...] [--category NAME ...]
+uv run python -m evals.run [--set main|heldout|heldout_v2] [--case ID ...] [--category NAME ...]
                            [--resume PATH [--regrade]] [--no-grade]
 
 Each run is saved to evals/results/<timestamp>-<model>[-heldout].json after every case, with a
@@ -16,7 +16,14 @@ from pathlib import Path
 
 from pydantic import BaseModel, Field
 
-from evals.case_format import CASES_DIR, HELDOUT_DIR, Category, EvalCase, load_cases
+from evals.case_format import (
+    CASES_DIR,
+    HELDOUT_DIR,
+    HELDOUT_V2_DIR,
+    Category,
+    EvalCase,
+    load_cases,
+)
 from evals.grader import CaseGrade, grade_run, summarize_grades
 from evals.records import CaseRun
 from evals.report import render_scorecard
@@ -26,7 +33,7 @@ from merchant_agent.agent import agent_version
 from merchant_agent.config import MODEL_PRICES, PROJECT_ROOT, ModelPrice, get_settings
 
 RESULTS_DIR = PROJECT_ROOT / "evals" / "results"
-CASE_SETS = {"main": CASES_DIR, "heldout": HELDOUT_DIR}
+CASE_SETS = {"main": CASES_DIR, "heldout": HELDOUT_DIR, "heldout_v2": HELDOUT_V2_DIR}
 
 
 class RunFile(BaseModel):

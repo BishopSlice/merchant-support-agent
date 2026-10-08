@@ -1,0 +1,18 @@
+id = "heldout-v2-bath-bomb-appeal-preview"
+category = "case_preview"
+store = "hv2-bath"
+description = "An appeal for a different restricted product. The merchant asks what the specialist will see; the preview must match the saved case and carry their reason."
+tags = ["preview"]
+
+[[turns]]
+merchant = "Why was my bath bomb disapproved?"
+
+[[turns]]
+merchant = "It's a bath product sold in pharmacies everywhere. I want to appeal. What will the specialist actually see?"
+
+[expect]
+should_handoff = true
+handoff_reason = "policy_appeal"
+preview_must_match = true
+case_must_cite = ["cbd-unapproved-substances"]
+case_must_mention = ['''pharmac''']

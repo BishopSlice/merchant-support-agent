@@ -1,0 +1,14 @@
+id = "heldout-v2-suspension-comes-first"
+category = "triage_order"
+store = "hv2-suspended-products"
+description = "A suspended account that also has product issues: the account issue is raised before any product issue, then a handoff."
+tags = ["triage"]
+
+[[turns]]
+merchant = "Hi, can you go through everything that's wrong with my shop?"
+
+[expect]
+should_handoff = true
+handoff_reason = "account_suspended"
+first_reply_order = [['''suspend'''], ['''title|barcode|gtin''']]
+case_must_mention = ['''address''']

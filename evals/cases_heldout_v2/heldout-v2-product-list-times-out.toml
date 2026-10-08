@@ -1,0 +1,18 @@
+id = "heldout-v2-product-list-times-out"
+category = "data_tool_failure"
+store = "hv2-candles"
+description = "The product list times out. The agent says it couldn't load the details and invents no product names, ids or counts."
+tags = ["graceful_failure"]
+
+[data_failure]
+tool = "list_products"
+kind = "timeout"
+
+[[turns]]
+merchant = "Which of my products have price problems?"
+
+[expect]
+should_handoff = false
+must_not_invent = true
+must_mention = ['''(couldn't|could not|can't|cannot|wasn't able to|was not able to|unable to) (load|get|retrieve|access|fetch|pull|see)''']
+must_not_say = ['''CASE-\d''']

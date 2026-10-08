@@ -21,6 +21,8 @@ CASES_DIR = PROJECT_ROOT / "evals" / "cases"
 # Held-out cases, written before Task 11's prompt changes, to check fixes don't just fit
 # the main set.
 HELDOUT_DIR = PROJECT_ROOT / "evals" / "cases_heldout"
+# v2 held-out cases, written and committed before any v2 prompt change (SPEC, Evals c).
+HELDOUT_V2_DIR = PROJECT_ROOT / "evals" / "cases_heldout_v2"
 EVAL_STORES_DIR = PROJECT_ROOT / "evals" / "stores"
 DATA_STORES_DIR = PROJECT_ROOT / "data" / "stores"
 
