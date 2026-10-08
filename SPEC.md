@@ -16,7 +16,7 @@ Rebuild the merchant experience as a feature inside a Merchant Center-like shell
 
 | Layer | Choice | Notes |
 |---|---|---|
-| Agent | Python 3.13, Google ADK 2.x, `gemini-3.5-flash-lite` | One model call per answer, with context loaded by code; the ADK tool loop is the fallback ([ADR 0008](docs/decisions/0008-one-call-answers.md)). The grader stays on `gemini-3.6-flash`. |
+| Agent | Python 3.13, Google ADK 2.x, `gemini-3.6-flash` | One model call per answer, with context loaded by code; the ADK tool loop is the fallback ([ADR 0008](docs/decisions/0008-one-call-answers.md)). The grader stays on `gemini-3.6-flash`. |
 | API | **FastAPI + Uvicorn** (approved 8 Oct) | JSON endpoints; serves the static front end |
 | Front end | **Material Web** (`@material/web`), pinned exact version, loaded from a CDN as ES modules; plain HTML and JS; no build step | Official Material 3 components; the library is in maintenance mode ([ADR 0003](docs/decisions/0003-ui-stack-material-web.md)) |
 | Data | `pydantic` models mirroring the Merchant API's documented resources | [ADR 0004](docs/decisions/0004-mcp-shaped-data-layer.md) |

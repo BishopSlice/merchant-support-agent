@@ -36,7 +36,7 @@ def test_the_grader_model_is_set_separately_and_has_a_price(monkeypatch):
     monkeypatch.setenv("MODEL_NAME", "gemini-3.5-flash-lite")
     monkeypatch.delenv("GRADER_MODEL", raising=False)
     settings = get_settings()
-    assert settings.model_name == "gemini-3.5-flash-lite"
+    assert settings.model_name == "gemini-3.5-flash-lite"  # the agent model is set on its own
     assert settings.grader_model_name == "gemini-3.6-flash"  # scores stay comparable
     assert MODEL_PRICES["gemini-3.5-flash-lite"].input_per_million == 0.30
     assert MODEL_PRICES["gemini-3.5-flash-lite"].output_per_million == 2.50

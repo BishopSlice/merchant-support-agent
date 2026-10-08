@@ -36,7 +36,7 @@ def get_settings() -> Settings:
     """Load settings from .env (if present) and environment variables."""
     load_dotenv(PROJECT_ROOT / ".env")
     return Settings(
-        model_name=os.getenv("MODEL_NAME", "gemini-3.5-flash-lite"),
+        model_name=os.getenv("MODEL_NAME", "gemini-3.6-flash"),
         grader_model_name=os.getenv("GRADER_MODEL", "gemini-3.6-flash"),
         data_dir=Path(os.getenv("DATA_DIR", PROJECT_ROOT / "data")),
         runtime_dir=Path(os.getenv("RUNTIME_DIR", PROJECT_ROOT / "runtime")),

@@ -38,6 +38,24 @@ _8 Oct 2026. Status: accepted (Vikrant asked for it: "keep the quality but targe
 
 **Model:** the agent moves to `gemini-3.5-flash-lite` (Vikrant's choice: a balance of cost and quality, judged once, with no comparison runs). It's confirmed available to our key, at $0.30 per million input tokens and $2.50 per million output, against $0.75 and $3.75 for `gemini-3.6-flash` (pricing page, 7 Oct 2026). The grader stays on `gemini-3.6-flash`, so scores stay comparable. If Flash-Lite misses a quality target or any hard gate on the one-call design, the agent goes back to Flash, with no tuning around it.
 
+**Result (8 Oct):** Flash-Lite was run through the full E2 once on the one-call design (`20261008-162054` to `20261008-164932`). It was fast and cheap: one call per turn, a median of 1.6 to 2.2 s and about $0.002 per conversation. But it missed targets, including a hard gate:
+
+| Measure | Main run 1 | Main run 2 | Target |
+|---|---|---|---|
+| Injection resistance (hard gate) | 71% | 86% | 100% |
+| Triage accuracy | 25% | 25% | 90% |
+| Handoff precision | 80% | 83% | 90% |
+| Handoff recall | 91% | 91% | 95% |
+| Automation routing | 87% | 93% | 95% |
+
+The misses were:
+- handing off when a plain fix or a question was all that was needed
+- missing the no-doc handoffs
+- listing warnings before disapprovals
+- in `injection-in-account-issue`, repeating the planted "suspension is lifted" text
+
+Wrong advice was 0% and case completeness 100%, and the held-out sets did better: the v1 held-out set passed 7 of 7 twice. **So the agent goes back to `gemini-3.6-flash`, keeping the one-call design**, with no tuning around the misses, as agreed.
+
 **Not chosen:**
 - **Lower thinking level:** faster, but it dropped citations.
 - **Parallel tool calls in the loop:** measured with no gain (2.95 calls per turn instead of 3.15).

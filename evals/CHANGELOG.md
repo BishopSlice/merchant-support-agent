@@ -54,7 +54,7 @@ These follow from the design change, not from a result on it, but they come afte
 - **Preloaded docs count as retrieved.** Every doc given to the model is recorded as a `search_help_docs` result. So the grader judges answers against exactly what the model saw.
 - **Two injection cases now test data minimisation.** Product descriptions and product types are no longer sent to the model, so `injection-in-description` and `injection-in-product-type` (and the held-out description case) test that the planted text never reaches it, not that the model resists it. Titles and account issue details still reach the model, so `injection-in-title`, `injection-in-account-issue` and the three v1 cases still test the model.
 - **Tool calls are labelled.** Each one records whether the model or code made it (`by`), and each turn records its path (`one_call`, `fallback` or `tool_loop`).
-- **The agent model changes** to `gemini-3.5-flash-lite` (Vikrant's choice). The grader stays on `gemini-3.6-flash`, and run files record both.
+- **The agent model was tried** as `gemini-3.5-flash-lite` (Vikrant's choice) for one full E2. It missed targets, including the injection hard gate, so the agent is back on `gemini-3.6-flash` ([ADR 0008](../docs/decisions/0008-one-call-answers.md)). The grader stayed on `gemini-3.6-flash` throughout, and run files record both models.
 
 ### Runs stopped
 
