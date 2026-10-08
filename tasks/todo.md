@@ -29,7 +29,7 @@ Details for each task are in `tasks/plan.md`.
   - `suspended-why-not-showing`: the saved case left out the suspension's detail (missing returns policy and contact details). Fixed in Task 18: `create_handoff_case` records the account issues from the data itself, not from the model.
 - [x] Task 15: Eval format and scorers
 - [x] Task 16: v2 held-out set, written blind
-- [ ] Task 17: New expectations, re-labelled cases, automation help doc, baseline run
+- [x] Task 17: New expectations, re-labelled cases, automation help doc, baseline run
 - [x] Task 18: Agent v2 behaviour. Latency experiments, all on the same 14 cases with nothing saved, 8 Oct:
 
   | Variant | Passed | p50 | p95 | Cost per case |
@@ -41,9 +41,9 @@ Details for each task are in `tasks/plan.md`.
 
   Each model call takes about 4 to 5 s, and a turn needs about 3 calls (data, help search, reply). Only LOW thinking moves latency, and it dropped two citations. Even LOW misses the 8 s p50 target. Both changes are reverted. The trade-off (quality against speed, or re-targeting latency as time to the first progress update in the side panel) is for Vikrant to decide.
 - [ ] Checkpoint E2: all eval targets and hard gates, twice
-- [ ] Task 19: FastAPI app
-- [ ] Task 20: Material Web shell
-- [ ] Task 21: Retire Streamlit
+- [x] Task 19: FastAPI app
+- [x] Task 20: Material Web shell
+- [x] Task 21: Retire Streamlit
 - [ ] Checkpoint F: merchant journey in the shell, product checks
 - [ ] Task 21a: Shared metrics module and event store
 - [ ] Task 21b: Tracing (OpenTelemetry needs approval)
