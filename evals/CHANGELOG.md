@@ -46,6 +46,13 @@ From SPEC, Evals (g):
 - **First draft:** the completeness clause flagged 6 handoffs. Five were about something else, for example a merchant asking for a person, with a mismatch merely listed. I narrowed it to handoffs about a mismatch. After that only `frustration-price-twice` is flagged, as intended, because v1 never recorded automation state.
 - **Wrong advice:** two v1 replies moved from unsupported to supported (`no-handoff-contact-support` and `off-topic-shopify-steps`). The two frozen v1 runs already disagreed on these same cases, so this is grader variance on borderline replies, not the new wording.
 
+### Runs stopped
+
+| Run | Stopped at | Why |
+|---|---|---|
+| `20261008-135908-*-heldout` | 2 of 7 | E2 attempt 1 missed three targets, so the agent changed |
+| `20261008-154911-*` (main run 2 of E2 attempt 2) | 22 of 69 | Vikrant asked for one model call per answer instead of about three ([ADR 0008](../docs/decisions/0008-one-call-answers.md)), so the agent design is changing. E2 is re-run in full on the new design. |
+
 ### Known false positives, not changed
 
 | Case | Result | Why it isn't changed |
