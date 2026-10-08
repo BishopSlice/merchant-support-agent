@@ -296,3 +296,63 @@ def test_replays_are_never_recorded(env):
         c.get("/api/replays/price-fix")
     with sqlite3.connect(env / "runtime" / "events.sqlite") as db:
         assert db.execute("select count(*) from turns").fetchone() == (0,)
+
+
+# --- feedback and sampled grading (Task 21c) ---
+
+
+def test_feedback_is_stored_for_this_sessions_own_turns(env):
+    import sqlite3
+
+    with make_client(env) as a:
+        b = TestClient(a.app)
+        with b:
+            turn_id = a.post("/api/chat", json={"message": "hi"}, headers=ACCESS).json()["turn_id"]
+            assert a.post("/api/feedback", json={"turn_id": turn_id, "value": 1}).status_code == 200
+            # Another session can't vote on this turn, and votes are 1 or -1.
+            assert b.post("/api/feedback", json={"turn_id": turn_id, "value": -1}).status_code == 404
+            assert a.post("/api/feedback", json={"turn_id": turn_id, "value": 3}).status_code == 422
+    with sqlite3.connect(env / "runtime" / "events.sqlite") as db:
+        assert db.execute("select turn_id, value from feedback").fetchall() == [(turn_id, 1)]
+
+
+def fake_generate(calls):
+    from evals.grader import CompletenessGrade, ReplyVerdict, WrongAdviceGrade
+    from merchant_agent.chat import Usage
+
+    def generate(prompt, schema):
+        calls.append(schema.__name__)
+        usage = Usage(model_calls=1, input_tokens=1000, output_tokens=100)
+        if schema is WrongAdviceGrade:
+            verdict = ReplyVerdict(turn=1, verdict="supported", evidence="ok")
+            return WrongAdviceGrade(replies=[verdict]), usage
+        return CompletenessGrade(verdict="complete", evidence="ok"), usage
+
+    return generate
+
+
+def grades(env):
+    import sqlite3
+
+    with sqlite3.connect(env / "runtime" / "events.sqlite") as db:
+        return db.execute("select wrong_advice_rate, completeness from grades").fetchall()
+
+
+def test_sampled_live_conversations_are_graded(env):
+    calls = []
+    with make_client(env, grade_sample_rate=1.0) as c:
+        c.app.state.grade_generate = fake_generate(calls)
+        c.post("/api/chat", json={"message": "I want to appeal"}, headers=ACCESS)
+    assert calls == ["WrongAdviceGrade", "CompletenessGrade"]
+    assert grades(env) == [(0.0, "complete")]
+
+
+def test_grading_respects_the_sample_rate_and_the_daily_budget(env):
+    calls = []
+    with make_client(env, grade_sample_rate=0.0) as c:
+        c.app.state.grade_generate = fake_generate(calls)
+        c.post("/api/chat", json={"message": "hi"}, headers=ACCESS)
+    with make_client(env, grade_sample_rate=1.0, grading_daily_budget_usd=0.0) as c:
+        c.app.state.grade_generate = fake_generate(calls)
+        c.post("/api/chat", json={"message": "hi"}, headers=ACCESS)
+    assert calls == [] and grades(env) == []

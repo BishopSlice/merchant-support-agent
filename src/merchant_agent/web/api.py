@@ -12,7 +12,7 @@ import re
 import secrets
 import shutil
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Annotated, Any, Literal
@@ -32,6 +32,7 @@ from fastapi.staticfiles import StaticFiles
 from google.genai.errors import APIError
 from pydantic import BaseModel, ConfigDict, StringConstraints
 
+from evals.records import TokenUsage, ToolCallRecord, TurnRecord
 from merchant_agent.agent import agent_version
 from merchant_agent.chat import describe_tool_call, new_runner, new_session, run_turn
 from merchant_agent.config import MODEL_PRICES, PROJECT_ROOT, cost_usd, get_settings
@@ -41,6 +42,7 @@ from merchant_agent.merchant_api import product_name
 from merchant_agent.models import IssueType
 from merchant_agent.stores import load_feed, load_store, store_dir
 from merchant_agent.tools.handoff import list_cases
+from merchant_agent.web.sampling import SampledGrader
 
 SESSION_COOKIE = "sid"
 SPECIALIST_COOKIE = "specialist"
@@ -59,6 +61,8 @@ class WebConfig(BaseModel):
     demo_store: str = "sample-store"
     replays_dir: Path = PROJECT_ROOT / "replays"
     secure_cookies: bool = False  # set true when served over HTTPS
+    grade_sample_rate: float = 0.1  # share of live conversations graded by the AI grader
+    grading_daily_budget_usd: float = 0.50
 
     @classmethod
     def from_env(cls) -> "WebConfig":
@@ -69,6 +73,8 @@ class WebConfig(BaseModel):
             session_cap=int(env.get("SESSION_CAP", 30)),
             daily_cap=int(env.get("DAILY_CAP", 400)),
             secure_cookies=env.get("SECURE_COOKIES", "") == "1",
+            grade_sample_rate=float(env.get("GRADE_SAMPLE_RATE", 0.1)),
+            grading_daily_budget_usd=float(env.get("GRADING_DAILY_BUDGET_USD", 0.50)),
         )
 
 
@@ -112,6 +118,11 @@ class LoginIn(BaseModel):
     code: str
 
 
+class FeedbackIn(BaseModel):
+    turn_id: str
+    value: Literal[1, -1]
+
+
 # --- sessions ---
 
 
@@ -125,6 +136,9 @@ class WebSession:
     runner: Any = None
     conversation: str | None = None
     event_conversation: str | None = None  # this conversation's id in the event store
+    sampled: bool = False  # chosen for AI grading when the conversation started
+    transcript: list[TurnRecord] = field(default_factory=list)  # this conversation, for grading
+    turn_ids: set[str] = field(default_factory=set)  # turns this session may give feedback on
 
 
 class Sessions:
@@ -209,7 +223,16 @@ def create_app(
     sessions = Sessions(config)
     events = EventStore(get_settings().runtime_dir / "events.sqlite")
     events.purge_old_text()
+    grader = SampledGrader(events, config.grade_sample_rate, config.grading_daily_budget_usd)
     app = FastAPI(title="Merchant support agent (concept prototype)")
+    app.state.grade_generate = None  # created on first use; tests set a fake
+
+    def grade_generate():
+        if app.state.grade_generate is None:
+            from evals.grader import gemini_generate
+
+            app.state.grade_generate = gemini_generate(get_settings().model_name)
+        return app.state.grade_generate
 
     def session(response: Response, sid: Annotated[str | None, Cookie()] = None) -> WebSession:
         token, current = sessions.get_or_create(sid)
@@ -272,6 +295,8 @@ def create_app(
                 }
             current.conversation = await new_session(current.runner, current.store_id, extra)
             current.event_conversation = secrets.token_hex(16)
+            current.sampled = grader.sample()
+            current.transcript = []
             background.add_task(
                 events.start_conversation,
                 source="live",
@@ -293,6 +318,27 @@ def create_app(
         background.add_task(
             events.record_turn, current.event_conversation, body.message, turn, cost, turn_id
         )
+        current.turn_ids.add(turn_id)
+        current.transcript.append(
+            TurnRecord(
+                merchant=body.message,
+                reply=turn.reply,
+                tool_calls=[
+                    ToolCallRecord(name=c.name, args=c.args, response=c.response)
+                    for c in turn.tool_calls
+                ],
+                usage=TokenUsage(**asdict(turn.usage)),
+                seconds=turn.seconds,
+            )
+        )
+        if current.sampled:
+            background.add_task(
+                grader.grade,
+                current.event_conversation,
+                list(current.transcript),
+                grade_generate(),
+                MODEL_PRICES.get(model),
+            )
         created = [
             c.response
             for c in turn.tool_calls
@@ -308,6 +354,16 @@ def create_app(
             "turn_id": turn_id,
             "seconds": turn.seconds,
         }
+
+    @app.post("/api/feedback")
+    def feedback(body: FeedbackIn, current: Session) -> dict:
+        if body.turn_id not in current.turn_ids:
+            raise HTTPException(404, "No such reply in this session.")
+        try:
+            events.record_feedback(body.turn_id, body.value)
+        except KeyError as error:
+            raise HTTPException(409, "That reply is still being saved. Try again.") from error
+        return {"status": "saved"}
 
     @app.get("/api/session/cases")
     def my_cases(current: Session) -> dict:

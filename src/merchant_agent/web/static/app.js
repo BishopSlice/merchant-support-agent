@@ -209,6 +209,30 @@ function addSteps(steps) {
   $("#messages").append(el("li", {}, el("ul", { class: "steps", "aria-label": "What the assistant checked" }, steps.map((s) => el("li", {}, s)))));
 }
 
+function addFeedback(turnId) {
+  const status = el("span", { class: "feedback__status", role: "status" });
+  const vote = async (value, button) => {
+    try {
+      await api("/api/feedback", { method: "POST", body: JSON.stringify({ turn_id: turnId, value }) });
+      for (const b of row.querySelectorAll("md-icon-button")) b.selected = b === button;
+      status.textContent = "Thanks for the feedback.";
+    } catch (error) {
+      status.textContent = error.message;
+    }
+  };
+  const button = (value, iconName, label) => {
+    const b = el("md-icon-button", { toggle: "", "aria-label": label },
+      icon(iconName), el("span", { slot: "selected", class: "material-symbols-outlined filled", "aria-hidden": "true" }, iconName));
+    b.addEventListener("click", () => vote(value, b));
+    return b;
+  };
+  const row = el("li", { class: "feedback" },
+    button(1, "thumb_up", "This reply was helpful"),
+    button(-1, "thumb_down", "This reply was not helpful"),
+    status);
+  $("#messages").append(row);
+}
+
 function addPreview(caseResult) {
   if (!caseResult?.preview) return;
   const p = caseResult.preview;
@@ -308,6 +332,7 @@ async function sendMessage(event) {
     working.remove();
     addSteps(result.steps);
     addMessage("agent", result.reply);
+    addFeedback(result.turn_id);
     addPreview(result.case);
     $("#remaining").textContent = `${result.remaining} messages left in this session`;
   } catch (error) {
