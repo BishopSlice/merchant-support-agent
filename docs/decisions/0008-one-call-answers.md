@@ -36,6 +36,8 @@ _8 Oct 2026. Status: accepted (Vikrant asked for it: "keep the quality but targe
 - **Some checks become true by design.** "Re-checked after the last fix" and "called `get_automatic_improvements` first" now hold because code always does them. That's logged in `evals/CHANGELOG.md` as a change made after seeing results, so the scores aren't read as the model's own judgement.
 - **More input tokens per call, fewer calls.** The cost per conversation is tracked against the $0.03 target.
 
+**Model:** the agent moves to `gemini-3.5-flash-lite` (Vikrant's choice: a balance of cost and quality, judged once, with no comparison runs). It's confirmed available to our key, at $0.30 per million input tokens and $2.50 per million output, against $0.75 and $3.75 for `gemini-3.6-flash` (pricing page, 7 Oct 2026). The grader stays on `gemini-3.6-flash`, so scores stay comparable. If Flash-Lite misses a quality target or any hard gate on the one-call design, the agent goes back to Flash, with no tuning around it.
+
 **Not chosen:**
 - **Lower thinking level:** faster, but it dropped citations.
 - **Parallel tool calls in the loop:** measured with no gain (2.95 calls per turn instead of 3.15).

@@ -46,6 +46,16 @@ From SPEC, Evals (g):
 - **First draft:** the completeness clause flagged 6 handoffs. Five were about something else, for example a merchant asking for a person, with a mismatch merely listed. I narrowed it to handoffs about a mismatch. After that only `frustration-price-twice` is flagged, as intended, because v1 never recorded automation state.
 - **Wrong advice:** two v1 replies moved from unsupported to supported (`no-handoff-contact-support` and `off-topic-shopify-steps`). The two frozen v1 runs already disagreed on these same cases, so this is grader variance on borderline replies, not the new wording.
 
+### One-call design and model change (ADR 0008), before any run on it
+
+These follow from the design change, not from a result on it, but they come after seeing E2 results on the tool-loop design, so they're logged here.
+
+- **Some checks now hold by design.** Code reloads the data every turn and always reads the automation settings. So "re-checked after the last fix" and "called `get_automatic_improvements`" are true because of the design, not the model's judgement. The checks stay, so a regression in the preload would still fail them, but they no longer measure the model.
+- **Preloaded docs count as retrieved.** Every doc given to the model is recorded as a `search_help_docs` result. So the grader judges answers against exactly what the model saw.
+- **Two injection cases now test data minimisation.** Product descriptions and product types are no longer sent to the model, so `injection-in-description` and `injection-in-product-type` (and the held-out description case) test that the planted text never reaches it, not that the model resists it. Titles and account issue details still reach the model, so `injection-in-title`, `injection-in-account-issue` and the three v1 cases still test the model.
+- **Tool calls are labelled.** Each one records whether the model or code made it (`by`), and each turn records its path (`one_call`, `fallback` or `tool_loop`).
+- **The agent model changes** to `gemini-3.5-flash-lite` (Vikrant's choice). The grader stays on `gemini-3.6-flash`, and run files record both.
+
 ### Runs stopped
 
 | Run | Stopped at | Why |
