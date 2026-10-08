@@ -1,0 +1,938 @@
+{
+  "model": "gemini-3.6-flash",
+  "agent_version": "6419f20ebf19",
+  "case_set": "heldout",
+  "started_at": "2026-10-08T13:59:08.872572Z",
+  "finished_at": null,
+  "price": {
+    "input_per_million": 0.75,
+    "cached_input_per_million": 0.075,
+    "output_per_million": 3.75
+  },
+  "case_filter": [],
+  "category_filter": [],
+  "runs": {
+    "heldout-angry-many-images": {
+      "case_id": "heldout-angry-many-images",
+      "category": "angry_merchant",
+      "agent_version": "6419f20ebf19",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Three of my products are broken AGAIN and I'm sick of this. Just tell me what to fix.",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "### Summary\n* **Account status:** No account-level issues.\n* **Disapproved products:** 3 products are disapproved due to invalid or placeholder main image links (`invalid_image`).\n* **Warnings:** 0 products affected.\n\n---\n\n### Disapproval: Invalid or placeholder image (`invalid_image`)\n\nEvery product must have a full web address pointing to an image that shows the actual product. Placeholder images or incomplete web links are not allowed.\n\nHere are the 3 affected products and what needs to be fixed for each:\n\n1. **Ceramic Table Lamp, Matte White** (ID: `HG-006`)\n   * **Problem:** No main image link is provided.\n   * **Fix:** Add a full web link to a photo of this lamp.\n\n2. **Walnut Wall Shelf, 24 inch** (ID: `HG-013`)\n   * **Problem:** The image link points to a placeholder image (`https://cdn.hearthandhollow.example/img/placeholder.png`).\n   * **Fix:** Replace the placeholder link with a full link to an actual photo of the shelf.\n\n3. **Soy Wax Candle, Cedar and Smoke, 8 oz** (ID: `HG-010`)\n   * **Problem:** The image link (`candle-photo.jpg`) is not a complete web address.\n   * **Fix:** Update the image link to a full web address starting with `http://` or `https://` (for example, `https://.../candle-photo.jpg`).\n\nAccording to the [Product image link](https://support.google.com/merchants/answer/6324350) guidelines, every product needs a main image link showing the actual product, without placeholder images or generic graphics.\n\nOnce you update these image links in your product feed or store data, let me know and I can re-check your account status!",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": []
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/images-three/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "2",
+                      "pendingCount": "0",
+                      "disapprovedCount": "3",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "invalid_image",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "imageLink",
+                        "description": "Invalid or placeholder image [image_link]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324350",
+                        "productCount": "3"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_products",
+              "args": {
+                "issue_code": "invalid_image"
+              },
+              "response": {
+                "products": [
+                  {
+                    "name": "accounts/images-three/products/en~US~HG-006",
+                    "offerId": "HG-006",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Ceramic Table Lamp, Matte White",
+                      "description": "Ceramic Table Lamp, Matte White. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-006",
+                      "availability": "IN_STOCK",
+                      "brand": "Lumen Home",
+                      "gtins": [
+                        "0850012345067"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Lighting > Lamps"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "89000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "invalid_image",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "imageLink",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Invalid or placeholder image [image_link]",
+                          "detail": "No image link is set.",
+                          "documentation": "https://support.google.com/merchants/answer/6324350",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "name": "accounts/images-three/products/en~US~HG-013",
+                    "offerId": "HG-013",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Walnut Wall Shelf, 24 inch",
+                      "description": "Walnut Wall Shelf, 24 inch. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-013",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/placeholder.png",
+                      "availability": "IN_STOCK",
+                      "brand": "Timberline",
+                      "gtins": [
+                        "0850012345135"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Furniture > Shelving"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "65000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "invalid_image",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "imageLink",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Invalid or placeholder image [image_link]",
+                          "detail": "Image link 'https://cdn.hearthandhollow.example/img/placeholder.png' points to a placeholder, not a real product photo.",
+                          "documentation": "https://support.google.com/merchants/answer/6324350",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "name": "accounts/images-three/products/en~US~HG-010",
+                    "offerId": "HG-010",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Soy Wax Candle, Cedar and Smoke, 8 oz",
+                      "description": "Soy Wax Candle, Cedar and Smoke, 8 oz. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-010",
+                      "imageLink": "candle-photo.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Ember Co",
+                      "gtins": [
+                        "0850012345104"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Decor > Candles"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "22000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "invalid_image",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "imageLink",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Invalid or placeholder image [image_link]",
+                          "detail": "Image link 'candle-photo.jpg' is not a full web address.",
+                          "documentation": "https://support.google.com/merchants/answer/6324350",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "invalid_image"
+              },
+              "response": {
+                "query": "invalid_image",
+                "results": [
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "Every product needs a main image link. Without one the product cannot show.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "The image must show the actual product. Placeholder images, generic images and graphics that do not show the product are not allowed.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "Images must be at least 500 by 500 pixels, and around 1500 by 1500 pixels or larger is recommended. Do not add promotional text, logos, watermarks or other overlays to the main image.",
+                    "score": 8
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 3,
+            "input_tokens": 11039,
+            "cached_tokens": 0,
+            "output_tokens": 1714
+          },
+          "seconds": 11.71
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 3,
+        "input_tokens": 11039,
+        "cached_tokens": 0,
+        "output_tokens": 1714
+      },
+      "cost_usd": 0.01470675,
+      "seconds": 11.8
+    },
+    "heldout-appeal-hemp-oil": {
+      "case_id": "heldout-appeal-hemp-oil",
+      "category": "handoff_appeal",
+      "agent_version": "6419f20ebf19",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Why was my lavender massage oil disapproved?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "Here is a summary of your account and product statuses:\n\n* **Account issues**: None.\n* **Disapprovals**: 1 product is disapproved due to a restricted product policy.\n* **Warnings**: None.\n\n---\n\n### Disapproval Details\n\n**Product**: Hemp Extract Massage Oil, Lavender, 100 ml (ID: `HG-040`)  \n**Issue**: Restricted product (unapproved substances policy)\n\n**Why this happened**:  \nYour product details mention \"Hemp Extract.\" According to [CBD and other unapproved substances](https://support.google.com/merchants/answer/6165956), cannabidiol (CBD) and related unapproved substances are not allowed in Shopping ads or free listings. This is a policy decision rather than a data formatting issue, so simply editing the product text will not fix it.\n\nIf you believe your product complies with policy and would like to request an appeal, please let me know and I can assist you with that. Otherwise, let me know if you have any questions or would like to move on!",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": []
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/restricted-oil/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "2",
+                      "pendingCount": "0",
+                      "disapprovedCount": "1",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "restricted_product",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "productTypes",
+                        "description": "Restricted product (unapproved substances policy)",
+                        "documentationUri": "https://support.google.com/merchants/answer/6165956",
+                        "productCount": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_products",
+              "args": {
+                "issue_code": "restricted_product"
+              },
+              "response": {
+                "products": [
+                  {
+                    "name": "accounts/restricted-oil/products/en~US~HG-040",
+                    "offerId": "HG-040",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Hemp Extract Massage Oil, Lavender, 100 ml",
+                      "description": "Hemp Extract Massage Oil, Lavender. A relaxing body oil for massage.",
+                      "link": "https://www.hearthandhollow.example/products/hg-040",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/hg-040.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Hearth & Hollow",
+                      "gtins": [
+                        "0850012345401"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Bath & Body > Massage Oil"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "30000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "restricted_product",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "productTypes",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Restricted product (unapproved substances policy)",
+                          "detail": "Mentions 'Hemp Extract', which is a restricted product category.",
+                          "documentation": "https://support.google.com/merchants/answer/6165956",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "restricted_product"
+              },
+              "response": {
+                "query": "restricted_product",
+                "results": [
+                  {
+                    "doc_id": "cbd-unapproved-substances",
+                    "title": "CBD and other unapproved substances",
+                    "source_url": "https://support.google.com/merchants/answer/6165956",
+                    "passage": "Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD). Products on this list are not allowed in Shopping ads or free listings.",
+                    "score": 7
+                  },
+                  {
+                    "doc_id": "cbd-unapproved-substances",
+                    "title": "CBD and other unapproved substances",
+                    "source_url": "https://support.google.com/merchants/answer/6165956",
+                    "passage": "This is a policy decision, not a data problem, so it cannot be fixed by editing product details. Whether a specific product is allowed is decided by Google's policy team under the healthcare and medicines policy.",
+                    "score": 7
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 3,
+            "input_tokens": 10499,
+            "cached_tokens": 0,
+            "output_tokens": 2073
+          },
+          "seconds": 17.08
+        },
+        {
+          "merchant": "It's a cosmetic oil for the skin and it's sold legally in every shop near me. Please get someone to look at this again.",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "Google's healthcare policy prohibits products containing cannabidiol (CBD) or unapproved substances from showing in Shopping ads, as detailed in [CBD and other unapproved substances](https://support.google.com/merchants/answer/6165956). As noted in [Requesting a review or appealing a decision](https://support.google.com/merchants/answer/13585221), you may only get one chance to disagree before a waiting period starts.\n\nThis needs a specialist, so I've passed your request on to our team.\n\n* **Case ID**: `CASE-20261008-135944-30c9c7`\n\nA specialist will review your case. The case includes everything we have discussed, so you won't need to repeat your explanations or details.",
+          "tool_calls": [
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "request review"
+              },
+              "response": {
+                "query": "request review",
+                "results": [
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "When a product or account has an issue, Merchant Center may offer a \"Request review\" option. For product issues it is in the product's details on the Needs attention tab. For account issues it is under View setup and policy issues.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "You may only get one chance to disagree before a waiting period starts, so it is worth getting the request right.",
+                    "score": 5
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "A review can take up to 7 business days. Your ads may not show while the account or products are under review.",
+                    "score": 5
+                  }
+                ]
+              }
+            },
+            {
+              "name": "create_handoff_case",
+              "args": {
+                "reason": "policy_appeal",
+                "issues_found": [
+                  "restricted_product for product HG-040"
+                ],
+                "already_tried": [
+                  "Explained restricted product policy (unapproved substances) for product HG-040.",
+                  "Merchant clarified product is a cosmetic oil sold legally in local shops and requested a review."
+                ],
+                "merchant_request": "Merchant wants to appeal the product disapproval and have a specialist review product HG-040.",
+                "merchant_reasons": [
+                  "It's a cosmetic oil for the skin and it's sold legally in every shop near me.",
+                  "Please get someone to look at this again."
+                ],
+                "suggested_next_step": "Review product HG-040 under the unapproved substances / healthcare policy and evaluate the appeal request.",
+                "cited_doc_ids": [
+                  "cbd-unapproved-substances",
+                  "request-review"
+                ]
+              },
+              "response": {
+                "status": "created",
+                "case_id": "CASE-20261008-135944-30c9c7",
+                "preview": {
+                  "reason": "policy_appeal",
+                  "issues_found": [
+                    "restricted_product for product HG-040"
+                  ],
+                  "already_tried": [
+                    "Explained restricted product policy (unapproved substances) for product HG-040.",
+                    "Merchant clarified product is a cosmetic oil sold legally in local shops and requested a review."
+                  ],
+                  "merchant_request": "Merchant wants to appeal the product disapproval and have a specialist review product HG-040.",
+                  "merchant_reasons": [
+                    "It's a cosmetic oil for the skin and it's sold legally in every shop near me.",
+                    "Please get someone to look at this again."
+                  ],
+                  "suggested_next_step": "Review product HG-040 under the unapproved substances / healthcare policy and evaluate the appeal request.",
+                  "cited_doc_ids": [
+                    "cbd-unapproved-substances",
+                    "request-review"
+                  ],
+                  "account_issues": [],
+                  "automation": {
+                    "price_updates": false,
+                    "availability_updates": false,
+                    "image_improvements": false,
+                    "shipping_improvements": false
+                  }
+                }
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 3,
+            "input_tokens": 19500,
+            "cached_tokens": 0,
+            "output_tokens": 1553
+          },
+          "seconds": 11.88
+        }
+      ],
+      "handoff_cases": [
+        {
+          "case_id": "CASE-20261008-135944-30c9c7",
+          "store_id": "restricted-oil",
+          "created_at": "2026-10-08T13:59:44.708387Z",
+          "reason": "policy_appeal",
+          "issues_found": [
+            "restricted_product for product HG-040"
+          ],
+          "already_tried": [
+            "Explained restricted product policy (unapproved substances) for product HG-040.",
+            "Merchant clarified product is a cosmetic oil sold legally in local shops and requested a review."
+          ],
+          "merchant_request": "Merchant wants to appeal the product disapproval and have a specialist review product HG-040.",
+          "merchant_reasons": [
+            "It's a cosmetic oil for the skin and it's sold legally in every shop near me.",
+            "Please get someone to look at this again."
+          ],
+          "suggested_next_step": "Review product HG-040 under the unapproved substances / healthcare policy and evaluate the appeal request.",
+          "cited_doc_ids": [
+            "cbd-unapproved-substances",
+            "request-review"
+          ],
+          "account_issues": [],
+          "automation": {
+            "price_updates": false,
+            "availability_updates": false,
+            "image_improvements": false,
+            "shipping_improvements": false
+          }
+        }
+      ],
+      "usage": {
+        "model_calls": 6,
+        "input_tokens": 29999,
+        "cached_tokens": 0,
+        "output_tokens": 3626
+      },
+      "cost_usd": 0.03609675,
+      "seconds": 29.0
+    },
+    "heldout-appeal-other-shops": {
+      "case_id": "heldout-appeal-other-shops",
+      "category": "handoff_appeal",
+      "agent_version": "6419f20ebf19",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Other shops sell CBD candles on Google Shopping all the time, so why can't I? I want to challenge this decision.",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "According to Google's policies, cannabidiol (CBD) is included on the list of unapproved pharmaceuticals and supplements. Products on this list are not allowed in Shopping ads or free listings. Because this is a policy decision rather than a feed data error, it cannot be fixed simply by editing product details ([CBD and other unapproved substances](https://support.google.com/merchants/answer/6165956)).\n\nWhen challenging or appealing a policy disapproval, please keep in mind that you may only get one chance to submit a request to disagree with the decision ([Requesting a review or appealing a decision](https://support.google.com/merchants/answer/13585221)).\n\nSince you want to challenge this policy decision for your product (**CBD Infused Lavender Relaxation Candle, 6 oz**, ID: `HG-023`), this needs a specialist, so I've passed it on. \n\n- **Case Number:** `CASE-20261008-140000-b38e35`\n\nA specialist will review your appeal. Your case already includes all details from this conversation, so you won't need to repeat yourself.",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": []
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/sample-store/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "17",
+                      "pendingCount": "0",
+                      "disapprovedCount": "13",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "missing_gtin",
+                        "severity": "DEMOTED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "gtins",
+                        "description": "Missing value [gtin]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324461",
+                        "productCount": "6"
+                      },
+                      {
+                        "code": "price_mismatch",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "price",
+                        "description": "Mismatched value (page crawl) [price]",
+                        "documentationUri": "https://support.google.com/merchants/answer/12159029",
+                        "productCount": "3"
+                      },
+                      {
+                        "code": "invalid_image",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "imageLink",
+                        "description": "Invalid or placeholder image [image_link]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324350",
+                        "productCount": "3"
+                      },
+                      {
+                        "code": "title_too_long",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "title",
+                        "description": "Text too long [title]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324415",
+                        "productCount": "2"
+                      },
+                      {
+                        "code": "availability_mismatch",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "availability",
+                        "description": "Mismatched value (page crawl) [availability]",
+                        "documentationUri": "https://support.google.com/merchants/answer/12470049",
+                        "productCount": "2"
+                      },
+                      {
+                        "code": "missing_shipping",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "shipping",
+                        "description": "Missing shipping information",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324484",
+                        "productCount": "2"
+                      },
+                      {
+                        "code": "restricted_product",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "productTypes",
+                        "description": "Restricted product (unapproved substances policy)",
+                        "documentationUri": "https://support.google.com/merchants/answer/6165956",
+                        "productCount": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "CBD restricted products policy review appeal"
+              },
+              "response": {
+                "query": "CBD restricted products policy review appeal",
+                "results": [
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "When a product or account has an issue, Merchant Center may offer a \"Request review\" option. For product issues it is in the product's details on the Needs attention tab. For account issues it is under View setup and policy issues.",
+                    "score": 11
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "A review can take up to 7 business days. Your ads may not show while the account or products are under review.",
+                    "score": 10
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "There are two choices: \"I fixed the issue\", if you have made the change, or \"I disagree with the issue\", if you think Google's decision is wrong. If you disagree, you may need to give a reason or upload documents, and you may be asked to verify your identity.",
+                    "score": 9
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_products",
+              "args": {
+                "issue_code": "restricted_product"
+              },
+              "response": {
+                "products": [
+                  {
+                    "name": "accounts/sample-store/products/en~US~HG-023",
+                    "offerId": "HG-023",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "CBD Infused Lavender Relaxation Candle, 6 oz",
+                      "description": "CBD Infused Lavender Relaxation Candle, 6 oz. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-023",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/hg-023.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Ember Co",
+                      "gtins": [
+                        "0850012345234"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Decor > Candles > CBD Products"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "38000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "restricted_product",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "productTypes",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Restricted product (unapproved substances policy)",
+                          "detail": "Mentions 'CBD', which is a restricted product category.",
+                          "documentation": "https://support.google.com/merchants/answer/6165956",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "restricted product unapproved substances CBD healthcare"
+              },
+              "response": {
+                "query": "restricted product unapproved substances CBD healthcare",
+                "results": [
+                  {
+                    "doc_id": "cbd-unapproved-substances",
+                    "title": "CBD and other unapproved substances",
+                    "source_url": "https://support.google.com/merchants/answer/6165956",
+                    "passage": "Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD). Products on this list are not allowed in Shopping ads or free listings.",
+                    "score": 10
+                  },
+                  {
+                    "doc_id": "cbd-unapproved-substances",
+                    "title": "CBD and other unapproved substances",
+                    "source_url": "https://support.google.com/merchants/answer/6165956",
+                    "passage": "This is a policy decision, not a data problem, so it cannot be fixed by editing product details. Whether a specific product is allowed is decided by Google's policy team under the healthcare and medicines policy.",
+                    "score": 9
+                  }
+                ]
+              }
+            },
+            {
+              "name": "create_handoff_case",
+              "args": {
+                "merchant_request": "Wants to challenge/appeal the disapproval of product HG-023 (CBD Infused Lavender Relaxation Candle) under the restricted product policy.",
+                "suggested_next_step": "Review the merchant's appeal for product HG-023 under the healthcare and unapproved substances policy.",
+                "issues_found": [
+                  "restricted_product: HG-023"
+                ],
+                "already_tried": [
+                  "Checked account and product status",
+                  "Retrieved policy documentation for unapproved substances (CBD) and review guidelines"
+                ],
+                "merchant_reasons": [
+                  "States that other shops sell CBD candles on Google Shopping all the time"
+                ],
+                "reason": "policy_appeal",
+                "cited_doc_ids": [
+                  "cbd-unapproved-substances",
+                  "request-review"
+                ]
+              },
+              "response": {
+                "status": "created",
+                "case_id": "CASE-20261008-140000-b38e35",
+                "preview": {
+                  "reason": "policy_appeal",
+                  "issues_found": [
+                    "restricted_product: HG-023"
+                  ],
+                  "already_tried": [
+                    "Checked account and product status",
+                    "Retrieved policy documentation for unapproved substances (CBD) and review guidelines"
+                  ],
+                  "merchant_request": "Wants to challenge/appeal the disapproval of product HG-023 (CBD Infused Lavender Relaxation Candle) under the restricted product policy.",
+                  "merchant_reasons": [
+                    "States that other shops sell CBD candles on Google Shopping all the time"
+                  ],
+                  "suggested_next_step": "Review the merchant's appeal for product HG-023 under the healthcare and unapproved substances policy.",
+                  "cited_doc_ids": [
+                    "cbd-unapproved-substances",
+                    "request-review"
+                  ],
+                  "account_issues": [],
+                  "automation": {
+                    "price_updates": false,
+                    "availability_updates": false,
+                    "image_improvements": false,
+                    "shipping_improvements": false
+                  }
+                }
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 4,
+            "input_tokens": 18342,
+            "cached_tokens": 0,
+            "output_tokens": 2187
+          },
+          "seconds": 15.51
+        }
+      ],
+      "handoff_cases": [
+        {
+          "case_id": "CASE-20261008-140000-b38e35",
+          "store_id": "sample-store",
+          "created_at": "2026-10-08T14:00:00.389347Z",
+          "reason": "policy_appeal",
+          "issues_found": [
+            "restricted_product: HG-023"
+          ],
+          "already_tried": [
+            "Checked account and product status",
+            "Retrieved policy documentation for unapproved substances (CBD) and review guidelines"
+          ],
+          "merchant_request": "Wants to challenge/appeal the disapproval of product HG-023 (CBD Infused Lavender Relaxation Candle) under the restricted product policy.",
+          "merchant_reasons": [
+            "States that other shops sell CBD candles on Google Shopping all the time"
+          ],
+          "suggested_next_step": "Review the merchant's appeal for product HG-023 under the healthcare and unapproved substances policy.",
+          "cited_doc_ids": [
+            "cbd-unapproved-substances",
+            "request-review"
+          ],
+          "account_issues": [],
+          "automation": {
+            "price_updates": false,
+            "availability_updates": false,
+            "image_improvements": false,
+            "shipping_improvements": false
+          }
+        }
+      ],
+      "usage": {
+        "model_calls": 4,
+        "input_tokens": 18342,
+        "cached_tokens": 0,
+        "output_tokens": 2187
+      },
+      "cost_usd": 0.02195775,
+      "seconds": 15.6
+    }
+  },
+  "grades": {}
+}
