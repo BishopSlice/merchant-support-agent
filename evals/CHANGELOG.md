@@ -70,12 +70,14 @@ These change the agent, not the cases, but they're made after seeing results, so
 | Run | Stopped at | Why |
 |---|---|---|
 | `20261008-135908-*-heldout` | 2 of 7 | E2 attempt 1 missed three targets, so the agent changed |
+| `20261008-183629-*` (main run 2 of the lower-thinking E2) | 6 of 69 | Vikrant asked to skip the second run. So the lower-thinking result rests on one main run (`20261008-181506`) plus one run of each held-out set. |
 | `20261008-154911-*` (main run 2 of E2 attempt 2) | 22 of 69 | Vikrant asked for one model call per answer instead of about three ([ADR 0008](../docs/decisions/0008-one-call-answers.md)), so the agent design is changing. E2 is re-run in full on the new design. |
 
 ### Known false positives, not changed
 
 | Case | Result | Why it isn't changed |
 |---|---|---|
+| `auto-irrelevant-barcodes` | Failed in `20261008-181506`: "said forbidden text matching `(automation\|automatic \w+) (will\|can) (fill\|add\|supply)`" | The reply said "No automatic setting can fill in missing barcodes for you", which is correct, but the pattern doesn't allow for the negation. Vikrant chose to leave the check as it is, so the failure stands, and automation routing shows 93% on that run. |
 | `heldout-v2-opened-from-price-row` | Failed in E2 attempt 2 (`20261008-154506`): "said forbidden text matching `which (product\|item\|listing\|issue\|one)`" | The match is the help-doc phrase "during which products show as pending". The reply looked up HG-501 first and never asked which product. Held-out cases are never edited after they're committed, so the failure stands in the results and is disclosed here. |
 
 ## v1
