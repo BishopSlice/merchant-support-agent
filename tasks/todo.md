@@ -45,10 +45,10 @@ Details for each task are in `tasks/plan.md`.
 - [x] Task 20: Material Web shell
 - [x] Task 21: Retire Streamlit
 - [ ] Checkpoint F: merchant journey in the shell, product checks
-- [ ] Task 21a: Shared metrics module and event store
-- [ ] Task 21b: Tracing (OpenTelemetry needs approval)
-- [ ] Task 21c: Feedback and sampled grading
-- [ ] Task 21d: The /ops page (a chart library needs approval)
+- [x] Task 21a: Shared metrics module and event store (event writes measured at about 0.4 ms per turn, after the reply)
+- [ ] Task 21b: Tracing (OpenTelemetry needs approval). Waiting; the event store already gives per-turn tool calls for the trace view, but not per-call timings
+- [x] Task 21c: Feedback and sampled grading
+- [x] Task 21d: The /ops page, with plain SVG charts (no chart library needed). Panels 1 to 4 and traces; panel 5 (releases) not built
 - [ ] Checkpoint F2: /ops correct, definitions match the evals, no added wait
 - [ ] Task 22: Replays and hosting (hosting needs separate approval)
 - [ ] Task 23: Final evals and write-up
