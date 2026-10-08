@@ -135,6 +135,58 @@ So only price and availability mismatches are automation-solvable in our issue s
   - delete or overwrite saved eval results
   - edit held-out cases after they're committed
 
+## Observability
+
+[ADR 0007](docs/decisions/0007-observability-dashboard.md). This is built after the Material screens and before release (plan Tasks 21a to 21d).
+
+### The /ops page
+
+- **Access:** a separate read-only page in the same Material shell, with its own access code (not the specialist's).
+- **Traffic sources:**
+  - **live:** conversations from the hosted demo
+  - **eval:** every eval conversation, fully traced and labelled "eval traffic"
+  - **replay:** always excluded from metrics
+- **Honesty:** every chart states which sources it includes. A chart with fewer than 30 conversations shows a small-sample warning. A chart with no data says so; it is never filled with made-up data.
+
+| Panel | Shows |
+|---|---|
+| 1. Outcomes | Conversations by day and entry point (issue row or Help). Resolution, where the merchant edits a product and the re-check passes. Automation routing. Handoff rate and reasons. Uniquely agent-resolved rate. Estimated cost avoided, using the business case's stated assumption, which is shown on the chart. Thumbs up and down. |
+| 2. Quality | Repeat contact (the same issue raised again within 7 days). Frustration and turn-limit hits. Citation validity (every cited doc id exists). Sampled AI grading (about 10% of live conversations, within a daily budget), with the sample size shown. |
+| 3. Safety | Write calls: must be 0, and the panel turns red otherwise. Behaviour after a tool failure (graceful or invented). Injection attempts seen and followed. Personal data blocked by case validation. Gemini safety blocks and refusals. Definitions are the same as the eval hard gates. |
+| 4. Operations | Latency p50 and p95 per turn, against 8 s and 20 s. Tokens and cost per conversation. Daily spend against the cap. Errors by type. Access-code and cap hits. The current agent version and model. |
+| 5. Releases | The eval scorecard for each agent version next to that version's live metrics, with version markers on every time chart. |
+
+**Trace drill-down, per conversation:** the messages, each tool call (arguments, duration, error), the docs retrieved against the docs cited, the handoff case, and grader scores where sampled.
+
+### Build
+
+- **Tracing:** ADK's built-in OpenTelemetry tracing. Spans are tagged with `session_id`, `agent_version`, `entry_point` and `traffic_source`. Exporting to Cloud Trace later should be a configuration change.
+- **Storage:** a SQLite event store holding conversations, turns, tool calls, feedback, grades and spend.
+- **One metrics module** (`merchant_agent.metrics`), imported by both `evals` and the dashboard. Tests check that the eval scorer and the dashboard compute each shared definition identically.
+- **Off the critical path:** events are written after each reply is sent, never during the merchant's wait, and the added latency is measured and reported.
+
+### Privacy
+
+- Emails and phone numbers are masked before anything is stored.
+- Message text is kept for 30 days. After that only aggregate metrics remain.
+- Full prompt capture is off by default.
+
+### Alerts
+
+A red banner on /ops when:
+- a write call is greater than 0
+- daily spend is above 80% of the cap
+- p95 latency is above 20 s for 15 minutes
+- tool errors are above 5% of calls
+- the handoff rate moves more than 2× week over week
+
+The page also lists what a production system would page someone on.
+
+### Dependencies
+
+- OpenTelemetry already comes with ADK. Declaring it directly, and any chart library, are **pending approval**. Fallback: plain SVG charts drawn by our own code.
+- **Minimum version if time is short:** panels 1, 3 and 4, plus the trace view.
+
 ## Evals
 
 The v1 suite (47 cases, rules plus an AI grader plus a human hand-check) stays the foundation. v2 widens it to cover what changed: automation routing, the MCP-shaped data tools, the product surface and the hosted demo.

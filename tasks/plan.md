@@ -121,6 +121,15 @@ Every eval expectation lands **before** the change it tests:
 
 **Checkpoint F:** the full merchant journey works in the shell in live and replay modes, and all product checks pass.
 
+## Phase 9b: Observability ([ADR 0007](../docs/decisions/0007-observability-dashboard.md))
+
+- [ ] **Task 21a: Shared metrics module and event store.** `merchant_agent.metrics` holds every metric definition, used by both evals and the dashboard, with tests that they agree. A SQLite event store. Masking of emails and phone numbers before storage. 30-day text retention. Events written after each reply, with the overhead measured.
+- [ ] **Task 21b: Tracing.** ADK OpenTelemetry spans tagged with session, agent version, entry point and traffic source. Eval runs traced as "eval traffic"; replay excluded. *Declaring OpenTelemetry directly needs approval first.*
+- [ ] **Task 21c: Feedback and sampled grading.** Thumbs up and down in the side panel. Grading of about 10% of live conversations within a daily budget, with the sample size recorded.
+- [ ] **Task 21d: The /ops page.** Its own access code, panels 1 to 5, trace drill-down, alerts banner, source labels and small-sample warnings. *A chart library needs approval; the fallback is plain SVG.* Minimum if short on time: panels 1, 3 and 4 plus the trace view.
+
+**Checkpoint F2:** /ops shows live and eval traffic correctly labelled, safety panel definitions match the eval hard gates (tested), and logging adds no wait to replies.
+
 ## Phase 10: Release
 
 - [ ] **Task 22: Replays and hosting.** Record replays from the release candidate, with a freshness test. Container setup. **The host choice and its account and billing are a separate approval.**

@@ -34,6 +34,11 @@ Details for each task are in `tasks/plan.md`.
 - [ ] Task 20: Material Web shell
 - [ ] Task 21: Retire Streamlit
 - [ ] Checkpoint F: merchant journey in the shell, product checks
+- [ ] Task 21a: Shared metrics module and event store
+- [ ] Task 21b: Tracing (OpenTelemetry needs approval)
+- [ ] Task 21c: Feedback and sampled grading
+- [ ] Task 21d: The /ops page (a chart library needs approval)
+- [ ] Checkpoint F2: /ops correct, definitions match the evals, no added wait
 - [ ] Task 22: Replays and hosting (hosting needs separate approval)
 - [ ] Task 23: Final evals and write-up
 - [ ] Checkpoint G: v2 release gates

@@ -117,6 +117,12 @@ The v1 metrics are kept. v2 adds metrics for automation routing, triage, tool sa
 | Uniquely agent-resolved rate | Resolved cases that an automation couldn't have fixed | tracked; feeds the business case |
 | Cost per conversation | Model cost of a full conversation | $0.03 or less at 2026 prices |
 
+**Measured in production, not just in evals** ([ADR 0007](decisions/0007-observability-dashboard.md)). The same metric definitions feed an /ops dashboard over live conversations, with:
+- **Merchant feedback:** thumbs up or down on agent replies.
+- **Sampled grading:** about 10% of live conversations get AI grading, within a daily budget.
+- **Estimated cost avoided:** shown with the business case's stated assumption.
+- **Labelled traffic:** live, eval and replay traffic are always labelled, and replay is never counted.
+
 ## 10. What changed from v1
 
 | v1 | v2 | Why |
