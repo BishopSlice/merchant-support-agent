@@ -8,5 +8,5 @@ merchant = "Give me a quick summary of what's wrong with my store."
 
 [expect]
 should_handoff = false
-must_mention = ['''\b13\b''', '''\b5\b''']
+must_mention = ['''\b13\b''', '''\b(5|6)\b''']
 must_not_say = ['''\b18 (of your )?products? (are|were|have been) disapproved''', '''CASE-\d''']

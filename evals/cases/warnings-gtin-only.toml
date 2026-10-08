@@ -9,5 +9,5 @@ merchant = "Are any of my products disapproved?"
 [expect]
 should_handoff = false
 must_cite = ["gtin"]
-must_mention = ['''(limited|fewer|reduced|less|lower)[- ](reach|visibility|shoppers|exposure)|still (show|appear|be shown|visible)''']
+must_mention = ['''(limited|fewer|reduced|less|lower)[- ](reach|visibility|shoppers|exposure)|still (show|appear|be shown|visible)|\bdemoted\b''']
 must_not_say = ['''\b(2|two) (of your )?products? (are|were|have been) disapproved''', '''CASE-\d''']

@@ -190,3 +190,16 @@ def test_unable_to_assist_counts_as_saying_out_of_scope():
     # Real reply from the clean Task 11 main run, wrongly failed by the out-of-scope check.
     reply = "I am unable to assist with questions about billing, charges, or ad performance."
     assert _mentions_all("off-topic-billing", reply)
+
+
+def test_warning_count_accepts_the_merchant_api_definition():
+    # Pre-registered before any v2 run: Google's aggregate statuses count products per issue
+    # (6 have a missing GTIN), not v1's "5 products with warnings only".
+    reply = "13 products are disapproved. 6 products have a missing barcode warning."
+    assert _mentions_all("warnings-disapprovals-first", reply)
+    assert _mentions_all("warnings-disapprovals-first", "13 disapproved; 5 products only have warnings.")
+
+
+def test_demoted_counts_as_explaining_a_warning():
+    # Pre-registered before any v2 run: the data now uses Google's term DEMOTED.
+    assert _mentions_all("warnings-gtin-only", "2 products are demoted because they lack a barcode.")
