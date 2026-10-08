@@ -31,3 +31,9 @@ def test_secrets_stay_out_of_the_image():
     ignored = (PROJECT_ROOT / ".dockerignore").read_text().split()
     assert ".env" in ignored and "runtime" in ignored
     assert "GOOGLE_API_KEY=" not in (PROJECT_ROOT / "Dockerfile").read_text()
+
+
+def test_the_image_includes_the_replays_and_the_ops_seed():
+    dockerfile = (PROJECT_ROOT / "Dockerfile").read_text()
+    assert "COPY replays" in dockerfile
+    assert "deploy/ops-seed.sqlite" in dockerfile

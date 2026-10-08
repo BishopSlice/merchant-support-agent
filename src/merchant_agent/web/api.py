@@ -66,6 +66,8 @@ class WebConfig(BaseModel):
     replays_dir: Path = PROJECT_ROOT / "replays"
     secure_cookies: bool = False  # set true when served over HTTPS
     ops_code: str | None = None  # the /ops dashboard's own code; None turns /ops off
+    # Eval traffic baked into the image, copied in when runtime/ starts empty (Cloud Run).
+    ops_seed: Path = PROJECT_ROOT / "deploy" / "ops-seed.sqlite"
     grade_sample_rate: float = 0.1  # share of live conversations graded by the AI grader
     grading_daily_budget_usd: float = 0.50
 
@@ -229,7 +231,11 @@ def create_app(
     config = config or WebConfig.from_env()
     _working_copy(config)
     sessions = Sessions(config)
-    events = EventStore(get_settings().runtime_dir / "events.sqlite")
+    events_path = get_settings().runtime_dir / "events.sqlite"
+    if not events_path.exists() and config.ops_seed.is_file():
+        events_path.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(config.ops_seed, events_path)
+    events = EventStore(events_path)
     events.purge_old_text()
     setup_tracing(events)
     grader = SampledGrader(events, config.grade_sample_rate, config.grading_daily_budget_usd)

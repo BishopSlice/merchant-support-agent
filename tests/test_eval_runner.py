@@ -239,3 +239,16 @@ def test_eval_runs_are_logged_as_eval_traffic(tmp_path):
             ("eval", f"20261008-test/{record.case_id}")
         ]
         assert db.execute("select count(*) from turns").fetchone() == (2,)
+
+
+def test_the_ops_seed_holds_eval_traffic_only(tmp_path):
+    import sqlite3
+
+    from evals.ops_seed import build_seed
+    from merchant_agent.config import PROJECT_ROOT
+
+    run = PROJECT_ROOT / "evals/results/20261008-183448-gemini-3.6-flash-heldout_v2.json"
+    out = tmp_path / "seed.sqlite"
+    assert build_seed([run], out) == 8
+    with sqlite3.connect(out) as db:
+        assert db.execute("select distinct source from conversations").fetchall() == [("eval",)]

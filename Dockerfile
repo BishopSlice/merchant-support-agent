@@ -13,6 +13,8 @@ RUN uv sync --frozen --no-dev --no-install-project
 COPY src ./src
 COPY data ./data
 COPY replays ./replays
+# /ops starts from the release candidate's eval traffic after each cold start.
+COPY deploy/ops-seed.sqlite ./deploy/ops-seed.sqlite
 # The live grader reuses the eval rubrics and records.
 COPY evals/__init__.py evals/grader.py evals/records.py ./evals/
 COPY evals/rubrics ./evals/rubrics

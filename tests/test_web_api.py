@@ -74,6 +74,7 @@ def make_client(env, runner=FakeRunner, **overrides) -> TestClient:
         "daily_cap": 5,
         "replays_dir": env / "replays",
         "grade_sample_rate": 0.0,  # tests that grade set it and pass a fake grader
+        "ops_seed": env / "no-seed.sqlite",
     }
     config = WebConfig(**(fields | overrides))
     return TestClient(create_app(config, runner_factory=runner, answer=None))
@@ -403,3 +404,19 @@ def test_chat_answers_in_one_model_call_with_context_loaded_by_code(env):
     assert data["path"] == "one_call" and len(fake.prompts) == 1
     assert "en~US~HG-004" in fake.prompts[0]
     assert any("product statuses" in step.lower() for step in data["steps"])
+
+
+def test_a_fresh_instance_starts_ops_from_the_baked_in_seed(env):
+    """Cloud Run scales to zero and loses runtime/, so /ops starts from eval traffic baked in."""
+    import sqlite3
+
+    from merchant_agent.events import EventStore
+
+    seed = env / "ops-seed.sqlite"
+    store = EventStore(seed)
+    store.start_conversation(source="eval", store_id="s", agent_version="v", model="m")
+    with make_client(env, ops_code="o", ops_seed=seed) as c:
+        c.post("/api/ops/login", json={"code": "o"})
+        assert c.get("/api/ops/summary?source=eval").json()["conversations"] == 1
+    with sqlite3.connect(seed) as db:  # the seed itself is never written to
+        assert db.execute("select count(*) from conversations").fetchone() == (1,)
