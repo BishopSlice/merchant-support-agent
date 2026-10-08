@@ -28,7 +28,7 @@ from merchant_agent.config import PROJECT_ROOT, get_settings
 from merchant_agent.data import MockMerchantMcp
 from merchant_agent.merchant_api import product_name
 from merchant_agent.models import IssueType
-from merchant_agent.stores import load_store, store_dir
+from merchant_agent.stores import load_feed, load_store, store_dir
 from merchant_agent.tools.handoff import list_cases
 
 SESSION_COOKIE = "sid"
@@ -168,6 +168,7 @@ def _issues_view(store_id: str) -> dict:
         "aggregateProductStatuses"
     ]
     automation = load_store(store_id).automatic_improvements
+    feed = {p.id: p for p in load_feed(store_id)}
     return {
         "stats": aggregate["stats"],
         "accountIssues": mcp.call("list_account_issues", account=store_id)["accountIssues"],
@@ -178,6 +179,7 @@ def _issues_view(store_id: str) -> dict:
                 "title": p["productAttributes"].get("title", ""),
                 "attributes": p["productAttributes"],
                 "issues": p["productStatus"]["itemLevelIssues"],
+                "edit": feed[p["offerId"]].model_dump(include=set(ProductEdit.model_fields)),
             }
             for p in products
             if p["productStatus"]["itemLevelIssues"]

@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Store console: Needs attention (concept prototype)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=block">
+  <link rel="stylesheet" href="app.css">
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@material/web@2.5.0/all.js/+esm"></script>
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to the issues</a>
+
+  <header class="app-bar">
+    <span class="material-symbols-outlined app-bar__mark" aria-hidden="true">storefront</span>
+    <span class="app-bar__title">Store console</span>
+    <span class="concept-label" role="note">Concept prototype, not a Google product</span>
+    <span class="app-bar__spacer"></span>
+    <md-filled-tonal-button id="help-button" aria-haspopup="dialog" aria-controls="panel">
+      <span class="material-symbols-outlined" slot="icon" aria-hidden="true">help</span>
+      Help
+    </md-filled-tonal-button>
+  </header>
+
+  <div class="layout">
+    <nav class="nav" aria-label="Main">
+      <ul>
+        <li><button class="nav__item" disabled title="Not part of this prototype">
+          <span class="material-symbols-outlined" aria-hidden="true">home</span>Overview</button></li>
+        <li><span class="nav__group">
+          <span class="material-symbols-outlined" aria-hidden="true">sell</span>Products</span>
+          <ul>
+            <li><button class="nav__item nav__item--sub" disabled title="Not part of this prototype">All products</button></li>
+            <li><a class="nav__item nav__item--sub nav__item--active" href="#main" aria-current="page">Needs attention</a></li>
+          </ul>
+        </li>
+        <li><button class="nav__item" disabled title="Not part of this prototype">
+          <span class="material-symbols-outlined" aria-hidden="true">monitoring</span>Performance</button></li>
+        <li><button class="nav__item" disabled title="Not part of this prototype">
+          <span class="material-symbols-outlined" aria-hidden="true">campaign</span>Marketing</button></li>
+        <li><button class="nav__item" disabled title="Not part of this prototype">
+          <span class="material-symbols-outlined" aria-hidden="true">settings</span>Settings</button></li>
+      </ul>
+      <p class="nav__note">Only Needs attention works in this prototype.</p>
+      <a class="nav__specialist" href="specialist.html">Specialist page (demo login)</a>
+    </nav>
+
+    <main id="main" class="main" tabindex="-1">
+      <h1>Needs attention</h1>
+      <p class="lede">Products that can't show, or show to fewer shoppers, and why.</p>
+
+      <div id="account-banner" class="banner" role="alert" hidden></div>
+
+      <section class="summary" aria-label="Summary">
+        <div class="stat"><span class="stat__value" id="stat-disapproved">–</span>
+          <span class="stat__label">
+            <span class="material-symbols-outlined" aria-hidden="true">block</span>Disapproved products</span></div>
+        <div class="stat"><span class="stat__value" id="stat-demoted">–</span>
+          <span class="stat__label">
+            <span class="material-symbols-outlined" aria-hidden="true">trending_down</span>Products with warnings</span></div>
+        <div class="stat stat--wide"><span class="stat__label">Automatic improvements</span>
+          <ul class="automation" id="automation"></ul></div>
+      </section>
+
+      <section aria-labelledby="issues-heading">
+        <h2 id="issues-heading">Issues</h2>
+        <div class="table-wrap">
+          <table class="issues">
+            <thead>
+              <tr><th scope="col">Product</th><th scope="col">Issue</th><th scope="col">Impact</th><th scope="col"><span class="visually-hidden">Actions</span></th></tr>
+            </thead>
+            <tbody id="issues-body"><tr><td colspan="4">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <aside id="panel" class="panel" aria-label="Assistant" hidden>
+      <div class="panel__header">
+        <h2 class="panel__title">Assistant</h2>
+        <md-icon-button id="panel-close" aria-label="Close the assistant">
+          <span class="material-symbols-outlined" aria-hidden="true">close</span>
+        </md-icon-button>
+      </div>
+      <div class="mode" role="radiogroup" aria-label="Mode">
+        <label><md-radio name="mode" value="replay" checked></md-radio> Replay (no code needed)</label>
+        <label><md-radio name="mode" value="live"></md-radio> Live (access code)</label>
+      </div>
+      <div id="replay-picker" class="replay-picker"></div>
+      <div id="access" class="access" hidden>
+        <md-outlined-text-field id="access-code" label="Access code" type="password"></md-outlined-text-field>
+      </div>
+      <p id="context-chip" class="context-chip" hidden></p>
+      <ol id="messages" class="messages" aria-live="polite"></ol>
+      <form id="chat-form" class="composer" hidden>
+        <md-outlined-text-field id="chat-input" label="Ask about your products" type="textarea" rows="2" maxlength="2000"></md-outlined-text-field>
+        <div class="composer__row">
+          <span id="remaining" class="remaining"></span>
+          <md-filled-button id="send" type="submit">Send</md-filled-button>
+        </div>
+      </form>
+    </aside>
+  </div>
+
+  <md-dialog id="edit-dialog">
+    <div slot="headline">Edit product <span id="edit-offer"></span></div>
+    <form slot="content" id="edit-form" method="dialog" class="edit-form">
+      <md-outlined-text-field name="title" label="Title" maxlength="300"></md-outlined-text-field>
+      <md-outlined-text-field name="price" label="Price (for example 36.00 USD)"></md-outlined-text-field>
+      <md-outlined-select name="availability" label="Availability">
+        <md-select-option value="in_stock"><div slot="headline">In stock</div></md-select-option>
+        <md-select-option value="out_of_stock"><div slot="headline">Out of stock</div></md-select-option>
+        <md-select-option value="preorder"><div slot="headline">Preorder</div></md-select-option>
+        <md-select-option value="backorder"><div slot="headline">Backorder</div></md-select-option>
+      </md-outlined-select>
+      <md-outlined-text-field name="image_link" label="Image link"></md-outlined-text-field>
+      <md-outlined-text-field name="gtin" label="Product barcode number (GTIN)"></md-outlined-text-field>
+      <md-outlined-text-field name="shipping" label="Shipping (for example US:::5.95 USD)"></md-outlined-text-field>
+      <p id="edit-error" class="error" role="alert"></p>
+    </form>
+    <div slot="actions">
+      <md-text-button id="edit-cancel">Cancel</md-text-button>
+      <md-filled-button id="edit-save">Save</md-filled-button>
+    </div>
+  </md-dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

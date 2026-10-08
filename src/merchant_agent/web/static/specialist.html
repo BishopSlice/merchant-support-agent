@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Specialist cases (concept prototype)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=block">
+  <link rel="stylesheet" href="app.css">
+  <style>
+    .cases { display: flex; flex-direction: column; gap: 16px; max-width: 880px; }
+    .case { background: var(--md-sys-color-surface); border: 1px solid var(--md-sys-color-outline-variant); border-radius: 12px; padding: 16px 20px; }
+    .case h2 { margin: 0 0 4px; font-size: 16px; }
+    .case .meta { color: var(--md-sys-color-on-surface-variant); font-size: 12px; margin: 0 0 12px; }
+    .case dl { margin: 0; display: grid; grid-template-columns: 160px 1fr; gap: 6px 16px; }
+    .case dt { color: var(--md-sys-color-on-surface-variant); }
+    .case dd { margin: 0; }
+    .case ul { margin: 0; padding-left: 18px; }
+    .login { display: flex; gap: 12px; align-items: flex-start; flex-wrap: wrap; max-width: 560px; }
+    @media (max-width: 760px) { .case dl { grid-template-columns: 1fr; } }
+  </style>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@material/web@2.5.0/all.js/+esm"></script>
+  <script type="module" src="specialist.js"></script>
+</head>
+<body>
+  <header class="app-bar">
+    <span class="material-symbols-outlined app-bar__mark" aria-hidden="true">support_agent</span>
+    <span class="app-bar__title">Specialist cases</span>
+    <span class="concept-label" role="note">Concept prototype, not a Google product</span>
+    <span class="app-bar__spacer"></span>
+    <a class="nav__specialist" href="./">Back to the merchant view</a>
+  </header>
+  <main id="main" class="main">
+    <h1>Escalated cases</h1>
+    <p class="lede">What a support specialist receives when the assistant hands off. This page is separate from the merchant's journey.</p>
+    <form id="login" class="login">
+      <md-outlined-text-field id="code" label="Demo specialist code" type="password" supporting-text="For this demo the code is specialist-demo"></md-outlined-text-field>
+      <md-filled-button type="submit">Sign in</md-filled-button>
+      <p id="login-error" class="error" role="alert"></p>
+    </form>
+    <div id="cases" class="cases" aria-live="polite"></div>
+  </main>
+</body>
+</html>

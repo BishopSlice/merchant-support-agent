@@ -106,6 +106,7 @@ def test_issues_lists_products_with_their_issues_and_the_counts(client):
     codes = {i["code"] for i in product(client, "HG-004")["issues"]}
     assert codes == {"price_mismatch"}
     assert data["automation"]["price_updates"] is False
+    assert product(client, "HG-004")["edit"]["price"] == "32.00 USD"  # feed format, for the form
 
 
 # --- product edits ---
@@ -246,3 +247,20 @@ def test_specialist_cases_need_the_demo_login(client):
     assert client.post("/api/specialist/login", json={"code": "specialist-demo"}).status_code == 200
     cases = client.get("/api/cases").json()["cases"]
     assert [c["reason"] for c in cases] == ["policy_appeal"]
+
+
+# --- branding (SPEC, Evals f) ---
+
+
+@pytest.mark.parametrize("path", ["/", "/specialist.html", "/app.js", "/specialist.js"])
+def test_pages_carry_the_concept_label_and_no_google_branding(client, path):
+    import re
+
+    page = client.get(path)
+    assert page.status_code == 200
+    text = page.text
+    assert "Merchant Center" not in text
+    assert not re.search(r"<img[^>]+(google|logo)", text, re.IGNORECASE)
+    assert not re.search(r"<svg[^>]*aria-label=\"[^\"]*google", text, re.IGNORECASE)
+    if path.endswith(".html") or path == "/":
+        assert "Concept prototype, not a Google product" in text
