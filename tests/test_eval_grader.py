@@ -198,3 +198,15 @@ def test_a_failed_grade_is_recorded_skipped_in_rates_and_retried_later():
 
     grade_run(run_file, generate=good, save=lambda: None)
     assert run_file.grades["b"].error == ""
+
+
+def test_wrong_advice_prompt_includes_mcp_data_tool_results():
+    run = make_run()
+    run.turns[0].tool_calls = [
+        ToolCallRecord(
+            name="list_aggregate_product_statuses",
+            args={},
+            response={"aggregateProductStatuses": [{"stats": {"disapprovedCount": "13"}}]},
+        )
+    ]
+    assert '"disapprovedCount": "13"' in wrong_advice_prompt(run)

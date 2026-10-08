@@ -23,6 +23,15 @@ if TYPE_CHECKING:
     from evals.run import RunFile
 
 RUBRICS_DIR = PROJECT_ROOT / "evals" / "rubrics"
+# Tool results that are facts about the merchant's own data (v1's check_feed and v2's MCP tools).
+DATA_TOOL_NAMES = {
+    "check_feed",
+    "list_products",
+    "get_product_by_name",
+    "list_account_issues",
+    "list_aggregate_product_statuses",
+    "get_automatic_improvements",
+}
 
 
 class ReplyVerdict(BaseModel):
@@ -100,7 +109,10 @@ def wrong_advice_prompt(run: CaseRun) -> str:
         for i in doc_ids
     )
     feed_data = [
-        call.response for turn in run.turns for call in turn.tool_calls if call.name == "check_feed"
+        call.response
+        for turn in run.turns
+        for call in turn.tool_calls
+        if call.name in DATA_TOOL_NAMES
     ]
     return "\n\n".join(
         [

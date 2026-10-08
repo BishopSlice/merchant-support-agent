@@ -113,12 +113,40 @@ async def run_turn(runner: Runner, session_id: str, text: str) -> Turn:
 def describe_tool_call(call: ToolCall) -> str:
     """Say in one plain sentence what a tool call did, for showing to a person."""
     response = call.response if isinstance(call.response, dict) else {}
+    if "error" in response:
+        return f"Tried {call.name}, but it failed: {response['error']}"
     if call.name == "check_feed":
         if response.get("account_status") == "suspended":
             return "Checked the product feed: the account is suspended."
         return (
             f"Checked the product feed: {response.get('disapproved_products', 0)} disapproved, "
             f"{response.get('limited_products', 0)} with limited reach."
+        )
+    if call.name == "list_aggregate_product_statuses":
+        statuses = response.get("aggregateProductStatuses") or [{}]
+        disapproved = statuses[0].get("stats", {}).get("disapprovedCount", "0")
+        kinds = len(statuses[0].get("itemLevelIssues", []))
+        return f"Checked product statuses: {disapproved} disapproved, {kinds} kinds of issue."
+    if call.name == "list_products":
+        count = len(response.get("products", []))
+        if code := call.args.get("issue_code"):
+            return f'Listed products with "{code}": {count} found.'
+        return f"Listed all products: {count} found."
+    if call.name == "get_product_by_name":
+        return f"Looked up product {call.args.get('name', '').split('~')[-1]}."
+    if call.name == "list_account_issues":
+        titles = [issue.get("title", "") for issue in response.get("accountIssues", [])]
+        return f"Checked account issues: {', '.join(titles) or 'none'}."
+    if call.name == "get_automatic_improvements":
+        updates = response.get("itemUpdates", {})
+
+        def state(key: str) -> str:
+            return "on" if updates.get(key) else "off"
+
+        return (
+            "Checked automatic improvements: "
+            f"price updates {state('effectiveAllowPriceUpdates')}, "
+            f"availability updates {state('effectiveAllowAvailabilityUpdates')}."
         )
     if call.name == "search_help_docs":
         query = call.args.get("query", "")

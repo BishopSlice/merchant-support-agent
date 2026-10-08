@@ -35,7 +35,9 @@ def call_part(name: str, args: dict) -> types.Part:
 
 
 def response_part(name: str, response: dict) -> types.Part:
-    return types.Part(function_response=types.FunctionResponse(id="c1", name=name, response=response))
+    return types.Part(
+        function_response=types.FunctionResponse(id="c1", name=name, response=response)
+    )
 
 
 def test_run_turn_collects_reply_and_tool_calls():
@@ -182,3 +184,55 @@ def test_run_turn_adds_up_token_usage_across_model_calls():
 def test_usage_adds_together():
     total = Usage(1, 100, 10, 5) + Usage(2, 200, 0, 7)
     assert total == Usage(model_calls=3, input_tokens=300, cached_tokens=10, output_tokens=12)
+
+
+def test_describe_mcp_data_tools():
+    aggregate = ToolCall(
+        name="list_aggregate_product_statuses",
+        args={},
+        response={
+            "aggregateProductStatuses": [
+                {"stats": {"disapprovedCount": "13"}, "itemLevelIssues": [{}, {}]}
+            ]
+        },
+    )
+    assert (
+        describe_tool_call(aggregate)
+        == "Checked product statuses: 13 disapproved, 2 kinds of issue."
+    )
+    products = ToolCall(
+        name="list_products",
+        args={"issue_code": "price_mismatch"},
+        response={"products": [{}, {}, {}]},
+    )
+    assert describe_tool_call(products) == 'Listed products with "price_mismatch": 3 found.'
+    issues = ToolCall(
+        name="list_account_issues",
+        args={},
+        response={"accountIssues": [{"title": "Misrepresentation"}]},
+    )
+    assert describe_tool_call(issues) == "Checked account issues: Misrepresentation."
+    none = ToolCall(name="list_account_issues", args={}, response={"accountIssues": []})
+    assert describe_tool_call(none) == "Checked account issues: none."
+    auto = ToolCall(
+        name="get_automatic_improvements",
+        args={},
+        response={
+            "itemUpdates": {
+                "effectiveAllowPriceUpdates": False,
+                "effectiveAllowAvailabilityUpdates": True,
+            }
+        },
+    )
+    assert describe_tool_call(auto) == (
+        "Checked automatic improvements: price updates off, availability updates on."
+    )
+    one = ToolCall(
+        name="get_product_by_name", args={"name": "accounts/s/products/en~US~HG-004"}, response={}
+    )
+    assert describe_tool_call(one) == "Looked up product HG-004."
+
+
+def test_describe_a_failed_data_call_says_it_failed():
+    failed = ToolCall(name="list_products", args={}, response={"error": "quota exceeded"})
+    assert describe_tool_call(failed) == "Tried list_products, but it failed: quota exceeded"
