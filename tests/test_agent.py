@@ -159,3 +159,12 @@ def test_instructions_set_the_triage_order_and_graceful_failure():
     assert "account issues first" in instruction
     assert "couldn't load that data" in instruction
     assert "never fill the gap" in instruction
+
+
+def test_instructions_ground_what_happens_after_a_fix_and_appeals():
+    # E2 attempt 1: replies said "Google will re-check it" and "an appeal can be requested"
+    # without a retrieved doc, and repeated the instructions' wording about DEMOTED.
+    instruction = build_agent().instruction.lower()
+    assert "what happens after a fix" in instruction
+    assert "mention appeals or reviews only with a citation" in instruction
+    assert "reaches fewer shoppers" not in instruction
