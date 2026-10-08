@@ -81,10 +81,12 @@ Check each against its free tier when billing is set up. I haven't verified thei
 
 **One-time setup.** Connecting GitHub needs Vikrant's own sign-in, so this is done in the console.
 
+**Check the project first.** The trigger, the secrets and the Cloud Run service must all be in the same project. On 8 Oct the first trigger was created in another project, because the console's project picker was on it. So its builds deployed there, where the secrets didn't exist, and every deploy failed with "Permission denied on secret". Before creating the trigger, check that the project picker at the top of the console shows the project your service runs in (`gcloud run services list` shows where it is). Look up account numbers from the project; don't copy them from error messages.
+
 1. **Let the build's service account deploy, and let the app read its secrets.** New projects run both Cloud Build and the app as the Compute Engine default service account:
 
    ```bash
-   PROJECT_ID=merchant-agent-demo-vn
+   PROJECT_ID=YOUR_PROJECT_ID   # for example gen-lang-client-0691064980, the project AI Studio made
    NUMBER=$(gcloud projects describe $PROJECT_ID --format='value(projectNumber)')
    SA="${NUMBER}-compute@developer.gserviceaccount.com"
    for role in roles/run.admin roles/iam.serviceAccountUser roles/artifactregistry.writer roles/logging.logWriter roles/secretmanager.secretAccessor; do
