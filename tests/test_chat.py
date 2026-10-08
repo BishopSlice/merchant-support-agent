@@ -236,3 +236,9 @@ def test_describe_mcp_data_tools():
 def test_describe_a_failed_data_call_says_it_failed():
     failed = ToolCall(name="list_products", args={}, response={"error": "quota exceeded"})
     assert describe_tool_call(failed) == "Tried list_products, but it failed: quota exceeded"
+
+
+def test_run_turn_records_how_long_the_turn_took():
+    runner = FakeRunner([event(types.Part(text="Done."))])
+    turn = asyncio.run(run_turn(runner, "session-1", "Hi"))
+    assert 0 <= turn.seconds < 5

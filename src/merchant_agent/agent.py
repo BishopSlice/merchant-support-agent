@@ -1,6 +1,9 @@
 """The merchant support agent: Gemini through Google ADK, with read-only Merchant Center data
 tools, help search and handoff."""
 
+import hashlib
+import inspect
+
 from google.adk import Agent, Context
 from google.adk.models import Gemini
 from google.genai import types
@@ -139,6 +142,21 @@ def create_handoff_case(
     )
 
 
+def _tools() -> list:
+    return [*DATA_TOOLS, search_help_docs, create_handoff_case]
+
+
+def agent_version() -> str:
+    """A short hash of everything the model sees: instructions, tool signatures and docs, model.
+
+    Replays and eval runs record it, so a stale transcript can be detected.
+    """
+    parts = [INSTRUCTION, get_settings().model_name]
+    for tool in _tools():
+        parts += [tool.__name__, str(inspect.signature(tool)), inspect.getdoc(tool) or ""]
+    return hashlib.sha256("\n".join(parts).encode()).hexdigest()[:12]
+
+
 def build_agent() -> Agent:
     """Create the support agent using the model named in settings."""
     return Agent(
@@ -146,7 +164,7 @@ def build_agent() -> Agent:
         model=Gemini(model=get_settings().model_name, retry_options=RETRY_OPTIONS),
         description="Helps Google Shopping merchants fix disapproved products.",
         instruction=INSTRUCTION,
-        tools=[*DATA_TOOLS, search_help_docs, create_handoff_case],
+        tools=_tools(),
         generate_content_config=types.GenerateContentConfig(
             http_options=types.HttpOptions(timeout=REQUEST_TIMEOUT_MS)
         ),

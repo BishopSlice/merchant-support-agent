@@ -114,3 +114,18 @@ def test_instructions_ask_suspension_replies_to_cite_the_policy():
 def test_instructions_keep_out_of_scope_redirects_free_of_navigation_details():
     instruction = build_agent().instruction.lower()
     assert "don't name menus, settings or steps in other google products" in instruction
+
+
+def test_agent_version_is_stable_and_changes_with_what_the_model_sees(monkeypatch):
+    from merchant_agent import agent as agent_module
+
+    first = agent_module.agent_version()
+    assert first == agent_module.agent_version()
+    assert len(first) == 12 and int(first, 16) >= 0
+
+    monkeypatch.setattr(agent_module, "INSTRUCTION", agent_module.INSTRUCTION + " ")
+    assert agent_module.agent_version() != first
+
+    monkeypatch.undo()
+    monkeypatch.setenv("MODEL_NAME", "another-model")
+    assert agent_module.agent_version() != first

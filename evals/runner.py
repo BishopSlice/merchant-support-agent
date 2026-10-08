@@ -16,6 +16,7 @@ from google.genai.errors import APIError
 
 from evals.case_format import EVAL_STORES_DIR, EvalCase
 from evals.records import CaseRun, TokenUsage, ToolCallRecord, TurnRecord
+from merchant_agent.agent import agent_version
 from merchant_agent.chat import Usage, new_runner, new_session, run_turn
 from merchant_agent.config import PROJECT_ROOT, ModelPrice, cost_usd
 from merchant_agent.demo import apply_fix
@@ -46,7 +47,7 @@ async def run_case(
     case: EvalCase, price: ModelPrice, runner_factory: Callable[[], Runner] = new_runner
 ) -> CaseRun:
     """Play a case's scripted turns against the agent and record everything that happened."""
-    record = CaseRun(case_id=case.id, category=case.category.value)
+    record = CaseRun(case_id=case.id, category=case.category.value, agent_version=agent_version())
     total = Usage()
     started = time.monotonic()
     with isolated_workspace():
@@ -66,6 +67,7 @@ async def run_case(
                     for c in turn.tool_calls
                 ]
                 turn_record.usage = TokenUsage(**asdict(turn.usage))
+                turn_record.seconds = turn.seconds
                 total += turn.usage
         except (APIError, httpx.HTTPError) as error:  # model or network errors: resume reruns these
             record.status, record.error = "error", f"{type(error).__name__}: {error}"

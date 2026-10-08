@@ -136,3 +136,11 @@ def test_network_errors_are_recorded_not_raised():
     record = run(make_case([{"merchant": "a"}]), network_error=True)
     assert record.status == "error"
     assert "timed out" in record.error
+
+
+def test_runs_record_the_agent_version_and_per_turn_timing():
+    from merchant_agent.agent import agent_version
+
+    record = run(make_case([{"merchant": "a"}, {"merchant": "b"}]))
+    assert record.agent_version == agent_version()
+    assert all(turn.seconds >= 0 for turn in record.turns)

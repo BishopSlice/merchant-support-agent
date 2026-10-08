@@ -22,6 +22,7 @@ from evals.records import CaseRun
 from evals.report import render_scorecard
 from evals.runner import run_case
 from evals.scoring import score_case, summarize
+from merchant_agent.agent import agent_version
 from merchant_agent.config import MODEL_PRICES, PROJECT_ROOT, ModelPrice, get_settings
 
 RESULTS_DIR = PROJECT_ROOT / "evals" / "results"
@@ -32,6 +33,7 @@ class RunFile(BaseModel):
     """Everything saved for one eval run."""
 
     model: str
+    agent_version: str = ""
     case_set: str = "main"
     started_at: datetime
     finished_at: datetime | None = None
@@ -131,6 +133,7 @@ def main(argv: list[str] | None = None) -> None:
         case_ids, categories = args.case, args.category
         run_file = RunFile(
             model=model,
+            agent_version=agent_version(),
             case_set=args.set,
             started_at=now,
             price=MODEL_PRICES[model],

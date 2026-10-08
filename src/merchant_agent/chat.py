@@ -2,6 +2,7 @@
 
 import asyncio
 import threading
+import time
 from collections.abc import Coroutine
 from dataclasses import dataclass, field
 from typing import Any
@@ -61,6 +62,7 @@ class Turn:
     reply: str
     tool_calls: list[ToolCall] = field(default_factory=list)
     usage: Usage = field(default_factory=Usage)
+    seconds: float = 0.0  # wall-clock time for the whole turn
 
     @property
     def case_ids(self) -> list[str]:
@@ -92,6 +94,7 @@ async def run_turn(runner: Runner, session_id: str, text: str) -> Turn:
     message = types.Content(role="user", parts=[types.Part(text=text)])
     pending: dict[str, tuple[str, dict]] = {}
     turn = Turn(reply="")
+    started = time.monotonic()
     async for event in runner.run_async(
         user_id=USER_ID, session_id=session_id, new_message=message
     ):
@@ -107,6 +110,7 @@ async def run_turn(runner: Runner, session_id: str, text: str) -> Turn:
                 turn.tool_calls.append(ToolCall(name=name, args=args, response=result.response))
             elif part.text and not part.thought and event.is_final_response():
                 turn.reply += part.text
+    turn.seconds = round(time.monotonic() - started, 2)
     return turn
 
 

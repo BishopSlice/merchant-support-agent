@@ -29,6 +29,7 @@ class TurnRecord(BaseModel):
     reply: str = ""
     tool_calls: list[ToolCallRecord] = Field(default_factory=list)
     usage: TokenUsage = Field(default_factory=TokenUsage)
+    seconds: float = 0.0  # wall-clock time for the agent's reply
 
 
 class CaseRun(BaseModel):
@@ -36,6 +37,7 @@ class CaseRun(BaseModel):
 
     case_id: str
     category: str
+    agent_version: str = ""  # merchant_agent.agent.agent_version() at run time
     status: str = "ok"  # "ok" or "error"
     error: str = ""
     turns: list[TurnRecord] = Field(default_factory=list)
