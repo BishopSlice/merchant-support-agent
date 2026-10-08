@@ -1,0 +1,326 @@
+"""The web app's API: the merchant shell, the agent side panel, replays and the specialist page.
+
+Every browser session gets its own copy of the demo store (a store id like "s-1a2b3c..."),
+so one visitor's edits and cases never show for another. The original data/ folder is copied
+once at startup into runtime/web-data, and only that copy is ever written.
+"""
+
+import csv
+import json
+import os
+import re
+import secrets
+import shutil
+from collections.abc import Callable
+from dataclasses import dataclass
+from datetime import UTC, datetime
+from pathlib import Path
+from typing import Annotated, Any, Literal
+
+import httpx
+from fastapi import Cookie, Depends, FastAPI, Header, HTTPException, Request, Response
+from fastapi.staticfiles import StaticFiles
+from google.genai.errors import APIError
+from pydantic import BaseModel, ConfigDict, StringConstraints
+
+from merchant_agent.chat import describe_tool_call, new_runner, new_session, run_turn
+from merchant_agent.config import PROJECT_ROOT, get_settings
+from merchant_agent.data import MockMerchantMcp
+from merchant_agent.merchant_api import product_name
+from merchant_agent.models import IssueType
+from merchant_agent.stores import load_store, store_dir
+from merchant_agent.tools.handoff import list_cases
+
+SESSION_COOKIE = "sid"
+SPECIALIST_COOKIE = "specialist"
+STATIC_DIR = Path(__file__).parent / "static"
+_REPLAY_ID = re.compile(r"^[a-z0-9][a-z0-9-]*$")
+
+
+class WebConfig(BaseModel):
+    """Limits and codes for the hosted demo. Codes come from the environment, never the repo."""
+
+    access_code: str | None = None  # None turns live chat off; replays still work
+    specialist_code: str = "specialist-demo"  # a demo login, shown on the specialist page
+    session_cap: int = 30
+    daily_cap: int = 400
+    max_sessions: int = 500  # oldest session copies are removed beyond this
+    demo_store: str = "sample-store"
+    replays_dir: Path = PROJECT_ROOT / "replays"
+    secure_cookies: bool = False  # set true when served over HTTPS
+
+    @classmethod
+    def from_env(cls) -> "WebConfig":
+        env = os.environ
+        return cls(
+            access_code=env.get("ACCESS_CODE") or None,
+            specialist_code=env.get("SPECIALIST_CODE", "specialist-demo"),
+            session_cap=int(env.get("SESSION_CAP", 30)),
+            daily_cap=int(env.get("DAILY_CAP", 400)),
+            secure_cookies=env.get("SECURE_COOKIES", "") == "1",
+        )
+
+
+# --- request bodies ---
+
+Text = Annotated[str, StringConstraints(strip_whitespace=True)]
+
+
+class ProductEdit(BaseModel):
+    """The fields a merchant can change in the Edit product dialog. Omitted fields stay as is."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    title: Annotated[Text, StringConstraints(min_length=1, max_length=300)] | None = None
+    price: Annotated[Text, StringConstraints(pattern=r"^\d+(\.\d{1,2})? [A-Z]{3}$")] | None = None
+    availability: Literal["in_stock", "out_of_stock", "preorder", "backorder"] | None = None
+    image_link: Annotated[Text, StringConstraints(pattern=r"^(https?://\S+)?$")] | None = None
+    gtin: Annotated[Text, StringConstraints(pattern=r"^(\d{8}|\d{12,14})?$")] | None = None
+    shipping: (
+        Annotated[
+            Text, StringConstraints(pattern=r"^([A-Z]{2}:[^:]*:[^:]*:\d+(\.\d{1,2})? [A-Z]{3})?$")
+        ]
+        | None
+    ) = None
+
+
+class EntryContextIn(BaseModel):
+    """The issue row the side panel was opened from."""
+
+    offer_id: Annotated[str, StringConstraints(pattern=r"^[A-Z]{2}-\d{3}$")]
+    issue_code: IssueType
+
+
+class ChatIn(BaseModel):
+    message: Annotated[Text, StringConstraints(min_length=1, max_length=2000)]
+    entry_context: EntryContextIn | None = None
+    new_conversation: bool = False
+
+
+class LoginIn(BaseModel):
+    code: str
+
+
+# --- sessions ---
+
+
+@dataclass
+class WebSession:
+    """One browser session: its own store copy, message count and agent conversation."""
+
+    store_id: str
+    created: datetime
+    messages: int = 0
+    runner: Any = None
+    conversation: str | None = None
+
+
+class Sessions:
+    def __init__(self, config: WebConfig) -> None:
+        self.config = config
+        self.by_token: dict[str, WebSession] = {}
+        self.daily: dict[str, int] = {}
+        self.specialists: set[str] = set()
+
+    def get_or_create(self, token: str | None) -> tuple[str, WebSession]:
+        if token and token in self.by_token:
+            return token, self.by_token[token]
+        while len(self.by_token) >= self.config.max_sessions:
+            oldest = min(self.by_token, key=lambda t: self.by_token[t].created)
+            shutil.rmtree(store_dir(self.by_token.pop(oldest).store_id), ignore_errors=True)
+        store_id = f"s-{secrets.token_hex(8)}"
+        source = get_settings().stores_dir / self.config.demo_store
+        shutil.copytree(source, get_settings().stores_dir / store_id)
+        token = secrets.token_urlsafe(24)
+        self.by_token[token] = WebSession(store_id=store_id, created=datetime.now(UTC))
+        return token, self.by_token[token]
+
+    def count_today(self) -> int:
+        return self.daily.get(datetime.now(UTC).date().isoformat(), 0)
+
+    def add_today(self) -> None:
+        today = datetime.now(UTC).date().isoformat()
+        self.daily = {today: self.daily.get(today, 0) + 1}
+
+
+def _working_copy(config: WebConfig) -> None:
+    """Copy the help docs and the demo store into runtime/web-data and point DATA_DIR at it."""
+    settings = get_settings()
+    work = settings.runtime_dir / "web-data"
+    if work.resolve() != settings.data_dir.resolve():
+        shutil.rmtree(work, ignore_errors=True)
+        shutil.copytree(settings.data_dir / "help_docs", work / "help_docs")
+        shutil.copytree(
+            settings.stores_dir / config.demo_store, work / "stores" / config.demo_store
+        )
+    os.environ["DATA_DIR"] = str(work)
+
+
+def _feed_path(store_id: str) -> Path:
+    return store_dir(store_id) / "feed.csv"
+
+
+def _issues_view(store_id: str) -> dict:
+    """What the Needs attention page shows: counts, account issues, flagged products, settings."""
+    mcp = MockMerchantMcp()
+    products = mcp.call("list_products", account=store_id)["products"]
+    [aggregate] = mcp.call("list_aggregate_product_statuses", account=store_id)[
+        "aggregateProductStatuses"
+    ]
+    automation = load_store(store_id).automatic_improvements
+    return {
+        "stats": aggregate["stats"],
+        "accountIssues": mcp.call("list_account_issues", account=store_id)["accountIssues"],
+        "products": [
+            {
+                "offerId": p["offerId"],
+                "name": p["name"],
+                "title": p["productAttributes"].get("title", ""),
+                "attributes": p["productAttributes"],
+                "issues": p["productStatus"]["itemLevelIssues"],
+            }
+            for p in products
+            if p["productStatus"]["itemLevelIssues"]
+        ],
+        "automation": automation.model_dump() if automation else None,
+    }
+
+
+def create_app(
+    config: WebConfig | None = None, runner_factory: Callable[[], Any] = new_runner
+) -> FastAPI:
+    """Build the app. Tests pass a fake runner factory so the model is never called."""
+    config = config or WebConfig.from_env()
+    _working_copy(config)
+    sessions = Sessions(config)
+    app = FastAPI(title="Merchant support agent (concept prototype)")
+
+    def session(response: Response, sid: Annotated[str | None, Cookie()] = None) -> WebSession:
+        token, current = sessions.get_or_create(sid)
+        if token != sid:
+            response.set_cookie(
+                SESSION_COOKIE, token, httponly=True, samesite="lax", secure=config.secure_cookies
+            )
+        return current
+
+    Session = Annotated[WebSession, Depends(session)]
+
+    @app.get("/api/issues")
+    def issues(current: Session) -> dict:
+        return _issues_view(current.store_id)
+
+    @app.post("/api/products/{offer_id}")
+    def edit_product(offer_id: str, edit: ProductEdit, current: Session) -> dict:
+        path = _feed_path(current.store_id)
+        with path.open(newline="") as f:
+            reader = csv.DictReader(f)
+            rows, columns = list(reader), reader.fieldnames or []
+        row = next((r for r in rows if r["id"] == offer_id), None)
+        if row is None:
+            raise HTTPException(404, f"No product {offer_id}")
+        row.update(edit.model_dump(exclude_none=True))
+        with path.open("w", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=columns, lineterminator="\n")
+            writer.writeheader()
+            writer.writerows(rows)
+        return {"status": "saved", "offerId": offer_id}
+
+    @app.post("/api/chat")
+    async def chat(
+        body: ChatIn,
+        current: Session,
+        x_access_code: Annotated[str | None, Header()] = None,
+    ) -> dict:
+        if not config.access_code:
+            raise HTTPException(403, "Live chat is off in this demo. Watch a replay instead.")
+        if not secrets.compare_digest(x_access_code or "", config.access_code):
+            raise HTTPException(401, "Live chat needs an access code.")
+        if current.messages >= config.session_cap:
+            raise HTTPException(
+                429, f"You've reached this session's limit of {config.session_cap} messages."
+            )
+        if sessions.count_today() >= config.daily_cap:
+            raise HTTPException(429, "The demo's daily message limit is used up. Try a replay.")
+        current.messages += 1
+        sessions.add_today()
+
+        if current.runner is None:
+            current.runner = runner_factory()
+        if body.new_conversation or current.conversation is None:
+            extra = {}
+            if body.entry_context:
+                extra["entry_context"] = {
+                    "product_name": product_name(current.store_id, body.entry_context.offer_id),
+                    "issue_code": body.entry_context.issue_code.value,
+                }
+            current.conversation = await new_session(current.runner, current.store_id, extra)
+        try:
+            turn = await run_turn(current.runner, current.conversation, body.message)
+        except (APIError, httpx.HTTPError) as error:
+            raise HTTPException(503, "The assistant is unavailable right now.") from error
+
+        created = [
+            c.response
+            for c in turn.tool_calls
+            if c.name == "create_handoff_case"
+            and isinstance(c.response, dict)
+            and c.response.get("status") == "created"
+        ]
+        return {
+            "reply": turn.reply,
+            "steps": [describe_tool_call(c) for c in turn.tool_calls],
+            "case": created[-1] if created else None,
+            "remaining": config.session_cap - current.messages,
+            "seconds": turn.seconds,
+        }
+
+    @app.get("/api/session/cases")
+    def my_cases(current: Session) -> dict:
+        mine = [c for c in list_cases() if c.store_id == current.store_id]
+        return {"cases": [json.loads(c.model_dump_json()) for c in mine]}
+
+    @app.get("/api/replays")
+    def replays() -> dict:
+        folder = config.replays_dir
+        files = sorted(folder.glob("*.json")) if folder.is_dir() else []
+        listed = []
+        for path in files:
+            data = json.loads(path.read_text())
+            listed.append({"id": path.stem, "title": data.get("title", path.stem)})
+        return {"replays": listed}
+
+    @app.get("/api/replays/{replay_id}")
+    def replay(replay_id: str) -> dict:
+        path = config.replays_dir / f"{replay_id}.json"
+        if not _REPLAY_ID.match(replay_id) or not path.is_file():
+            raise HTTPException(404, "No such replay")
+        return json.loads(path.read_text())
+
+    @app.post("/api/specialist/login")
+    def specialist_login(body: LoginIn, response: Response) -> dict:
+        if not secrets.compare_digest(body.code, config.specialist_code):
+            raise HTTPException(401, "Wrong demo code.")
+        token = secrets.token_urlsafe(24)
+        sessions.specialists.add(token)
+        response.set_cookie(
+            SPECIALIST_COOKIE, token, httponly=True, samesite="lax", secure=config.secure_cookies
+        )
+        return {"status": "signed in"}
+
+    @app.get("/api/cases")
+    def all_cases(request: Request) -> dict:
+        if request.cookies.get(SPECIALIST_COOKIE) not in sessions.specialists:
+            raise HTTPException(401, "Sign in with the demo specialist code.")
+        return {"cases": [json.loads(c.model_dump_json()) for c in list_cases()]}
+
+    if STATIC_DIR.is_dir():
+        app.mount("/", StaticFiles(directory=STATIC_DIR, html=True), name="static")
+    return app
+
+
+def __getattr__(name: str) -> FastAPI:
+    """`uvicorn merchant_agent.web.api:app` builds the app on first access, from the env."""
+    if name == "app":
+        globals()["app"] = create_app()
+        return globals()["app"]
+    raise AttributeError(name)
