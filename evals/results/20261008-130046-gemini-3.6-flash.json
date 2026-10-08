@@ -1,0 +1,711 @@
+{
+  "model": "gemini-3.6-flash",
+  "agent_version": "c2ab45d1bf07",
+  "case_set": "main",
+  "started_at": "2026-10-08T13:00:46.703134Z",
+  "finished_at": "2026-10-08T13:01:55.478097Z",
+  "price": {
+    "input_per_million": 0.75,
+    "cached_input_per_million": 0.075,
+    "output_per_million": 3.75
+  },
+  "case_filter": [],
+  "category_filter": [
+    "data_tool_failure"
+  ],
+  "runs": {
+    "fail-account-issues-partial": {
+      "case_id": "fail-account-issues-partial",
+      "category": "data_tool_failure",
+      "agent_version": "c2ab45d1bf07",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Run me through everything wrong with my store.",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "I couldn't load your account-level issues right now due to a data error, so I can't confirm whether there are any account-level warnings or suspensions. I can try checking account issues again for you if you'd like.\n\nHere is the summary of your product statuses:\n* **Disapproved products:** 1 product is disapproved due to an invalid image link.\n* **Warnings (Demoted issues):** 0 warnings.\n\n---\n\n### Disapproved Issue: Invalid or placeholder image\n\n**Affected product:**\n* **Linen Lampshade, Drum, Oat** (ID: `HG-095`): No image link is set.\n\n**How to fix:**\nProvide a valid main image link for this product. According to the [Product image link](https://support.google.com/merchants/answer/6324350) help guide:\n* Every product needs a main image link to show on Google Shopping.\n* The image must show the actual product (placeholder or generic images are not allowed).\n* Images must be at least 500 by 500 pixels.\n* Do not include promotional text, logos, watermarks, or overlays on the main image.\n\nWould you like me to try checking your account-level issues again, or is there anything else you'd like to work on?",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "error": "500 INTERNAL: Merchant Center couldn't return this data."
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/v2-suspended-images/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "2",
+                      "pendingCount": "0",
+                      "disapprovedCount": "1",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "invalid_image",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "imageLink",
+                        "description": "Invalid or placeholder image [image_link]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324350",
+                        "productCount": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_products",
+              "args": {
+                "issue_code": "invalid_image"
+              },
+              "response": {
+                "products": [
+                  {
+                    "name": "accounts/v2-suspended-images/products/en~US~HG-095",
+                    "offerId": "HG-095",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Linen Lampshade, Drum, Oat",
+                      "description": "Linen Lampshade, Drum, Oat. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-095",
+                      "availability": "IN_STOCK",
+                      "brand": "Hearth & Hollow",
+                      "gtins": [
+                        "0850012345951"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Lighting > Lamp Shades"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "39000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "invalid_image",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "imageLink",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Invalid or placeholder image [image_link]",
+                          "detail": "No image link is set.",
+                          "documentation": "https://support.google.com/merchants/answer/6324350",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "invalid_image"
+              },
+              "response": {
+                "query": "invalid_image",
+                "results": [
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "Every product needs a main image link. Without one the product cannot show.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "The image must show the actual product. Placeholder images, generic images and graphics that do not show the product are not allowed.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "Images must be at least 500 by 500 pixels, and around 1500 by 1500 pixels or larger is recommended. Do not add promotional text, logos, watermarks or other overlays to the main image.",
+                    "score": 8
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 3,
+            "input_tokens": 10857,
+            "cached_tokens": 0,
+            "output_tokens": 2416
+          },
+          "seconds": 15.06
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 3,
+        "input_tokens": 10857,
+        "cached_tokens": 0,
+        "output_tokens": 2416
+      },
+      "cost_usd": 0.01720275,
+      "seconds": 15.1
+    },
+    "fail-automation-malformed": {
+      "case_id": "fail-automation-malformed",
+      "category": "data_tool_failure",
+      "agent_version": "c2ab45d1bf07",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Are automatic updates switched on for my account right now?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "I couldn't check your automatic update settings right now because that data failed to load. Would you like me to try checking again?\n\nHere is a quick summary of your store status:\n* **Account issues:** None found.\n* **Disapproved products:** 1 product is disapproved due to a price mismatch (`price_mismatch`).\n* **Warnings (DEMOTED issues):** None.",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": []
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/price-only/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "3",
+                      "pendingCount": "0",
+                      "disapprovedCount": "1",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "price_mismatch",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "price",
+                        "description": "Mismatched value (page crawl) [price]",
+                        "documentationUri": "https://support.google.com/merchants/answer/12159029",
+                        "productCount": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "get_automatic_improvements",
+              "args": {},
+              "response": {
+                "unexpected": "<html><body>502 Bad Gateway</body></html>"
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 2,
+            "input_tokens": 6337,
+            "cached_tokens": 0,
+            "output_tokens": 1571
+          },
+          "seconds": 9.74
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 2,
+        "input_tokens": 6337,
+        "cached_tokens": 0,
+        "output_tokens": 1571
+      },
+      "cost_usd": 0.010644,
+      "seconds": 9.8
+    },
+    "fail-products-empty": {
+      "case_id": "fail-products-empty",
+      "category": "data_tool_failure",
+      "agent_version": "c2ab45d1bf07",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "List the specific products that got disapproved.",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "Here is a summary of your account and product status:\n\n* **Account issues:** None.\n* **Disapprovals:** 13 products are disapproved and cannot show to shoppers:\n  * **Price mismatch:** 3 products\n  * **Invalid image:** 3 products\n  * **Title too long:** 2 products\n  * **Availability mismatch:** 2 products\n  * **Missing shipping information:** 2 products\n  * **Restricted product:** 1 product\n* **Warnings:** 6 products have a warning for missing product barcode numbers (GTINs). (These products can still show, but reach fewer shoppers.)\n\nI tried to fetch the detailed list of specific product titles and IDs for you, but the system returned an empty product list, which contradicts the summary showing 13 disapprovals. Because of this issue, I couldn't load the specific product list right now.\n\nWould you like me to try loading the detailed product data again?",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": []
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/sample-store/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "17",
+                      "pendingCount": "0",
+                      "disapprovedCount": "13",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "missing_gtin",
+                        "severity": "DEMOTED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "gtins",
+                        "description": "Missing value [gtin]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324461",
+                        "productCount": "6"
+                      },
+                      {
+                        "code": "price_mismatch",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "price",
+                        "description": "Mismatched value (page crawl) [price]",
+                        "documentationUri": "https://support.google.com/merchants/answer/12159029",
+                        "productCount": "3"
+                      },
+                      {
+                        "code": "invalid_image",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "imageLink",
+                        "description": "Invalid or placeholder image [image_link]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324350",
+                        "productCount": "3"
+                      },
+                      {
+                        "code": "title_too_long",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "title",
+                        "description": "Text too long [title]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324415",
+                        "productCount": "2"
+                      },
+                      {
+                        "code": "availability_mismatch",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "availability",
+                        "description": "Mismatched value (page crawl) [availability]",
+                        "documentationUri": "https://support.google.com/merchants/answer/12470049",
+                        "productCount": "2"
+                      },
+                      {
+                        "code": "missing_shipping",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "shipping",
+                        "description": "Missing shipping information",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324484",
+                        "productCount": "2"
+                      },
+                      {
+                        "code": "restricted_product",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "productTypes",
+                        "description": "Restricted product (unapproved substances policy)",
+                        "documentationUri": "https://support.google.com/merchants/answer/6165956",
+                        "productCount": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_products",
+              "args": {
+                "issue_code": "price_mismatch"
+              },
+              "response": {
+                "products": []
+              }
+            },
+            {
+              "name": "get_automatic_improvements",
+              "args": {},
+              "response": {
+                "name": "accounts/sample-store/automaticImprovements",
+                "itemUpdates": {
+                  "accountItemUpdatesSettings": {
+                    "allowPriceUpdates": false,
+                    "allowAvailabilityUpdates": false,
+                    "allowStrictAvailabilityUpdates": false,
+                    "allowConditionUpdates": false
+                  },
+                  "effectiveAllowPriceUpdates": false,
+                  "effectiveAllowAvailabilityUpdates": false,
+                  "effectiveAllowStrictAvailabilityUpdates": false,
+                  "effectiveAllowConditionUpdates": false
+                },
+                "imageImprovements": {
+                  "effectiveAllowAutomaticImageImprovements": false,
+                  "accountImageImprovementsSettings": {
+                    "allowAutomaticImageImprovements": false
+                  }
+                },
+                "shippingImprovements": {
+                  "allowShippingImprovements": false
+                }
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "automatic item updates"
+              },
+              "response": {
+                "query": "automatic item updates",
+                "results": [
+                  {
+                    "doc_id": "automatic-item-updates",
+                    "title": "Automatic item updates for price and availability",
+                    "source_url": "https://support.google.com/merchants/answer/3246284",
+                    "passage": "Merchant Center can update some product information automatically, using what it finds on your website. Automatic item updates cover price, sale price, availability and condition.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "automatic-item-updates",
+                    "title": "Automatic item updates for price and availability",
+                    "source_url": "https://support.google.com/merchants/answer/3246284",
+                    "passage": "Automatic item updates are on by default. You can turn them on or off under Products, on the Automations tab, by choosing an automation and opening View details.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "automatic-item-updates",
+                    "title": "Automatic item updates for price and availability",
+                    "source_url": "https://support.google.com/merchants/answer/3246284",
+                    "passage": "Automatic updates are not a replacement for keeping your product data up to date. They are meant for occasional mismatches on a small share of products. If a price or availability changes often, for example more than once a day, the product may be disapproved instead of updated.",
+                    "score": 6
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "price_mismatch"
+              },
+              "response": {
+                "query": "price_mismatch",
+                "results": [
+                  {
+                    "doc_id": "price-mismatch",
+                    "title": "Price in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12159029",
+                    "passage": "The price you send must match the price shown on the product's page and at checkout, in the same currency. If they differ, Google disapproves the product.",
+                    "score": 10
+                  },
+                  {
+                    "doc_id": "price-mismatch",
+                    "title": "Price in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12159029",
+                    "passage": "Common causes are a delay between changing the price on your website and updating your product data, a sale price with the wrong dates, or price markup on the page that differs from the price shoppers see.",
+                    "score": 10
+                  },
+                  {
+                    "doc_id": "price-mismatch",
+                    "title": "Price in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12159029",
+                    "passage": "To fix it, change the price in your product data so it matches the product page exactly, then upload the corrected data. You can edit products one at a time in Merchant Center or download the list of affected products and fix them in bulk.",
+                    "score": 10
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_products",
+              "args": {},
+              "response": {
+                "products": []
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 4,
+            "input_tokens": 17582,
+            "cached_tokens": 0,
+            "output_tokens": 2917
+          },
+          "seconds": 18.23
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 4,
+        "input_tokens": 17582,
+        "cached_tokens": 0,
+        "output_tokens": 2917
+      },
+      "cost_usd": 0.02412525,
+      "seconds": 18.3
+    },
+    "fail-products-quota": {
+      "case_id": "fail-products-quota",
+      "category": "data_tool_failure",
+      "agent_version": "c2ab45d1bf07",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Which items are missing shipping details?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "Here is a summary of your account and product status:\n\n* **Account issues:** None.\n* **Disapproved products:** 13 products are disapproved due to price mismatch (3), invalid image (3), title too long (2), availability mismatch (2), missing shipping information (2), and restricted product policy (1).\n* **Warnings (Demoted):** 1 warning for missing product barcode numbers (GTINs), affecting 6 products.\n\nYour account summary shows **2 products** with missing shipping details. However, I was unable to load the specific item list due to a data error. \n\nWould you like me to try loading the product details again?\n\nFor guidance on setting up shipping information, see [Shipping costs](https://support.google.com/merchants/answer/6324484).",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": []
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/sample-store/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "17",
+                      "pendingCount": "0",
+                      "disapprovedCount": "13",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "missing_gtin",
+                        "severity": "DEMOTED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "gtins",
+                        "description": "Missing value [gtin]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324461",
+                        "productCount": "6"
+                      },
+                      {
+                        "code": "price_mismatch",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "price",
+                        "description": "Mismatched value (page crawl) [price]",
+                        "documentationUri": "https://support.google.com/merchants/answer/12159029",
+                        "productCount": "3"
+                      },
+                      {
+                        "code": "invalid_image",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "imageLink",
+                        "description": "Invalid or placeholder image [image_link]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324350",
+                        "productCount": "3"
+                      },
+                      {
+                        "code": "title_too_long",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "title",
+                        "description": "Text too long [title]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324415",
+                        "productCount": "2"
+                      },
+                      {
+                        "code": "availability_mismatch",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "availability",
+                        "description": "Mismatched value (page crawl) [availability]",
+                        "documentationUri": "https://support.google.com/merchants/answer/12470049",
+                        "productCount": "2"
+                      },
+                      {
+                        "code": "missing_shipping",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "shipping",
+                        "description": "Missing shipping information",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324484",
+                        "productCount": "2"
+                      },
+                      {
+                        "code": "restricted_product",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "productTypes",
+                        "description": "Restricted product (unapproved substances policy)",
+                        "documentationUri": "https://support.google.com/merchants/answer/6165956",
+                        "productCount": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_products",
+              "args": {
+                "issue_code": "missing_shipping"
+              },
+              "response": {
+                "error": "429 RESOURCE_EXHAUSTED: Merchant API quota exceeded. Try again later."
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "missing_shipping"
+              },
+              "response": {
+                "query": "missing_shipping",
+                "results": [
+                  {
+                    "doc_id": "shipping",
+                    "title": "Shipping costs",
+                    "source_url": "https://support.google.com/merchants/answer/6324484",
+                    "passage": "In the United States and many other countries, products need shipping information, including cost and delivery speed. Products with missing or wrong shipping information can be disapproved.",
+                    "score": 9
+                  },
+                  {
+                    "doc_id": "shipping",
+                    "title": "Shipping costs",
+                    "source_url": "https://support.google.com/merchants/answer/6324484",
+                    "passage": "The recommended way is to set up shipping in your Merchant Center account settings, which then applies to your products. Use the shipping value in your product data only to override those settings for specific products.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "shipping",
+                    "title": "Shipping costs",
+                    "source_url": "https://support.google.com/merchants/answer/6324484",
+                    "passage": "Delivery speed is made of two parts: handling time, from the order until it is handed to the carrier, and transit time, from the carrier to the customer.",
+                    "score": 7
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 3,
+            "input_tokens": 11518,
+            "cached_tokens": 0,
+            "output_tokens": 2970
+          },
+          "seconds": 17.49
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 3,
+        "input_tokens": 11518,
+        "cached_tokens": 0,
+        "output_tokens": 2970
+      },
+      "cost_usd": 0.019776,
+      "seconds": 17.5
+    },
+    "fail-summary-timeout": {
+      "case_id": "fail-summary-timeout",
+      "category": "data_tool_failure",
+      "agent_version": "c2ab45d1bf07",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Give me the big picture: how many listings have problems?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "I checked your account, and there are no account-level issues or suspensions.\n\nHowever, I wasn't able to load your product status summary because the request timed out.\n\nWould you like me to try loading your product status data again?",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": []
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "error": "The request to Merchant Center timed out."
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 2,
+            "input_tokens": 5960,
+            "cached_tokens": 0,
+            "output_tokens": 690
+          },
+          "seconds": 8.02
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 2,
+        "input_tokens": 5960,
+        "cached_tokens": 0,
+        "output_tokens": 690
+      },
+      "cost_usd": 0.0070575,
+      "seconds": 8.1
+    }
+  },
+  "grades": {}
+}

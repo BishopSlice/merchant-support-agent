@@ -177,6 +177,8 @@ class MockMerchantMcp:
         store = load_store(account)
         if store.account_status is not AccountStatus.SUSPENDED:
             return {"accountIssues": []}
+        # The mock raises CRITICAL account issues only for suspended stores, and the agent's
+        # instructions read CRITICAL as a suspension.
         title = store.suspension_reason.split(":")[0] or "Account suspended"
         issue = AccountIssue(
             name=f"accounts/{account}/issues/{title.lower().replace(' ', '-')}",

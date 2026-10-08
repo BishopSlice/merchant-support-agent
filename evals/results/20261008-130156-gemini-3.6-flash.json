@@ -1,0 +1,2324 @@
+{
+  "model": "gemini-3.6-flash",
+  "agent_version": "c2ab45d1bf07",
+  "case_set": "main",
+  "started_at": "2026-10-08T13:01:56.019073Z",
+  "finished_at": "2026-10-08T13:04:17.166131Z",
+  "price": {
+    "input_per_million": 0.75,
+    "cached_input_per_million": 0.075,
+    "output_per_million": 3.75
+  },
+  "case_filter": [],
+  "category_filter": [
+    "automation_routing"
+  ],
+  "runs": {
+    "auto-irrelevant-barcodes": {
+      "case_id": "auto-irrelevant-barcodes",
+      "category": "automation_routing",
+      "agent_version": "c2ab45d1bf07",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Could some automatic setting fill in the missing barcodes for me?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "No, automatic settings cannot fill in missing barcodes for you. Automatic item updates only cover price, sale price, availability, and condition ([Automatic item updates for price and availability](https://support.google.com/merchants/answer/3246284)).\n\nHere is the current status of your account:\n* **Account issues:** None.\n* **Disapproved products:** 0 products disapproved.\n* **Warnings:** 1 warning (missing product barcode number [GTIN]) affecting 2 products.\n\n### Missing Product Barcode Number (GTIN)\nThe following 2 products have a warning because no barcode number is set:\n* **Linen Napkins, Set of 4, Natural** (ID: `HG-002`) — Missing product barcode number (GTIN)\n* **Wool Throw Blanket, Charcoal Herringbone** (ID: `HG-007`) — Missing product barcode number (GTIN)\n\n**How to fix:**\nYou need to manually add the correct product barcode number (GTIN) for each item. A GTIN is an 8, 12, 13, or 14-digit number assigned by the manufacturer (such as a UPC in North America or an EAN in Europe). Copy the exact number from the product packaging or from your supplier and enter it into the GTIN field for each product ([Product barcode number (GTIN)](https://support.google.com/merchants/answer/6324461)).",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": []
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/gtin-only/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "5",
+                      "pendingCount": "0",
+                      "disapprovedCount": "0",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "missing_gtin",
+                        "severity": "DEMOTED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "gtins",
+                        "description": "Missing value [gtin]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324461",
+                        "productCount": "2"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "automatic item updates"
+              },
+              "response": {
+                "query": "automatic item updates",
+                "results": [
+                  {
+                    "doc_id": "automatic-item-updates",
+                    "title": "Automatic item updates for price and availability",
+                    "source_url": "https://support.google.com/merchants/answer/3246284",
+                    "passage": "Merchant Center can update some product information automatically, using what it finds on your website. Automatic item updates cover price, sale price, availability and condition.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "automatic-item-updates",
+                    "title": "Automatic item updates for price and availability",
+                    "source_url": "https://support.google.com/merchants/answer/3246284",
+                    "passage": "Automatic item updates are on by default. You can turn them on or off under Products, on the Automations tab, by choosing an automation and opening View details.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "automatic-item-updates",
+                    "title": "Automatic item updates for price and availability",
+                    "source_url": "https://support.google.com/merchants/answer/3246284",
+                    "passage": "Automatic updates are not a replacement for keeping your product data up to date. They are meant for occasional mismatches on a small share of products. If a price or availability changes often, for example more than once a day, the product may be disapproved instead of updated.",
+                    "score": 6
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "missing_gtin"
+              },
+              "response": {
+                "query": "missing_gtin",
+                "results": [
+                  {
+                    "doc_id": "gtin",
+                    "title": "Product barcode number (GTIN)",
+                    "source_url": "https://support.google.com/merchants/answer/6324461",
+                    "passage": "Products with a missing or wrong GTIN may get limited visibility. If a product does have a GTIN and you leave it out, the product could be disapproved.",
+                    "score": 9
+                  },
+                  {
+                    "doc_id": "gtin",
+                    "title": "Product barcode number (GTIN)",
+                    "source_url": "https://support.google.com/merchants/answer/6324461",
+                    "passage": "A GTIN is the barcode number a manufacturer gives a product, such as a UPC in North America or an EAN in Europe. Google recommends sending it for every product that has one.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "gtin",
+                    "title": "Product barcode number (GTIN)",
+                    "source_url": "https://support.google.com/merchants/answer/6324461",
+                    "passage": "Valid GTINs are 8, 12, 13 or 14 digits long. Spaces and dashes are ignored. The last digit is a check digit and must be correct, so copy the number exactly from the packaging or from your supplier.",
+                    "score": 8
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_products",
+              "args": {
+                "issue_code": "missing_gtin"
+              },
+              "response": {
+                "products": [
+                  {
+                    "name": "accounts/gtin-only/products/en~US~HG-002",
+                    "offerId": "HG-002",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Linen Napkins, Set of 4, Natural",
+                      "description": "Linen Napkins, Set of 4, Natural. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-002",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/hg-002.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Hearth & Hollow",
+                      "gtins": [],
+                      "productTypes": [
+                        "Home & Garden > Linens & Bedding > Table Linens"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "24000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [
+                            "US"
+                          ],
+                          "pendingCountries": [],
+                          "disapprovedCountries": []
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "missing_gtin",
+                          "severity": "DEMOTED",
+                          "resolution": "merchant_action",
+                          "attribute": "gtins",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Missing value [gtin]",
+                          "detail": "No GTIN (barcode number) is set for this product.",
+                          "documentation": "https://support.google.com/merchants/answer/6324461",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "name": "accounts/gtin-only/products/en~US~HG-007",
+                    "offerId": "HG-007",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Wool Throw Blanket, Charcoal Herringbone",
+                      "description": "Wool Throw Blanket, Charcoal Herringbone. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-007",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/hg-007.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Hearth & Hollow",
+                      "gtins": [],
+                      "productTypes": [
+                        "Home & Garden > Linens & Bedding > Blankets"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "120000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [
+                            "US"
+                          ],
+                          "pendingCountries": [],
+                          "disapprovedCountries": []
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "missing_gtin",
+                          "severity": "DEMOTED",
+                          "resolution": "merchant_action",
+                          "attribute": "gtins",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Missing value [gtin]",
+                          "detail": "No GTIN (barcode number) is set for this product.",
+                          "documentation": "https://support.google.com/merchants/answer/6324461",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 4,
+            "input_tokens": 15857,
+            "cached_tokens": 0,
+            "output_tokens": 2448
+          },
+          "seconds": 16.41
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 4,
+        "input_tokens": 15857,
+        "cached_tokens": 0,
+        "output_tokens": 2448
+      },
+      "cost_usd": 0.02107275,
+      "seconds": 16.5
+    },
+    "auto-irrelevant-photos": {
+      "case_id": "auto-irrelevant-photos",
+      "category": "automation_routing",
+      "agent_version": "c2ab45d1bf07",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Is there any automatic option that could deal with my lamp and shelf pictures?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "### Account & Product Summary\n* **Account issues:** None.\n* **Disapproved products:** 2 products are disapproved due to invalid or placeholder images.\n* **Warnings:** None.\n\n---\n\n### Automatic Image Options\nAutomatic image improvements are already turned on for your account. However, as noted in [Automatic image improvements](https://support.google.com/merchants/answer/9242973), this setting only removes promotional overlays (like text, watermarks, or logos) from existing product photos. It cannot create or replace missing images or placeholder images.\n\n---\n\n### Affected Products\nBoth affected products require a manual fix:\n\n1. **Ceramic Table Lamp, Matte White** (ID: `HG-006`): No image link is provided in the product data.\n2. **Walnut Wall Shelf, 24 inch** (ID: `HG-013`): The image link points to a placeholder image (`https://cdn.hearthandhollow.example/img/placeholder.png`).\n\n---\n\n### How to Fix\nTo resolve these disapprovals, update your product feed with direct image links that meet the requirements in [Product image link](https://support.google.com/merchants/answer/6324350):\n* The main image must show the actual product (placeholder or generic graphics are not allowed).\n* Images must be at least 500 × 500 pixels.\n\nWould you like to move on to anything else?",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": []
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/v2-images-auto-on/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "3",
+                      "pendingCount": "0",
+                      "disapprovedCount": "2",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "invalid_image",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "imageLink",
+                        "description": "Invalid or placeholder image [image_link]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324350",
+                        "productCount": "2"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "get_automatic_improvements",
+              "args": {},
+              "response": {
+                "name": "accounts/v2-images-auto-on/automaticImprovements",
+                "itemUpdates": {
+                  "accountItemUpdatesSettings": {
+                    "allowPriceUpdates": false,
+                    "allowAvailabilityUpdates": false,
+                    "allowStrictAvailabilityUpdates": false,
+                    "allowConditionUpdates": false
+                  },
+                  "effectiveAllowPriceUpdates": false,
+                  "effectiveAllowAvailabilityUpdates": false,
+                  "effectiveAllowStrictAvailabilityUpdates": false,
+                  "effectiveAllowConditionUpdates": false
+                },
+                "imageImprovements": {
+                  "effectiveAllowAutomaticImageImprovements": true,
+                  "accountImageImprovementsSettings": {
+                    "allowAutomaticImageImprovements": true
+                  }
+                },
+                "shippingImprovements": {
+                  "allowShippingImprovements": false
+                }
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "automatic image improvements"
+              },
+              "response": {
+                "query": "automatic image improvements",
+                "results": [
+                  {
+                    "doc_id": "automatic-image-improvements",
+                    "title": "Automatic image improvements",
+                    "source_url": "https://support.google.com/merchants/answer/9242973",
+                    "passage": "Automatic image improvements are off by default. You can turn them on under Products, on the Automations tab.",
+                    "score": 9
+                  },
+                  {
+                    "doc_id": "automatic-image-improvements",
+                    "title": "Automatic image improvements",
+                    "source_url": "https://support.google.com/merchants/answer/9242973",
+                    "passage": "Image improvements work on the overlays in an existing image. A missing image or a placeholder needs a real image of the product, added by you.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "automatic-image-improvements",
+                    "title": "Automatic image improvements",
+                    "source_url": "https://support.google.com/merchants/answer/9242973",
+                    "passage": "Merchant Center can try to fix product images that were disapproved because of promotional overlays. It removes text, watermarks, overlays or logos it detects in the image.",
+                    "score": 7
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "invalid_image"
+              },
+              "response": {
+                "query": "invalid_image",
+                "results": [
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "Every product needs a main image link. Without one the product cannot show.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "The image must show the actual product. Placeholder images, generic images and graphics that do not show the product are not allowed.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "Images must be at least 500 by 500 pixels, and around 1500 by 1500 pixels or larger is recommended. Do not add promotional text, logos, watermarks or other overlays to the main image.",
+                    "score": 8
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_products",
+              "args": {
+                "issue_code": "invalid_image"
+              },
+              "response": {
+                "products": [
+                  {
+                    "name": "accounts/v2-images-auto-on/products/en~US~HG-006",
+                    "offerId": "HG-006",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Ceramic Table Lamp, Matte White",
+                      "description": "Ceramic Table Lamp, Matte White. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-006",
+                      "availability": "IN_STOCK",
+                      "brand": "Lumen Home",
+                      "gtins": [
+                        "0850012345067"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Lighting > Lamps"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "89000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "invalid_image",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "imageLink",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Invalid or placeholder image [image_link]",
+                          "detail": "No image link is set.",
+                          "documentation": "https://support.google.com/merchants/answer/6324350",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "name": "accounts/v2-images-auto-on/products/en~US~HG-013",
+                    "offerId": "HG-013",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Walnut Wall Shelf, 24 inch",
+                      "description": "Walnut Wall Shelf, 24 inch. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-013",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/placeholder.png",
+                      "availability": "IN_STOCK",
+                      "brand": "Timberline",
+                      "gtins": [
+                        "0850012345135"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Furniture > Shelving"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "65000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "invalid_image",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "imageLink",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Invalid or placeholder image [image_link]",
+                          "detail": "Image link 'https://cdn.hearthandhollow.example/img/placeholder.png' points to a placeholder, not a real product photo.",
+                          "documentation": "https://support.google.com/merchants/answer/6324350",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 3,
+            "input_tokens": 11689,
+            "cached_tokens": 0,
+            "output_tokens": 2738
+          },
+          "seconds": 17.49
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 3,
+        "input_tokens": 11689,
+        "cached_tokens": 0,
+        "output_tokens": 2738
+      },
+      "cost_usd": 0.01903425,
+      "seconds": 17.5
+    },
+    "auto-irrelevant-shipping": {
+      "case_id": "auto-irrelevant-shipping",
+      "category": "automation_routing",
+      "agent_version": "c2ab45d1bf07",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "My string lights are disapproved over shipping. Isn't there an automatic setting for that already?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "### Account & Product Status Summary\n* **Account issues:** None.\n* **Disapprovals:** 1 product is disapproved because it is missing shipping information.\n* **Warnings (Demoted):** None.\n\n---\n\n### Disapproved Product: Missing Shipping Information\n\nAutomated settings cannot automatically fill in missing shipping costs. To fix this disapproval, you need to provide shipping details manually.\n\n**Affected product:**\n* **Outdoor String Lights, 48 ft** (ID: `HG-030`) — No shipping cost is set for this product.\n\n**How to fix:**\nAccording to the help documentation, products need shipping information, including cost and delivery speed. You can fix this by setting up shipping in your Merchant Center account settings so it applies to your products, or by providing the shipping value directly in your product data.\n\nFor more details, see the official guidance on [Shipping costs](https://support.google.com/merchants/answer/6324484).\n\nWould you like to check anything else?",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": []
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/v2-shipping-auto-on/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "3",
+                      "pendingCount": "0",
+                      "disapprovedCount": "1",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "missing_shipping",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "shipping",
+                        "description": "Missing shipping information",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324484",
+                        "productCount": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "get_automatic_improvements",
+              "args": {},
+              "response": {
+                "name": "accounts/v2-shipping-auto-on/automaticImprovements",
+                "itemUpdates": {
+                  "accountItemUpdatesSettings": {
+                    "allowPriceUpdates": false,
+                    "allowAvailabilityUpdates": false,
+                    "allowStrictAvailabilityUpdates": false,
+                    "allowConditionUpdates": false
+                  },
+                  "effectiveAllowPriceUpdates": false,
+                  "effectiveAllowAvailabilityUpdates": false,
+                  "effectiveAllowStrictAvailabilityUpdates": false,
+                  "effectiveAllowConditionUpdates": false
+                },
+                "imageImprovements": {
+                  "effectiveAllowAutomaticImageImprovements": false,
+                  "accountImageImprovementsSettings": {
+                    "allowAutomaticImageImprovements": false
+                  }
+                },
+                "shippingImprovements": {
+                  "allowShippingImprovements": true
+                }
+              }
+            },
+            {
+              "name": "list_products",
+              "args": {
+                "issue_code": "missing_shipping"
+              },
+              "response": {
+                "products": [
+                  {
+                    "name": "accounts/v2-shipping-auto-on/products/en~US~HG-030",
+                    "offerId": "HG-030",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Outdoor String Lights, 48 ft",
+                      "description": "Outdoor String Lights, 48 ft. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-030",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/hg-030.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Lumen Home",
+                      "gtins": [
+                        "0850012345296"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Lighting > Outdoor Lighting"
+                      ],
+                      "shipping": [],
+                      "price": {
+                        "amountMicros": "42000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "missing_shipping",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "shipping",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Missing shipping information",
+                          "detail": "No shipping cost is set for this product.",
+                          "documentation": "https://support.google.com/merchants/answer/6324484",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "missing_shipping"
+              },
+              "response": {
+                "query": "missing_shipping",
+                "results": [
+                  {
+                    "doc_id": "shipping",
+                    "title": "Shipping costs",
+                    "source_url": "https://support.google.com/merchants/answer/6324484",
+                    "passage": "In the United States and many other countries, products need shipping information, including cost and delivery speed. Products with missing or wrong shipping information can be disapproved.",
+                    "score": 9
+                  },
+                  {
+                    "doc_id": "shipping",
+                    "title": "Shipping costs",
+                    "source_url": "https://support.google.com/merchants/answer/6324484",
+                    "passage": "The recommended way is to set up shipping in your Merchant Center account settings, which then applies to your products. Use the shipping value in your product data only to override those settings for specific products.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "shipping",
+                    "title": "Shipping costs",
+                    "source_url": "https://support.google.com/merchants/answer/6324484",
+                    "passage": "Delivery speed is made of two parts: handling time, from the order until it is handed to the carrier, and transit time, from the carrier to the customer.",
+                    "score": 7
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "shipping improvements"
+              },
+              "response": {
+                "query": "shipping improvements",
+                "results": [
+                  {
+                    "doc_id": "automatic-image-improvements",
+                    "title": "Automatic image improvements",
+                    "source_url": "https://support.google.com/merchants/answer/9242973",
+                    "passage": "Automatic image improvements are off by default. You can turn them on under Products, on the Automations tab.",
+                    "score": 3
+                  },
+                  {
+                    "doc_id": "automatic-image-improvements",
+                    "title": "Automatic image improvements",
+                    "source_url": "https://support.google.com/merchants/answer/9242973",
+                    "passage": "Image improvements work on the overlays in an existing image. A missing image or a placeholder needs a real image of the product, added by you.",
+                    "score": 3
+                  },
+                  {
+                    "doc_id": "shipping",
+                    "title": "Shipping costs",
+                    "source_url": "https://support.google.com/merchants/answer/6324484",
+                    "passage": "In the United States and many other countries, products need shipping information, including cost and delivery speed. Products with missing or wrong shipping information can be disapproved.",
+                    "score": 3
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "automatic shipping improvements"
+              },
+              "response": {
+                "query": "automatic shipping improvements",
+                "results": [
+                  {
+                    "doc_id": "automatic-image-improvements",
+                    "title": "Automatic image improvements",
+                    "source_url": "https://support.google.com/merchants/answer/9242973",
+                    "passage": "Automatic image improvements are off by default. You can turn them on under Products, on the Automations tab.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "automatic-image-improvements",
+                    "title": "Automatic image improvements",
+                    "source_url": "https://support.google.com/merchants/answer/9242973",
+                    "passage": "Image improvements work on the overlays in an existing image. A missing image or a placeholder needs a real image of the product, added by you.",
+                    "score": 5
+                  },
+                  {
+                    "doc_id": "automatic-image-improvements",
+                    "title": "Automatic image improvements",
+                    "source_url": "https://support.google.com/merchants/answer/9242973",
+                    "passage": "Merchant Center can try to fix product images that were disapproved because of promotional overlays. It removes text, watermarks, overlays or logos it detects in the image.",
+                    "score": 4
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 4,
+            "input_tokens": 16296,
+            "cached_tokens": 0,
+            "output_tokens": 1958
+          },
+          "seconds": 14.8
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 4,
+        "input_tokens": 16296,
+        "cached_tokens": 0,
+        "output_tokens": 1958
+      },
+      "cost_usd": 0.0195645,
+      "seconds": 14.8
+    },
+    "auto-off-both-kinds": {
+      "case_id": "auto-off-both-kinds",
+      "category": "automation_routing",
+      "agent_version": "c2ab45d1bf07",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Two of my listings were pulled. What happened and how do I stop it recurring?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "**Summary of account status:**\n* **Account issues:** None.\n* **Disapproved products:** 2 products are disapproved (1 for a price mismatch and 1 for an availability mismatch).\n* **Warnings:** None.\n\n---\n\n### Issue 1: Price Mismatch\n\n**Affected product:**\n* **Cast Iron Teapot, 1 Litre, Black** (ID: `HG-060`)\n\n**What happened:**\nThe price in your product data is **$48.00 USD**, but the product page on your website shows **$52.00 USD**. Google requires the price sent in your product data to match what appears on your website and at checkout ([Price in the feed does not match the website](https://support.google.com/merchants/answer/12159029)).\n\n**How to fix it:**\nUpdate the price in your product data to $52.00 USD so it matches your website, then re-upload or save your updated product data.\n\n**How to stop it from recurring:**\nYour account currently has automatic price updates turned off. You can turn on **automatic item updates** in Merchant Center under **Products** > **Automations**. When enabled, Google can automatically update product prices using the information on your website to avoid mismatches ([Automatic item updates for price and availability](https://support.google.com/merchants/answer/3246284)).\n\n---\n\nWould you like to move on to the second disapproved product?",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": []
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/v2-mismatch-off/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "3",
+                      "pendingCount": "0",
+                      "disapprovedCount": "2",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "price_mismatch",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "price",
+                        "description": "Mismatched value (page crawl) [price]",
+                        "documentationUri": "https://support.google.com/merchants/answer/12159029",
+                        "productCount": "1"
+                      },
+                      {
+                        "code": "availability_mismatch",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "availability",
+                        "description": "Mismatched value (page crawl) [availability]",
+                        "documentationUri": "https://support.google.com/merchants/answer/12470049",
+                        "productCount": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "get_automatic_improvements",
+              "args": {},
+              "response": {
+                "name": "accounts/v2-mismatch-off/automaticImprovements",
+                "itemUpdates": {
+                  "accountItemUpdatesSettings": {
+                    "allowPriceUpdates": false,
+                    "allowAvailabilityUpdates": false,
+                    "allowStrictAvailabilityUpdates": false,
+                    "allowConditionUpdates": false
+                  },
+                  "effectiveAllowPriceUpdates": false,
+                  "effectiveAllowAvailabilityUpdates": false,
+                  "effectiveAllowStrictAvailabilityUpdates": false,
+                  "effectiveAllowConditionUpdates": false
+                },
+                "imageImprovements": {
+                  "effectiveAllowAutomaticImageImprovements": false,
+                  "accountImageImprovementsSettings": {
+                    "allowAutomaticImageImprovements": false
+                  }
+                },
+                "shippingImprovements": {
+                  "allowShippingImprovements": false
+                }
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "automatic item updates"
+              },
+              "response": {
+                "query": "automatic item updates",
+                "results": [
+                  {
+                    "doc_id": "automatic-item-updates",
+                    "title": "Automatic item updates for price and availability",
+                    "source_url": "https://support.google.com/merchants/answer/3246284",
+                    "passage": "Merchant Center can update some product information automatically, using what it finds on your website. Automatic item updates cover price, sale price, availability and condition.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "automatic-item-updates",
+                    "title": "Automatic item updates for price and availability",
+                    "source_url": "https://support.google.com/merchants/answer/3246284",
+                    "passage": "Automatic item updates are on by default. You can turn them on or off under Products, on the Automations tab, by choosing an automation and opening View details.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "automatic-item-updates",
+                    "title": "Automatic item updates for price and availability",
+                    "source_url": "https://support.google.com/merchants/answer/3246284",
+                    "passage": "Automatic updates are not a replacement for keeping your product data up to date. They are meant for occasional mismatches on a small share of products. If a price or availability changes often, for example more than once a day, the product may be disapproved instead of updated.",
+                    "score": 6
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_products",
+              "args": {
+                "issue_code": "price_mismatch"
+              },
+              "response": {
+                "products": [
+                  {
+                    "name": "accounts/v2-mismatch-off/products/en~US~HG-060",
+                    "offerId": "HG-060",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Cast Iron Teapot, 1 Litre, Black",
+                      "description": "Cast Iron Teapot, 1 Litre, Black. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-060",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/hg-060.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Hearth & Hollow",
+                      "gtins": [
+                        "0850012345609"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Kitchen & Dining > Teapots"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "48000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "price_mismatch",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "price",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Mismatched value (page crawl) [price]",
+                          "detail": "Feed price is 48.00 USD but the product page shows 52.00 USD.",
+                          "documentation": "https://support.google.com/merchants/answer/12159029",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_products",
+              "args": {
+                "issue_code": "availability_mismatch"
+              },
+              "response": {
+                "products": [
+                  {
+                    "name": "accounts/v2-mismatch-off/products/en~US~HG-061",
+                    "offerId": "HG-061",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Terracotta Planter, 8 inch",
+                      "description": "Terracotta Planter, 8 inch. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-061",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/hg-061.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Hearth & Hollow",
+                      "gtins": [
+                        "0850012345616"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Lawn & Garden > Planters"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "18000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "availability_mismatch",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "availability",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Mismatched value (page crawl) [availability]",
+                          "detail": "Feed says in_stock but the product page says out_of_stock.",
+                          "documentation": "https://support.google.com/merchants/answer/12470049",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "price mismatch"
+              },
+              "response": {
+                "query": "price mismatch",
+                "results": [
+                  {
+                    "doc_id": "price-mismatch",
+                    "title": "Price in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12159029",
+                    "passage": "The price you send must match the price shown on the product's page and at checkout, in the same currency. If they differ, Google disapproves the product.",
+                    "score": 5
+                  },
+                  {
+                    "doc_id": "price-mismatch",
+                    "title": "Price in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12159029",
+                    "passage": "Common causes are a delay between changing the price on your website and updating your product data, a sale price with the wrong dates, or price markup on the page that differs from the price shoppers see.",
+                    "score": 5
+                  },
+                  {
+                    "doc_id": "price-mismatch",
+                    "title": "Price in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12159029",
+                    "passage": "To fix it, change the price in your product data so it matches the product page exactly, then upload the corrected data. You can edit products one at a time in Merchant Center or download the list of affected products and fix them in bulk.",
+                    "score": 5
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "availability mismatch"
+              },
+              "response": {
+                "query": "availability mismatch",
+                "results": [
+                  {
+                    "doc_id": "availability-mismatch",
+                    "title": "Availability in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12470049",
+                    "passage": "The availability you send (in stock, out of stock, preorder or backorder) must match what the product page and checkout show. If they differ, Google disapproves the product.",
+                    "score": 5
+                  },
+                  {
+                    "doc_id": "availability-mismatch",
+                    "title": "Availability in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12470049",
+                    "passage": "To fix it, change the availability in your product data to match the product page, then upload the corrected data. You can edit products one at a time in Merchant Center or download the list of affected products and fix them in bulk.",
+                    "score": 5
+                  },
+                  {
+                    "doc_id": "availability-mismatch",
+                    "title": "Availability in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12470049",
+                    "passage": "This often happens because of a delay between changing stock on your website and updating your product data.",
+                    "score": 4
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 4,
+            "input_tokens": 17425,
+            "cached_tokens": 0,
+            "output_tokens": 2444
+          },
+          "seconds": 18.18
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 4,
+        "input_tokens": 17425,
+        "cached_tokens": 0,
+        "output_tokens": 2444
+      },
+      "cost_usd": 0.02223375,
+      "seconds": 18.2
+    },
+    "auto-off-price-sync": {
+      "case_id": "auto-off-price-sync",
+      "category": "automation_routing",
+      "agent_version": "c2ab45d1bf07",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Is there a way to stop my website prices and my listings drifting apart?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "There are no account-level issues affecting your store. Currently, 1 product is disapproved due to a price mismatch, and there are no warnings.\n\nHere is the disapproved product:\n* **Waffle Weave Bath Towel, Sage** (ID: `HG-004`): Your feed lists the price as $32.00 USD, but your website shows $36.00 USD.\n\n### How to fix this\n\n1. **Manual fix:** Update the price in your product feed to match your website price ($36.00 USD), or update your website price to match the feed ($32.00 USD).\n\n2. **Turn on automatic updates:** Automatic price updates are currently turned off for your account. To prevent prices on your listings and website from drifting apart, you can turn on automatic item updates under **Products** > **Automations** tab. \n\nWhen turned on, Merchant Center can automatically update prices, sale prices, availability, and condition based on what it finds on your website. Please note that automatic updates are meant for occasional mismatches and are not a substitute for keeping your product feed updated.\n\nFor details, see [Automatic item updates for price and availability](https://support.google.com/merchants/answer/3246284).",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": []
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/price-only/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "3",
+                      "pendingCount": "0",
+                      "disapprovedCount": "1",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "price_mismatch",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "price",
+                        "description": "Mismatched value (page crawl) [price]",
+                        "documentationUri": "https://support.google.com/merchants/answer/12159029",
+                        "productCount": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "get_automatic_improvements",
+              "args": {},
+              "response": {
+                "name": "accounts/price-only/automaticImprovements",
+                "itemUpdates": {
+                  "accountItemUpdatesSettings": {
+                    "allowPriceUpdates": false,
+                    "allowAvailabilityUpdates": false,
+                    "allowStrictAvailabilityUpdates": false,
+                    "allowConditionUpdates": false
+                  },
+                  "effectiveAllowPriceUpdates": false,
+                  "effectiveAllowAvailabilityUpdates": false,
+                  "effectiveAllowStrictAvailabilityUpdates": false,
+                  "effectiveAllowConditionUpdates": false
+                },
+                "imageImprovements": {
+                  "effectiveAllowAutomaticImageImprovements": false,
+                  "accountImageImprovementsSettings": {
+                    "allowAutomaticImageImprovements": false
+                  }
+                },
+                "shippingImprovements": {
+                  "allowShippingImprovements": false
+                }
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "automatic item updates"
+              },
+              "response": {
+                "query": "automatic item updates",
+                "results": [
+                  {
+                    "doc_id": "automatic-item-updates",
+                    "title": "Automatic item updates for price and availability",
+                    "source_url": "https://support.google.com/merchants/answer/3246284",
+                    "passage": "Merchant Center can update some product information automatically, using what it finds on your website. Automatic item updates cover price, sale price, availability and condition.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "automatic-item-updates",
+                    "title": "Automatic item updates for price and availability",
+                    "source_url": "https://support.google.com/merchants/answer/3246284",
+                    "passage": "Automatic item updates are on by default. You can turn them on or off under Products, on the Automations tab, by choosing an automation and opening View details.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "automatic-item-updates",
+                    "title": "Automatic item updates for price and availability",
+                    "source_url": "https://support.google.com/merchants/answer/3246284",
+                    "passage": "Automatic updates are not a replacement for keeping your product data up to date. They are meant for occasional mismatches on a small share of products. If a price or availability changes often, for example more than once a day, the product may be disapproved instead of updated.",
+                    "score": 6
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_products",
+              "args": {
+                "issue_code": "price_mismatch"
+              },
+              "response": {
+                "products": [
+                  {
+                    "name": "accounts/price-only/products/en~US~HG-004",
+                    "offerId": "HG-004",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Waffle Weave Bath Towel, Sage",
+                      "description": "Waffle Weave Bath Towel, Sage. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-004",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/hg-004.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Hearth & Hollow",
+                      "gtins": [
+                        "0850012345043"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Linens & Bedding > Towels"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "32000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "price_mismatch",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "price",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Mismatched value (page crawl) [price]",
+                          "detail": "Feed price is 32.00 USD but the product page shows 36.00 USD.",
+                          "documentation": "https://support.google.com/merchants/answer/12159029",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 3,
+            "input_tokens": 11029,
+            "cached_tokens": 0,
+            "output_tokens": 1726
+          },
+          "seconds": 12.38
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 3,
+        "input_tokens": 11029,
+        "cached_tokens": 0,
+        "output_tokens": 1726
+      },
+      "cost_usd": 0.01474425,
+      "seconds": 12.4
+    },
+    "auto-off-stock-sync": {
+      "case_id": "auto-off-stock-sync",
+      "category": "automation_routing",
+      "agent_version": "c2ab45d1bf07",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "The cushion cover keeps showing in stock on Google when it's sold out. Can that update by itself?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "**Account Summary**\n* **Account issues:** None.\n* **Disapprovals:** 1 product is disapproved due to an availability mismatch.\n* **Warnings:** None.\n\n---\n\n### Availability Mismatch (Disapproved)\nYour product data lists an item as in stock, but your website shows it as out of stock. The availability in your feed must match what appears on your product page ([Availability in the feed does not match the website](https://support.google.com/merchants/answer/12470049)).\n\n**Affected product:**\n* **Velvet Cushion Cover, 18 x 18, Rust** (ID: `HG-012`)\n  * **What is wrong:** The feed status is set to in stock, but your website page shows out of stock.\n\n---\n\n### How to Fix\n\n1. **Manual Fix:**\n   Change the availability in your product feed to \"out of stock\" so it matches your website page, and then upload the updated product data ([Availability in the feed does not match the website](https://support.google.com/merchants/answer/12470049)).\n\n2. **Automatic Updates:**\n   To answer your question: yes, Google Merchant Center can update availability automatically by reading your website pages. However, automatic availability updates are currently **turned off** for your account. \n\n   To turn them on, go to **Products** and select the **Automations** tab in Merchant Center ([Automatic item updates for price and availability](https://support.google.com/merchants/answer/3246284)).\n\n---\n\nWould you like help with anything else?",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": []
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/availability-only/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "3",
+                      "pendingCount": "0",
+                      "disapprovedCount": "1",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "availability_mismatch",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "availability",
+                        "description": "Mismatched value (page crawl) [availability]",
+                        "documentationUri": "https://support.google.com/merchants/answer/12470049",
+                        "productCount": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "get_automatic_improvements",
+              "args": {},
+              "response": {
+                "name": "accounts/availability-only/automaticImprovements",
+                "itemUpdates": {
+                  "accountItemUpdatesSettings": {
+                    "allowPriceUpdates": false,
+                    "allowAvailabilityUpdates": false,
+                    "allowStrictAvailabilityUpdates": false,
+                    "allowConditionUpdates": false
+                  },
+                  "effectiveAllowPriceUpdates": false,
+                  "effectiveAllowAvailabilityUpdates": false,
+                  "effectiveAllowStrictAvailabilityUpdates": false,
+                  "effectiveAllowConditionUpdates": false
+                },
+                "imageImprovements": {
+                  "effectiveAllowAutomaticImageImprovements": false,
+                  "accountImageImprovementsSettings": {
+                    "allowAutomaticImageImprovements": false
+                  }
+                },
+                "shippingImprovements": {
+                  "allowShippingImprovements": false
+                }
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "automatic item updates"
+              },
+              "response": {
+                "query": "automatic item updates",
+                "results": [
+                  {
+                    "doc_id": "automatic-item-updates",
+                    "title": "Automatic item updates for price and availability",
+                    "source_url": "https://support.google.com/merchants/answer/3246284",
+                    "passage": "Merchant Center can update some product information automatically, using what it finds on your website. Automatic item updates cover price, sale price, availability and condition.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "automatic-item-updates",
+                    "title": "Automatic item updates for price and availability",
+                    "source_url": "https://support.google.com/merchants/answer/3246284",
+                    "passage": "Automatic item updates are on by default. You can turn them on or off under Products, on the Automations tab, by choosing an automation and opening View details.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "automatic-item-updates",
+                    "title": "Automatic item updates for price and availability",
+                    "source_url": "https://support.google.com/merchants/answer/3246284",
+                    "passage": "Automatic updates are not a replacement for keeping your product data up to date. They are meant for occasional mismatches on a small share of products. If a price or availability changes often, for example more than once a day, the product may be disapproved instead of updated.",
+                    "score": 6
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_products",
+              "args": {
+                "issue_code": "availability_mismatch"
+              },
+              "response": {
+                "products": [
+                  {
+                    "name": "accounts/availability-only/products/en~US~HG-012",
+                    "offerId": "HG-012",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Velvet Cushion Cover, 18 x 18, Rust",
+                      "description": "Velvet Cushion Cover, 18 x 18, Rust. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-012",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/hg-012.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Hearth & Hollow",
+                      "gtins": [
+                        "0850012345128"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Decor > Throw Pillows"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "26000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "availability_mismatch",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "availability",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Mismatched value (page crawl) [availability]",
+                          "detail": "Feed says in_stock but the product page says out_of_stock.",
+                          "documentation": "https://support.google.com/merchants/answer/12470049",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "availability_mismatch"
+              },
+              "response": {
+                "query": "availability_mismatch",
+                "results": [
+                  {
+                    "doc_id": "availability-mismatch",
+                    "title": "Availability in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12470049",
+                    "passage": "The availability you send (in stock, out of stock, preorder or backorder) must match what the product page and checkout show. If they differ, Google disapproves the product.",
+                    "score": 10
+                  },
+                  {
+                    "doc_id": "availability-mismatch",
+                    "title": "Availability in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12470049",
+                    "passage": "To fix it, change the availability in your product data to match the product page, then upload the corrected data. You can edit products one at a time in Merchant Center or download the list of affected products and fix them in bulk.",
+                    "score": 10
+                  },
+                  {
+                    "doc_id": "availability-mismatch",
+                    "title": "Availability in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12470049",
+                    "passage": "This often happens because of a delay between changing stock on your website and updating your product data.",
+                    "score": 9
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 3,
+            "input_tokens": 11391,
+            "cached_tokens": 0,
+            "output_tokens": 1990
+          },
+          "seconds": 13.38
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 3,
+        "input_tokens": 11391,
+        "cached_tokens": 0,
+        "output_tokens": 1990
+      },
+      "cost_usd": 0.01600575,
+      "seconds": 13.4
+    },
+    "auto-on-merchant-says-enabled": {
+      "case_id": "auto-on-merchant-says-enabled",
+      "category": "automation_routing",
+      "agent_version": "c2ab45d1bf07",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "I switched on the automatic updates weeks ago. Why do I still have price and stock problems?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "Here is a quick summary of your account and product statuses:\n\n* **Account issues:** None. Your account is in good standing.\n* **Disapproved products:** 2 products are disapproved (1 for a price mismatch and 1 for an availability mismatch).\n* **Warnings:** None.\n\n---\n\n### Why mismatches still happen with automatic updates\nAutomatic item updates for both price and availability are currently turned on for your account. However, as noted in [Automatic item updates for price and availability](https://support.google.com/merchants/answer/3246284), automatic updates are designed for occasional mismatches across a small share of products and are not a substitute for keeping your product data up to date. If a price or availability changes frequently, the product may be disapproved instead of automatically updated.\n\n---\n\n### Disapproval 1: Price mismatch (`price_mismatch`)\n\nThe price sent in your product data must match the price shown on your product page and at checkout in the same currency.\n\n**Affected product:**\n* **Title:** Waffle Weave Bath Towel, Sage\n* **ID:** `HG-004`\n* **What is wrong:** The feed price is $32.00 USD, but the product page shows $36.00 USD.\n\n**How to fix:**\nAs explained in [Price in the feed does not match the website](https://support.google.com/merchants/answer/12159029), update the price in your product data to match the product page ($36.00 USD) and re-upload your feed, or update the price on your website to match your feed.\n\n---\n\nWould you like to move on to the next issue (the availability mismatch)?",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": []
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/v2-updates-on/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "3",
+                      "pendingCount": "0",
+                      "disapprovedCount": "2",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "price_mismatch",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "price",
+                        "description": "Mismatched value (page crawl) [price]",
+                        "documentationUri": "https://support.google.com/merchants/answer/12159029",
+                        "productCount": "1"
+                      },
+                      {
+                        "code": "availability_mismatch",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "availability",
+                        "description": "Mismatched value (page crawl) [availability]",
+                        "documentationUri": "https://support.google.com/merchants/answer/12470049",
+                        "productCount": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "get_automatic_improvements",
+              "args": {},
+              "response": {
+                "name": "accounts/v2-updates-on/automaticImprovements",
+                "itemUpdates": {
+                  "accountItemUpdatesSettings": {
+                    "allowPriceUpdates": true,
+                    "allowAvailabilityUpdates": true,
+                    "allowStrictAvailabilityUpdates": false,
+                    "allowConditionUpdates": false
+                  },
+                  "effectiveAllowPriceUpdates": true,
+                  "effectiveAllowAvailabilityUpdates": true,
+                  "effectiveAllowStrictAvailabilityUpdates": false,
+                  "effectiveAllowConditionUpdates": false
+                },
+                "imageImprovements": {
+                  "effectiveAllowAutomaticImageImprovements": false,
+                  "accountImageImprovementsSettings": {
+                    "allowAutomaticImageImprovements": false
+                  }
+                },
+                "shippingImprovements": {
+                  "allowShippingImprovements": false
+                }
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "automatic item updates"
+              },
+              "response": {
+                "query": "automatic item updates",
+                "results": [
+                  {
+                    "doc_id": "automatic-item-updates",
+                    "title": "Automatic item updates for price and availability",
+                    "source_url": "https://support.google.com/merchants/answer/3246284",
+                    "passage": "Merchant Center can update some product information automatically, using what it finds on your website. Automatic item updates cover price, sale price, availability and condition.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "automatic-item-updates",
+                    "title": "Automatic item updates for price and availability",
+                    "source_url": "https://support.google.com/merchants/answer/3246284",
+                    "passage": "Automatic item updates are on by default. You can turn them on or off under Products, on the Automations tab, by choosing an automation and opening View details.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "automatic-item-updates",
+                    "title": "Automatic item updates for price and availability",
+                    "source_url": "https://support.google.com/merchants/answer/3246284",
+                    "passage": "Automatic updates are not a replacement for keeping your product data up to date. They are meant for occasional mismatches on a small share of products. If a price or availability changes often, for example more than once a day, the product may be disapproved instead of updated.",
+                    "score": 6
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_products",
+              "args": {
+                "issue_code": "price_mismatch"
+              },
+              "response": {
+                "products": [
+                  {
+                    "name": "accounts/v2-updates-on/products/en~US~HG-004",
+                    "offerId": "HG-004",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Waffle Weave Bath Towel, Sage",
+                      "description": "Waffle Weave Bath Towel, Sage. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-004",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/hg-004.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Hearth & Hollow",
+                      "gtins": [
+                        "0850012345043"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Linens & Bedding > Towels"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "32000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "price_mismatch",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "price",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Mismatched value (page crawl) [price]",
+                          "detail": "Feed price is 32.00 USD but the product page shows 36.00 USD.",
+                          "documentation": "https://support.google.com/merchants/answer/12159029",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "price_mismatch"
+              },
+              "response": {
+                "query": "price_mismatch",
+                "results": [
+                  {
+                    "doc_id": "price-mismatch",
+                    "title": "Price in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12159029",
+                    "passage": "The price you send must match the price shown on the product's page and at checkout, in the same currency. If they differ, Google disapproves the product.",
+                    "score": 10
+                  },
+                  {
+                    "doc_id": "price-mismatch",
+                    "title": "Price in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12159029",
+                    "passage": "Common causes are a delay between changing the price on your website and updating your product data, a sale price with the wrong dates, or price markup on the page that differs from the price shoppers see.",
+                    "score": 10
+                  },
+                  {
+                    "doc_id": "price-mismatch",
+                    "title": "Price in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12159029",
+                    "passage": "To fix it, change the price in your product data so it matches the product page exactly, then upload the corrected data. You can edit products one at a time in Merchant Center or download the list of affected products and fix them in bulk.",
+                    "score": 10
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 4,
+            "input_tokens": 17368,
+            "cached_tokens": 0,
+            "output_tokens": 2318
+          },
+          "seconds": 16.17
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 4,
+        "input_tokens": 17368,
+        "cached_tokens": 0,
+        "output_tokens": 2318
+      },
+      "cost_usd": 0.0217185,
+      "seconds": 16.2
+    },
+    "auto-on-price-persists": {
+      "case_id": "auto-on-price-persists",
+      "category": "automation_routing",
+      "agent_version": "c2ab45d1bf07",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Why is my bath towel still disapproved for its price?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "### Account & Product Summary\n* **Account-level issues:** None.\n* **Disapproved products:** 2 products (1 for price mismatch, 1 for availability mismatch).\n* **Warnings (Demoted products):** 0 products.\n\n---\n\n### Price Mismatch Issue\n\nThe price sent in your product feed must match the price displayed on your website landing page and at checkout.\n\n* **Product:** Waffle Weave Bath Towel, Sage (ID: `HG-004`)\n* **What is wrong:** The feed price is set to **$32.00 USD**, but the website landing page shows **$36.00 USD**.\n\n#### Why it is still disapproved (Automatic Updates)\nAutomatic item updates for prices are already turned on for your store. However, automatic updates are meant for occasional mismatches on a small share of products and are not a replacement for keeping your data updated. If a price changes frequently or lags behind, Google may disapprove the item instead of updating it automatically.\n\n#### How to fix it\n1. Update the price in your product data to **$36.00 USD** so it matches your store's web page exactly.\n2. Upload or save your updated product data.\n\nFor more details, see:\n* [Price in the feed does not match the website](https://support.google.com/merchants/answer/12159029)\n* [Automatic item updates for price and availability](https://support.google.com/merchants/answer/3246284)\n\n---\n\nWould you like to move on to the next disapproved issue (availability mismatch)?",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": []
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/v2-updates-on/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "3",
+                      "pendingCount": "0",
+                      "disapprovedCount": "2",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "price_mismatch",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "price",
+                        "description": "Mismatched value (page crawl) [price]",
+                        "documentationUri": "https://support.google.com/merchants/answer/12159029",
+                        "productCount": "1"
+                      },
+                      {
+                        "code": "availability_mismatch",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "availability",
+                        "description": "Mismatched value (page crawl) [availability]",
+                        "documentationUri": "https://support.google.com/merchants/answer/12470049",
+                        "productCount": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "get_automatic_improvements",
+              "args": {},
+              "response": {
+                "name": "accounts/v2-updates-on/automaticImprovements",
+                "itemUpdates": {
+                  "accountItemUpdatesSettings": {
+                    "allowPriceUpdates": true,
+                    "allowAvailabilityUpdates": true,
+                    "allowStrictAvailabilityUpdates": false,
+                    "allowConditionUpdates": false
+                  },
+                  "effectiveAllowPriceUpdates": true,
+                  "effectiveAllowAvailabilityUpdates": true,
+                  "effectiveAllowStrictAvailabilityUpdates": false,
+                  "effectiveAllowConditionUpdates": false
+                },
+                "imageImprovements": {
+                  "effectiveAllowAutomaticImageImprovements": false,
+                  "accountImageImprovementsSettings": {
+                    "allowAutomaticImageImprovements": false
+                  }
+                },
+                "shippingImprovements": {
+                  "allowShippingImprovements": false
+                }
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "automatic item updates"
+              },
+              "response": {
+                "query": "automatic item updates",
+                "results": [
+                  {
+                    "doc_id": "automatic-item-updates",
+                    "title": "Automatic item updates for price and availability",
+                    "source_url": "https://support.google.com/merchants/answer/3246284",
+                    "passage": "Merchant Center can update some product information automatically, using what it finds on your website. Automatic item updates cover price, sale price, availability and condition.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "automatic-item-updates",
+                    "title": "Automatic item updates for price and availability",
+                    "source_url": "https://support.google.com/merchants/answer/3246284",
+                    "passage": "Automatic item updates are on by default. You can turn them on or off under Products, on the Automations tab, by choosing an automation and opening View details.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "automatic-item-updates",
+                    "title": "Automatic item updates for price and availability",
+                    "source_url": "https://support.google.com/merchants/answer/3246284",
+                    "passage": "Automatic updates are not a replacement for keeping your product data up to date. They are meant for occasional mismatches on a small share of products. If a price or availability changes often, for example more than once a day, the product may be disapproved instead of updated.",
+                    "score": 6
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_products",
+              "args": {
+                "issue_code": "price_mismatch"
+              },
+              "response": {
+                "products": [
+                  {
+                    "name": "accounts/v2-updates-on/products/en~US~HG-004",
+                    "offerId": "HG-004",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Waffle Weave Bath Towel, Sage",
+                      "description": "Waffle Weave Bath Towel, Sage. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-004",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/hg-004.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Hearth & Hollow",
+                      "gtins": [
+                        "0850012345043"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Linens & Bedding > Towels"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "32000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "price_mismatch",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "price",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Mismatched value (page crawl) [price]",
+                          "detail": "Feed price is 32.00 USD but the product page shows 36.00 USD.",
+                          "documentation": "https://support.google.com/merchants/answer/12159029",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "price_mismatch"
+              },
+              "response": {
+                "query": "price_mismatch",
+                "results": [
+                  {
+                    "doc_id": "price-mismatch",
+                    "title": "Price in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12159029",
+                    "passage": "The price you send must match the price shown on the product's page and at checkout, in the same currency. If they differ, Google disapproves the product.",
+                    "score": 10
+                  },
+                  {
+                    "doc_id": "price-mismatch",
+                    "title": "Price in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12159029",
+                    "passage": "Common causes are a delay between changing the price on your website and updating your product data, a sale price with the wrong dates, or price markup on the page that differs from the price shoppers see.",
+                    "score": 10
+                  },
+                  {
+                    "doc_id": "price-mismatch",
+                    "title": "Price in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12159029",
+                    "passage": "To fix it, change the price in your product data so it matches the product page exactly, then upload the corrected data. You can edit products one at a time in Merchant Center or download the list of affected products and fix them in bulk.",
+                    "score": 10
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 3,
+            "input_tokens": 11520,
+            "cached_tokens": 0,
+            "output_tokens": 1967
+          },
+          "seconds": 13.4
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 3,
+        "input_tokens": 11520,
+        "cached_tokens": 0,
+        "output_tokens": 1967
+      },
+      "cost_usd": 0.01601625,
+      "seconds": 13.4
+    },
+    "auto-on-stock-persists": {
+      "case_id": "auto-on-stock-persists",
+      "category": "automation_routing",
+      "agent_version": "c2ab45d1bf07",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "The cushion cover is flagged for stock again. Isn't that supposed to be handled for me?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "**Account & Product Summary**\n* **Account issues:** None.\n* **Disapprovals:** 2 products are disapproved (1 for an availability mismatch and 1 for a price mismatch).\n* **Warnings:** None.\n\n---\n\n### Availability Mismatch\n\nAutomatic item updates for availability are already turned on for your account. However, as noted in [Automatic item updates for price and availability](https://support.google.com/merchants/answer/3246284), automatic updates are meant for occasional mismatches across a small share of products and are not a replacement for keeping your product data up to date. If availability changes frequently (for example, more than once a day), the product can be disapproved instead of updated.\n\n**Affected product:**\n* **Velvet Cushion Cover, 18 x 18, Rust** (ID: `HG-012`)\n  * **What's wrong:** Your product data says `in_stock`, but the product page on your website shows `out_of_stock`.\n\n**How to fix it:**\nAccording to [Availability in the feed does not match the website](https://support.google.com/merchants/answer/12470049), the stock status sent in your product data must match what your website page and checkout show. Update the availability value in your product data so it matches your product page, then upload the updated data.\n\nWould you like to move on to the next disapproved product issue?",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": []
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/v2-updates-on/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "3",
+                      "pendingCount": "0",
+                      "disapprovedCount": "2",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "price_mismatch",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "price",
+                        "description": "Mismatched value (page crawl) [price]",
+                        "documentationUri": "https://support.google.com/merchants/answer/12159029",
+                        "productCount": "1"
+                      },
+                      {
+                        "code": "availability_mismatch",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "availability",
+                        "description": "Mismatched value (page crawl) [availability]",
+                        "documentationUri": "https://support.google.com/merchants/answer/12470049",
+                        "productCount": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "get_automatic_improvements",
+              "args": {},
+              "response": {
+                "name": "accounts/v2-updates-on/automaticImprovements",
+                "itemUpdates": {
+                  "accountItemUpdatesSettings": {
+                    "allowPriceUpdates": true,
+                    "allowAvailabilityUpdates": true,
+                    "allowStrictAvailabilityUpdates": false,
+                    "allowConditionUpdates": false
+                  },
+                  "effectiveAllowPriceUpdates": true,
+                  "effectiveAllowAvailabilityUpdates": true,
+                  "effectiveAllowStrictAvailabilityUpdates": false,
+                  "effectiveAllowConditionUpdates": false
+                },
+                "imageImprovements": {
+                  "effectiveAllowAutomaticImageImprovements": false,
+                  "accountImageImprovementsSettings": {
+                    "allowAutomaticImageImprovements": false
+                  }
+                },
+                "shippingImprovements": {
+                  "allowShippingImprovements": false
+                }
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "automatic item updates"
+              },
+              "response": {
+                "query": "automatic item updates",
+                "results": [
+                  {
+                    "doc_id": "automatic-item-updates",
+                    "title": "Automatic item updates for price and availability",
+                    "source_url": "https://support.google.com/merchants/answer/3246284",
+                    "passage": "Merchant Center can update some product information automatically, using what it finds on your website. Automatic item updates cover price, sale price, availability and condition.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "automatic-item-updates",
+                    "title": "Automatic item updates for price and availability",
+                    "source_url": "https://support.google.com/merchants/answer/3246284",
+                    "passage": "Automatic item updates are on by default. You can turn them on or off under Products, on the Automations tab, by choosing an automation and opening View details.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "automatic-item-updates",
+                    "title": "Automatic item updates for price and availability",
+                    "source_url": "https://support.google.com/merchants/answer/3246284",
+                    "passage": "Automatic updates are not a replacement for keeping your product data up to date. They are meant for occasional mismatches on a small share of products. If a price or availability changes often, for example more than once a day, the product may be disapproved instead of updated.",
+                    "score": 6
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_products",
+              "args": {
+                "issue_code": "availability_mismatch"
+              },
+              "response": {
+                "products": [
+                  {
+                    "name": "accounts/v2-updates-on/products/en~US~HG-012",
+                    "offerId": "HG-012",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Velvet Cushion Cover, 18 x 18, Rust",
+                      "description": "Velvet Cushion Cover, 18 x 18, Rust. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-012",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/hg-012.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Hearth & Hollow",
+                      "gtins": [
+                        "0850012345128"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Decor > Throw Pillows"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "26000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "availability_mismatch",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "availability",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Mismatched value (page crawl) [availability]",
+                          "detail": "Feed says in_stock but the product page says out_of_stock.",
+                          "documentation": "https://support.google.com/merchants/answer/12470049",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "availability_mismatch"
+              },
+              "response": {
+                "query": "availability_mismatch",
+                "results": [
+                  {
+                    "doc_id": "availability-mismatch",
+                    "title": "Availability in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12470049",
+                    "passage": "The availability you send (in stock, out of stock, preorder or backorder) must match what the product page and checkout show. If they differ, Google disapproves the product.",
+                    "score": 10
+                  },
+                  {
+                    "doc_id": "availability-mismatch",
+                    "title": "Availability in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12470049",
+                    "passage": "To fix it, change the availability in your product data to match the product page, then upload the corrected data. You can edit products one at a time in Merchant Center or download the list of affected products and fix them in bulk.",
+                    "score": 10
+                  },
+                  {
+                    "doc_id": "availability-mismatch",
+                    "title": "Availability in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12470049",
+                    "passage": "This often happens because of a delay between changing stock on your website and updating your product data.",
+                    "score": 9
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 4,
+            "input_tokens": 16855,
+            "cached_tokens": 0,
+            "output_tokens": 2800
+          },
+          "seconds": 18.53
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 4,
+        "input_tokens": 16855,
+        "cached_tokens": 0,
+        "output_tokens": 2800
+      },
+      "cost_usd": 0.02314125,
+      "seconds": 18.6
+    }
+  },
+  "grades": {}
+}
