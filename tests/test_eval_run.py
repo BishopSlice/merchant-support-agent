@@ -170,3 +170,44 @@ def test_heldout_set_runs_from_its_own_folder_and_is_named_in_the_file(results_d
     [path] = results_dir.glob("*.json")
     assert path.name.endswith("-gemini-3.6-flash-heldout.json")
     assert fake_agent and all(case_id.startswith("heldout-") for case_id in fake_agent)
+
+
+def test_parallel_runs_save_every_case_in_the_same_format(results_dir, fake_agent, monkeypatch):
+    from concurrent.futures import ThreadPoolExecutor
+
+    # Worker processes can't see the fake agent, so the test runs the workers as threads.
+    monkeypatch.setattr(eval_run, "CaseExecutor", ThreadPoolExecutor)
+    eval_run.main(["--category", "off_topic", "--no-grade", "--workers", "3"])
+    [json_path] = results_dir.glob("*.json")
+    saved = json.loads(json_path.read_text())
+    assert set(saved["runs"]) == {"off-topic-billing", "off-topic-bids", "off-topic-shopify-steps"}
+    assert saved["workers"] == 3
+    assert sorted(fake_agent) == sorted(saved["runs"])
+
+
+def test_grading_runs_in_parallel_and_saves_every_grade():
+    from test_web_api import fake_generate
+
+    from evals.grader import grade_run
+    from evals.records import CaseRun, TurnRecord
+    from merchant_agent.config import MODEL_PRICES
+
+    run_file = eval_run.RunFile(
+        model="m",
+        started_at="2026-10-08T00:00:00Z",
+        price=MODEL_PRICES["gemini-3.6-flash"],
+        runs={
+            f"c{i}": CaseRun(
+                case_id=f"c{i}", category="easy_fix", turns=[TurnRecord(merchant="m", reply="r")]
+            )
+            for i in range(6)
+        },
+    )
+    saves = []
+    grade_run(run_file, save=lambda: saves.append(1), generate=fake_generate([]), workers=4)
+    assert set(run_file.grades) == {f"c{i}" for i in range(6)} and len(saves) == 6
+
+
+def test_the_default_is_parallel_outside_tests(monkeypatch):
+    monkeypatch.delenv("EVAL_WORKERS", raising=False)
+    assert eval_run.default_workers() == 5

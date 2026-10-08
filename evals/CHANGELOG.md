@@ -65,6 +65,14 @@ These change the agent, not the cases, but they're made after seeing results, so
 | 7d284f4 | The one-call path uses thinking level LOW | Median latency was 10.7 to 13.4 s on the main set (`20261008-165526`, `20261008-173540`) with one call per turn, because the single call used about 2,000 output tokens, mostly thinking |
 | 7d284f4 | After a suspension, the reply also summarises the product issues | `triage-suspended-then-products` failed in both runs: the first reply handed off on the suspension and never mentioned the product issues |
 
+### Parallel runs (8 Oct, Vikrant's request)
+
+From now on, eval runs are parallel by default: 5 cases at a time, each in its own worker process, and grading in 5 threads. `--workers N` changes it, and `--workers 1` restores one at a time. The results format is unchanged, apart from a new `workers` field in the run file.
+
+- **Timing:** each turn's time is still measured around that turn. But cases share the API with each other, so the latency figures can be a little higher than in a one-at-a-time run. For latency comparisons, run with `--workers 1`.
+- **Rate limits:** every model client already retries 429 and quota errors with growing delays (up to 5 attempts, 10 to 60 seconds).
+- **Before this:** every run in this file up to and including `20261008-183629` ran one case at a time.
+
 ### Runs stopped
 
 | Run | Stopped at | Why |

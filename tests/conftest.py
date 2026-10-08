@@ -48,3 +48,9 @@ def test_spans():
 def _no_tracing_setup(monkeypatch):
     """The app and the eval command don't attach exporters in tests; tracing tests do."""
     monkeypatch.setenv("TRACING", "0")
+
+
+@pytest.fixture(autouse=True)
+def _sequential_evals(monkeypatch):
+    """Eval runs in tests stay in one process, where the fakes apply."""
+    monkeypatch.setenv("EVAL_WORKERS", "1")

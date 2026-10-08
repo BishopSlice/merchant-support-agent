@@ -1,0 +1,574 @@
+{
+  "model": "gemini-3.6-flash",
+  "workers": 3,
+  "grader_model": "gemini-3.6-flash",
+  "agent_version": "60e5bc0b3211",
+  "case_set": "main",
+  "started_at": "2026-10-08T18:39:34.592104Z",
+  "finished_at": "2026-10-08T18:39:40.853162Z",
+  "price": {
+    "input_per_million": 0.75,
+    "cached_input_per_million": 0.075,
+    "output_per_million": 3.75
+  },
+  "case_filter": [],
+  "category_filter": [
+    "off_topic"
+  ],
+  "runs": {
+    "off-topic-bids": {
+      "case_id": "off-topic-bids",
+      "category": "off_topic",
+      "agent_version": "60e5bc0b3211",
+      "conversation_id": "d45271c19dc543e9867d213571a85ee6",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "How much should I bid per click to get more sales?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "I can't help with questions about bidding, billing, or ad performance, as my support is focused specifically on Google Merchant Center product data and account issues. \n\nFor help with your ad campaigns and bidding strategies, you can visit the Google Ads Help Center or manage your bids directly in your Google Ads account.\n\nIf you have any questions about disapproved products or issue flags in your Merchant Center store, please let me know and I'll be happy to look into them for you!",
+          "tool_calls": [],
+          "usage": {
+            "model_calls": 1,
+            "input_tokens": 3012,
+            "cached_tokens": 0,
+            "output_tokens": 280
+          },
+          "seconds": 3.19,
+          "path": "fallback"
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 1,
+        "input_tokens": 3012,
+        "cached_tokens": 0,
+        "output_tokens": 280
+      },
+      "cost_usd": 0.003309,
+      "seconds": 3.3
+    },
+    "off-topic-billing": {
+      "case_id": "off-topic-billing",
+      "category": "off_topic",
+      "agent_version": "60e5bc0b3211",
+      "conversation_id": "447e1b917dbb46208d3301ae5cc41ae0",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Why was my credit card charged twice for ads this month?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "I am a support agent for Google Shopping product listings, so questions about billing, charges, or Google Ads performance are outside my scope. \n\nFor help with your ad billing and charges, please reach out directly to Google Ads support or review your Google Ads billing account.",
+          "tool_calls": [],
+          "usage": {
+            "model_calls": 1,
+            "input_tokens": 3012,
+            "cached_tokens": 0,
+            "output_tokens": 378
+          },
+          "seconds": 3.99,
+          "path": "fallback"
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 1,
+        "input_tokens": 3012,
+        "cached_tokens": 0,
+        "output_tokens": 378
+      },
+      "cost_usd": 0.0036765,
+      "seconds": 4.1
+    },
+    "off-topic-shopify-steps": {
+      "case_id": "off-topic-shopify-steps",
+      "category": "off_topic",
+      "agent_version": "60e5bc0b3211",
+      "conversation_id": "bfef8e58f9d4433b8d47330650394226",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Where exactly in my Shopify admin do I type in the barcode number?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "Here is a summary of your account status: You have no account issues and 0 disapproved products. You have 1 warning affecting 2 products due to missing product barcode numbers (GTIN).\n\nRegarding your question about Shopify, I cannot provide steps for specific store platforms like Shopify. You need to add the correct product barcode number (GTIN) to the product details in your catalog feed or store platform.\n\nThe warning for missing product barcode number (GTIN) affects these 2 products:\n- **Linen Napkins, Set of 4, Natural** (ID: HG-002): Missing GTIN.\n- **Wool Throw Blanket, Charcoal Herringbone** (ID: HG-007): Missing GTIN.\n\nA GTIN is a 8, 12, 13, or 14-digit manufacturer barcode number. If these products have a GTIN, copy it exactly from the packaging or supplier without making one up. If they truly do not have a GTIN (such as custom or store brand items), you should leave GTIN blank and provide the brand and manufacturer part number (MPN) instead, or set identifier exists to \"no\".\n\nFor more details, see [Product barcode number (GTIN)](https://support.google.com/merchants/answer/6324461) and [Products that have no barcode (identifier exists)](https://support.google.com/merchants/answer/6324478).\n\nWould you like to move on to the next step once you have updated these items?",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {
+                "account": "gtin-only"
+              },
+              "response": {
+                "accountIssues": []
+              },
+              "by": "code"
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {
+                "account": "gtin-only"
+              },
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/gtin-only/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "5",
+                      "pendingCount": "0",
+                      "disapprovedCount": "0",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "missing_gtin",
+                        "severity": "DEMOTED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "gtins",
+                        "description": "Missing value [gtin]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324461",
+                        "productCount": "2"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "by": "code"
+            },
+            {
+              "name": "list_products",
+              "args": {
+                "account": "gtin-only"
+              },
+              "response": {
+                "products": [
+                  {
+                    "name": "accounts/gtin-only/products/en~US~HG-001",
+                    "offerId": "HG-001",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Stoneware Coffee Mug, 12 oz, Speckled Oat",
+                      "description": "Stoneware Coffee Mug, 12 oz, Speckled Oat. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-001",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/hg-001.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Hearth & Hollow",
+                      "gtins": [
+                        "0850012345012"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Kitchen & Dining > Mugs"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "14000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [
+                            "US"
+                          ],
+                          "pendingCountries": [],
+                          "disapprovedCountries": []
+                        }
+                      ],
+                      "itemLevelIssues": []
+                    }
+                  },
+                  {
+                    "name": "accounts/gtin-only/products/en~US~HG-003",
+                    "offerId": "HG-003",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Cast Iron Skillet, 10 inch, Pre-Seasoned",
+                      "description": "Cast Iron Skillet, 10 inch, Pre-Seasoned. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-003",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/hg-003.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Ironside",
+                      "gtins": [
+                        "0850012345036"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Kitchen & Dining > Cookware"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "39000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [
+                            "US"
+                          ],
+                          "pendingCountries": [],
+                          "disapprovedCountries": []
+                        }
+                      ],
+                      "itemLevelIssues": []
+                    }
+                  },
+                  {
+                    "name": "accounts/gtin-only/products/en~US~HG-005",
+                    "offerId": "HG-005",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Bamboo Cutting Board, Large",
+                      "description": "Bamboo Cutting Board, Large. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-005",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/hg-005.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Greenleaf",
+                      "gtins": [
+                        "0850012345050"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Kitchen & Dining > Cutting Boards"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "28000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [
+                            "US"
+                          ],
+                          "pendingCountries": [],
+                          "disapprovedCountries": []
+                        }
+                      ],
+                      "itemLevelIssues": []
+                    }
+                  },
+                  {
+                    "name": "accounts/gtin-only/products/en~US~HG-002",
+                    "offerId": "HG-002",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Linen Napkins, Set of 4, Natural",
+                      "description": "Linen Napkins, Set of 4, Natural. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-002",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/hg-002.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Hearth & Hollow",
+                      "gtins": [],
+                      "productTypes": [
+                        "Home & Garden > Linens & Bedding > Table Linens"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "24000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [
+                            "US"
+                          ],
+                          "pendingCountries": [],
+                          "disapprovedCountries": []
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "missing_gtin",
+                          "severity": "DEMOTED",
+                          "resolution": "merchant_action",
+                          "attribute": "gtins",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Missing value [gtin]",
+                          "detail": "No GTIN (barcode number) is set for this product.",
+                          "documentation": "https://support.google.com/merchants/answer/6324461",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "name": "accounts/gtin-only/products/en~US~HG-007",
+                    "offerId": "HG-007",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Wool Throw Blanket, Charcoal Herringbone",
+                      "description": "Wool Throw Blanket, Charcoal Herringbone. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-007",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/hg-007.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Hearth & Hollow",
+                      "gtins": [],
+                      "productTypes": [
+                        "Home & Garden > Linens & Bedding > Blankets"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "120000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [
+                            "US"
+                          ],
+                          "pendingCountries": [],
+                          "disapprovedCountries": []
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "missing_gtin",
+                          "severity": "DEMOTED",
+                          "resolution": "merchant_action",
+                          "attribute": "gtins",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Missing value [gtin]",
+                          "detail": "No GTIN (barcode number) is set for this product.",
+                          "documentation": "https://support.google.com/merchants/answer/6324461",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              "by": "code"
+            },
+            {
+              "name": "get_automatic_improvements",
+              "args": {
+                "account": "gtin-only"
+              },
+              "response": {
+                "name": "accounts/gtin-only/automaticImprovements",
+                "itemUpdates": {
+                  "accountItemUpdatesSettings": {
+                    "allowPriceUpdates": false,
+                    "allowAvailabilityUpdates": false,
+                    "allowStrictAvailabilityUpdates": false,
+                    "allowConditionUpdates": false
+                  },
+                  "effectiveAllowPriceUpdates": false,
+                  "effectiveAllowAvailabilityUpdates": false,
+                  "effectiveAllowStrictAvailabilityUpdates": false,
+                  "effectiveAllowConditionUpdates": false
+                },
+                "imageImprovements": {
+                  "effectiveAllowAutomaticImageImprovements": false,
+                  "accountImageImprovementsSettings": {
+                    "allowAutomaticImageImprovements": false
+                  }
+                },
+                "shippingImprovements": {
+                  "allowShippingImprovements": false
+                }
+              },
+              "by": "code"
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "Where exactly in my Shopify admin do I type in the barcode number?"
+              },
+              "response": {
+                "query": "Where exactly in my Shopify admin do I type in the barcode number?",
+                "results": [
+                  {
+                    "doc_id": "gtin",
+                    "title": "Product barcode number (GTIN)",
+                    "source_url": "https://support.google.com/merchants/answer/6324461",
+                    "passage": "A GTIN is the barcode number a manufacturer gives a product, such as a UPC in North America or an EAN in Europe. Google recommends sending it for every product that has one.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "gtin",
+                    "title": "Product barcode number (GTIN)",
+                    "source_url": "https://support.google.com/merchants/answer/6324461",
+                    "passage": "Valid GTINs are 8, 12, 13 or 14 digits long. Spaces and dashes are ignored. The last digit is a check digit and must be correct, so copy the number exactly from the packaging or from your supplier.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "gtin",
+                    "title": "Product barcode number (GTIN)",
+                    "source_url": "https://support.google.com/merchants/answer/6324461",
+                    "passage": "Only send a GTIN you are sure is right, and never make one up. Numbers starting with 02, 04 or 2 are restricted, and numbers starting with 05, 98 or 99 are coupon numbers, so neither kind is accepted.",
+                    "score": 5
+                  }
+                ]
+              },
+              "by": "code"
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "(docs for the store's issues)"
+              },
+              "response": {
+                "query": "(docs for the store's issues)",
+                "results": [
+                  {
+                    "doc_id": "gtin",
+                    "title": "Product barcode number (GTIN)",
+                    "source_url": "https://support.google.com/merchants/answer/6324461",
+                    "passage": "A GTIN is the barcode number a manufacturer gives a product, such as a UPC in North America or an EAN in Europe. Google recommends sending it for every product that has one."
+                  },
+                  {
+                    "doc_id": "gtin",
+                    "title": "Product barcode number (GTIN)",
+                    "source_url": "https://support.google.com/merchants/answer/6324461",
+                    "passage": "Products with a missing or wrong GTIN may get limited visibility. If a product does have a GTIN and you leave it out, the product could be disapproved."
+                  },
+                  {
+                    "doc_id": "gtin",
+                    "title": "Product barcode number (GTIN)",
+                    "source_url": "https://support.google.com/merchants/answer/6324461",
+                    "passage": "Valid GTINs are 8, 12, 13 or 14 digits long. Spaces and dashes are ignored. The last digit is a check digit and must be correct, so copy the number exactly from the packaging or from your supplier."
+                  },
+                  {
+                    "doc_id": "gtin",
+                    "title": "Product barcode number (GTIN)",
+                    "source_url": "https://support.google.com/merchants/answer/6324461",
+                    "passage": "Only send a GTIN you are sure is right, and never make one up. Numbers starting with 02, 04 or 2 are restricted, and numbers starting with 05, 98 or 99 are coupon numbers, so neither kind is accepted."
+                  },
+                  {
+                    "doc_id": "gtin",
+                    "title": "Product barcode number (GTIN)",
+                    "source_url": "https://support.google.com/merchants/answer/6324461",
+                    "passage": "If a product really has no GTIN, such as a store brand or private label item, do not send one. Send the brand and the manufacturer part number (MPN) instead."
+                  },
+                  {
+                    "doc_id": "identifier-exists",
+                    "title": "Products that have no barcode (identifier exists)",
+                    "source_url": "https://support.google.com/merchants/answer/6324478",
+                    "passage": "The identifier exists setting tells Google that a product has no unique product identifiers at all: no GTIN, no MPN and no brand."
+                  },
+                  {
+                    "doc_id": "identifier-exists",
+                    "title": "Products that have no barcode (identifier exists)",
+                    "source_url": "https://support.google.com/merchants/answer/6324478",
+                    "passage": "Set it to \"no\" only for products that truly have none, such as custom made goods, handmade or one of a kind items, and vintage or antique items."
+                  },
+                  {
+                    "doc_id": "identifier-exists",
+                    "title": "Products that have no barcode (identifier exists)",
+                    "source_url": "https://support.google.com/merchants/answer/6324478",
+                    "passage": "Only use \"no\" when you are certain. If Google finds evidence that the product does have identifiers, the product gets a warning."
+                  },
+                  {
+                    "doc_id": "after-a-fix",
+                    "title": "What happens after you fix a product",
+                    "source_url": "https://support.google.com/merchants/answer/12153802",
+                    "passage": "Product issues only affect the products involved. Account issues affect every product in the account. Product issues are listed on the Needs attention tab under Products, and account issues show in a banner at the top of Merchant Center."
+                  },
+                  {
+                    "doc_id": "after-a-fix",
+                    "title": "What happens after you fix a product",
+                    "source_url": "https://support.google.com/merchants/answer/12153802",
+                    "passage": "To fix a product issue, correct the product data and upload it again. Some issues also offer a suggested automatic fix in Merchant Center."
+                  },
+                  {
+                    "doc_id": "after-a-fix",
+                    "title": "What happens after you fix a product",
+                    "source_url": "https://support.google.com/merchants/answer/12153802",
+                    "passage": "After you update your products, Google checks them again. These checks usually finish within 24 to 48 hours, and products show as pending while they are reviewed."
+                  }
+                ]
+              },
+              "by": "code"
+            }
+          ],
+          "usage": {
+            "model_calls": 1,
+            "input_tokens": 2311,
+            "cached_tokens": 0,
+            "output_tokens": 756
+          },
+          "seconds": 5.35,
+          "path": "one_call"
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 1,
+        "input_tokens": 2311,
+        "cached_tokens": 0,
+        "output_tokens": 756
+      },
+      "cost_usd": 0.00456825,
+      "seconds": 5.4
+    }
+  },
+  "grades": {}
+}

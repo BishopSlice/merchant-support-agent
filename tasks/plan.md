@@ -106,6 +106,8 @@ Every eval expectation lands **before** the change it tests:
 
 **Task 18b: One call per answer** ([ADR 0008](../docs/decisions/0008-one-call-answers.md)). Vikrant asked for it on 8 Oct, replacing the latency decision. Code preloads the context, and the model answers in one structured call; the tool loop is the recorded fallback. Model calls per turn and the fallback rate are in the shared metrics. `gemini-3.5-flash-lite` was tried and missed targets, including a hard gate, so the agent stays on `gemini-3.6-flash`, as does the grader. Check on the 14 latency cases, then Checkpoint E2 in full.
 
+**Eval runs are parallel by default** (Vikrant, 8 Oct): 5 cases at a time, with `--workers 1` for latency measurements.
+
 ## Phase 9: Product surface
 
 - [ ] **Task 19: FastAPI app.** Endpoints, per-session isolated demo data, the access code, session and daily caps, replay serving, the specialist demo login. API tests for all of it (SPEC, Evals f).

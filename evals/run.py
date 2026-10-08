@@ -10,7 +10,10 @@ partial run in place, rerunning only cases that are missing or errored.
 
 import argparse
 import asyncio
+import os
 import sys
+from collections.abc import Iterator
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -43,6 +46,7 @@ class RunFile(BaseModel):
     """Everything saved for one eval run."""
 
     model: str
+    workers: int = 1  # cases run at once; latency is cleanest with 1
     grader_model: str = ""  # empty in runs from before the grader had its own setting
     agent_version: str = ""
     case_set: str = "main"
@@ -109,6 +113,54 @@ def write_scorecard(run_file: RunFile, cases: list[EvalCase], path: Path) -> str
     return scorecard
 
 
+# Cases run in worker processes: each case sets process-wide settings (its isolated data
+# folder, injected data failures), so threads would share them. Tests swap in threads.
+CaseExecutor = ProcessPoolExecutor
+DEFAULT_WORKERS = 5
+
+
+def default_workers() -> int:
+    """Parallel by default (Vikrant, 8 Oct); EVAL_WORKERS overrides it (tests use 1)."""
+    return int(os.environ.get("EVAL_WORKERS", DEFAULT_WORKERS))
+
+
+def _worker_start() -> None:
+    """In each worker process: send its trace spans to the event store too."""
+    setup_tracing(EventStore(get_settings().runtime_dir / "events.sqlite"))
+
+
+def _run_one(case: EvalCase, price: ModelPrice) -> CaseRun:
+    """Run one case in a worker process. Model and network errors are recorded by run_case;
+    anything else becomes an errored record, so --resume can rerun it."""
+    try:
+        record = asyncio.run(run_case(case, price))
+    except Exception as error:  # noqa: BLE001  (a crash in one case must not stop the others)
+        record = CaseRun(
+            case_id=case.id,
+            category=case.category.value,
+            status="error",
+            error=f"{type(error).__name__}: {error}",
+        )
+    flush_traces()
+    return record
+
+
+def run_cases(cases: list[EvalCase], price: ModelPrice, workers: int) -> Iterator[CaseRun]:
+    """Yield each case's record as it finishes: one at a time, or in parallel."""
+    if workers <= 1:
+        for case in cases:
+            yield asyncio.run(run_case(case, price))
+        return
+    with CaseExecutor(max_workers=workers, **_executor_options()) as executor:
+        futures = [executor.submit(_run_one, case, price) for case in cases]
+        for future in as_completed(futures):
+            yield future.result()
+
+
+def _executor_options() -> dict:
+    return {"initializer": _worker_start} if CaseExecutor is ProcessPoolExecutor else {}
+
+
 def main(argv: list[str] | None = None) -> None:
     """Run the selected cases, saving after each one, then write the scorecard."""
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
@@ -125,6 +177,12 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("--no-grade", action="store_true", help="skip the AI grader")
     parser.add_argument(
         "--regrade", action="store_true", help="with --resume: drop old grades and grade again"
+    )
+    parser.add_argument(
+        "--workers",
+        type=int,
+        default=default_workers(),
+        help="cases to run at once (default 5); use 1 for the cleanest latency figures",
     )
     args = parser.parse_args(argv)
 
@@ -153,6 +211,7 @@ def main(argv: list[str] | None = None) -> None:
             price=MODEL_PRICES[model],
             case_filter=case_ids,
             category_filter=categories,
+            workers=args.workers,
         )
     cases = select_cases(all_cases, case_ids, categories)
     pending = [c for c in cases if c.id not in run_file.runs or run_file.runs[c.id].status != "ok"]
@@ -160,9 +219,12 @@ def main(argv: list[str] | None = None) -> None:
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     events = EventStore(get_settings().runtime_dir / "events.sqlite")  # /ops: eval traffic
     setup_tracing(events)
-    print(f"Running {len(pending)} of {len(cases)} case(s) with {model} -> {path.name}")
-    for number, case in enumerate(pending, start=1):
-        record = asyncio.run(run_case(case, run_file.price))
+    print(
+        f"Running {len(pending)} of {len(cases)} case(s) with {model}, "
+        f"{args.workers} at a time -> {path.name}"
+    )
+    for number, record in enumerate(run_cases(pending, run_file.price, args.workers), start=1):
+        case = next(c for c in pending if c.id == record.case_id)
         run_file.runs[case.id] = record
         save(run_file, path)
         if record.status == "ok":
@@ -172,7 +234,7 @@ def main(argv: list[str] | None = None) -> None:
         print(f"[{number}/{len(pending)}] {case.id}: {status} ({record.seconds}s, {cost})")
 
     if not args.no_grade:
-        grade_run(run_file, save=lambda: save(run_file, path))
+        grade_run(run_file, save=lambda: save(run_file, path), workers=args.workers)
     flush_traces()
     run_file.finished_at = datetime.now(UTC)
     save(run_file, path)

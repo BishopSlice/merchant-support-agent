@@ -31,7 +31,7 @@ Install:      uv sync
 Test:         uv run pytest
 Lint:         uv run ruff check .
 Run app:      uv run uvicorn merchant_agent.web.api:app --reload
-Run evals:    uv run python -m evals.run [--set main|heldout|heldout_v2]
+Run evals:    uv run python -m evals.run [--set main|heldout|heldout_v2] [--workers N]  (5 at a time by default)
 Compare runs: uv run python -m evals.compare RUN1.json RUN2.json
 ```
 

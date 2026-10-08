@@ -7,6 +7,7 @@ agent (MODEL_NAME); SPEC.md asks for approval before using a different one.
 
 import json
 from collections.abc import Callable
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import asdict
 from typing import TYPE_CHECKING, Literal
 
@@ -177,9 +178,15 @@ def gemini_generate(model: str) -> Generate:
 
 
 def grade_run(
-    run_file: "RunFile", save: Callable[[], None], generate: Generate | None = None
+    run_file: "RunFile",
+    save: Callable[[], None],
+    generate: Generate | None = None,
+    workers: int = 1,
 ) -> None:
-    """Grade every finished case that has no grade (or a failed one), saving after each."""
+    """Grade every finished case that has no grade (or a failed one), saving after each.
+
+    With workers > 1, cases are graded in threads; results are stored and saved here, in
+    the calling thread, one at a time."""
     grader = get_settings().grader_model_name
     generate = generate or gemini_generate(grader)
     price = MODEL_PRICES.get(grader)
@@ -188,15 +195,21 @@ def grade_run(
         for case_id, run in run_file.runs.items()
         if run.status == "ok" and (case_id not in run_file.grades or run_file.grades[case_id].error)
     ]
-    for number, (case_id, run) in enumerate(pending, start=1):
+
+    def grade(item: tuple[str, CaseRun]) -> tuple[str, CaseGrade, str]:
+        case_id, run = item
         try:
-            run_file.grades[case_id] = grade_case(run, generate, price)
-            status = "ok"
+            return case_id, grade_case(run, generate, price), "ok"
         except GradingFailed as error:
-            run_file.grades[case_id] = CaseGrade(error=str(error))
-            status = f"FAILED {error}"
-        save()
-        print(f"[graded {number}/{len(pending)}] {case_id}: {status}")
+            return case_id, CaseGrade(error=str(error)), f"FAILED {error}"
+
+    with ThreadPoolExecutor(max_workers=max(1, workers)) as executor:
+        futures = [executor.submit(grade, item) for item in pending]
+        for number, future in enumerate(as_completed(futures), start=1):
+            case_id, result, status = future.result()
+            run_file.grades[case_id] = result
+            save()
+            print(f"[graded {number}/{len(pending)}] {case_id}: {status}")
 
 
 def summarize_grades(grades: dict[str, CaseGrade]) -> dict[str, float | None]:
