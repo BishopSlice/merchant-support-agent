@@ -15,13 +15,13 @@
     "Listed all products: 30 found.",
     "Checked automatic improvements: price updates off, availability updates off.",
     "Searched the help docs for \"Can I talk to someone at Google about my account, please?\": found Misrepresentation and account suspension.",
-    "Searched the help docs for \"(docs for the store's issues)\": found Product barcode number (GTIN), Products that have no barcode (identifier exists), Price in the feed does not match the website, Automatic item updates for price and availability, What happens after you fix a product, Product image link, Automatic image improvements, Product title, Availability in the feed does not match the website, Shipping costs, CBD and other unapproved substances, Requesting a review or appealing a decision, Misrepresentation and account suspension.",
-    "Handed off to a specialist: case CASE-20261008-184045-b0c853 (merchant_requested_human)."
+    "Loaded 13 help docs for the store's issues.",
+    "Handed off to a specialist: case CASE-20261008-184606-244690 (merchant_requested_human)."
    ],
-   "reply": "You currently have no account-level issues. You have 13 disapproved products (mainly due to price mismatches, invalid or placeholder images, titles that are too long, availability mismatches, missing shipping details, and a restricted product policy issue) and 6 products with warnings for missing product barcode numbers (GTINs).\n\nThis needs a specialist, so I've passed it on. Your case number is CASE-20261008-184045-b0c853. A specialist will review it shortly. This case already includes everything from this conversation, so you won't need to repeat yourself.",
+   "reply": "Your account has no account-level issues. Currently, 13 products are disapproved due to price mismatches, invalid or placeholder images, titles exceeding character limits, availability mismatches, missing shipping costs, and a restricted product category. Additionally, 6 products have warnings for missing product barcode numbers (GTIN).\n\nThis needs a specialist, so I've passed it on. Your case number is CASE-20261008-184606-244690. A specialist will review it, and the case already includes everything from this conversation, so you won't need to repeat yourself.",
    "case": {
     "status": "created",
-    "case_id": "CASE-20261008-184045-b0c853",
+    "case_id": "CASE-20261008-184606-244690",
     "preview": {
      "reason": "merchant_requested_human",
      "issues_found": [
@@ -34,9 +34,9 @@
       "missing_gtin: HG-002, HG-007, HG-011, HG-019, HG-024, HG-028"
      ],
      "already_tried": [],
-     "merchant_request": "The merchant requested to speak to a person at Google about their account.",
+     "merchant_request": "The merchant asked to speak to someone at Google about their account.",
      "merchant_reasons": [],
-     "suggested_next_step": "A specialist should contact the merchant to assist with their account and product disapproval questions.",
+     "suggested_next_step": "A specialist should review the store's account status and product disapprovals with the merchant.",
      "cited_doc_ids": [],
      "account_issues": [],
      "product_issues": {
@@ -82,7 +82,7 @@
      }
     }
    },
-   "seconds": 8.71
+   "seconds": 7.89
   }
  ]
 }

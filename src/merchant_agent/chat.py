@@ -173,6 +173,8 @@ def describe_tool_call(call: ToolCall) -> str:
     if call.name == "search_help_docs":
         query = call.args.get("query", "")
         titles = list(dict.fromkeys(r["title"] for r in response.get("results", [])))
+        if query.startswith("(docs for"):  # the one-call preload (ADR 0008)
+            return f"Loaded {len(titles)} help docs for the store's issues."
         if not titles:
             return f'Searched the help docs for "{query}": no matching doc.'
         return f'Searched the help docs for "{query}": found {", ".join(titles)}.'

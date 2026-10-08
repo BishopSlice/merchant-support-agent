@@ -206,7 +206,9 @@ function addMessage(kind, content) {
 
 function addSteps(steps) {
   if (!steps?.length) return;
-  $("#messages").append(el("li", {}, el("ul", { class: "steps", "aria-label": "What the assistant checked" }, steps.map((s) => el("li", {}, s)))));
+  $("#messages").append(el("li", {}, el("details", { class: "steps-box" },
+    el("summary", {}, `Checked your account (${steps.length} steps)`),
+    el("ul", { class: "steps", "aria-label": "What the assistant checked" }, steps.map((s) => el("li", {}, s))))));
 }
 
 function addFeedback(turnId) {

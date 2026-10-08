@@ -242,3 +242,16 @@ def test_run_turn_records_how_long_the_turn_took():
     runner = FakeRunner([event(types.Part(text="Done."))])
     turn = asyncio.run(run_turn(runner, "session-1", "Hi"))
     assert 0 <= turn.seconds < 5
+
+
+def test_describe_the_preloaded_docs_as_a_count():
+    from merchant_agent.chat import ToolCall, describe_tool_call
+
+    results = [{"title": t} for t in ["A", "A", "B", "C"]]
+    call = ToolCall(
+        name="search_help_docs",
+        args={"query": "(docs for the store's issues)"},
+        response={"results": results},
+        by="code",
+    )
+    assert describe_tool_call(call) == "Loaded 3 help docs for the store's issues."

@@ -15,11 +15,11 @@
     "Listed all products: 30 found.",
     "Checked automatic improvements: price updates off, availability updates off.",
     "Searched the help docs for \"Why was my CBD candle disapproved?\": found CBD and other unapproved substances.",
-    "Searched the help docs for \"(docs for the store's issues)\": found Product barcode number (GTIN), Products that have no barcode (identifier exists), Price in the feed does not match the website, Automatic item updates for price and availability, What happens after you fix a product, Product image link, Automatic image improvements, Product title, Availability in the feed does not match the website, Shipping costs, CBD and other unapproved substances, Requesting a review or appealing a decision."
+    "Loaded 12 help docs for the store's issues."
    ],
-   "reply": "Your product HG-023 \"CBD Infused Lavender Relaxation Candle, 6 oz\" was disapproved because Google's healthcare policy places cannabidiol (CBD) on its list of unapproved pharmaceuticals and supplements. Products containing or mentioning CBD are not allowed in Shopping ads or free listings ([CBD and other unapproved substances](https://support.google.com/merchants/answer/6165956)).\n\nThis is a policy restriction rather than a data entry issue, so editing the product text won't resolve it. If you believe this product was flagged in error, an appeal can be submitted ([Requesting a review or appealing a decision](https://support.google.com/merchants/answer/13585221)). Please let me know if you want to proceed with an appeal or if you would like to review the other product issues in your store.",
+   "reply": "Your product **HG-023 \"CBD Infused Lavender Relaxation Candle, 6 oz\"** was disapproved because Google's policy on unapproved pharmaceuticals and supplements includes cannabidiol (CBD). Products containing CBD are not allowed in Shopping ads or free listings ([CBD and other unapproved substances](https://support.google.com/merchants/answer/6165956)).\n\nThis is a policy restriction rather than a data error, so changing product details won't approve it. If you believe this decision is incorrect, you can request a review or appeal it directly in Merchant Center under the product's details ([Requesting a review or appealing a decision](https://support.google.com/merchants/answer/13585221)). Please let me know if you would like to proceed with an appeal or look at the other disapproved products in your store.",
    "case": null,
-   "seconds": 8.22
+   "seconds": 7.64
   },
   {
    "merchant": "It's a scented candle with no THC, so I think that's wrong. I'd like to appeal. What will the specialist see?",
@@ -30,26 +30,26 @@
     "Listed all products: 30 found.",
     "Checked automatic improvements: price updates off, availability updates off.",
     "Searched the help docs for \"It's a scented candle with no THC, so I think that's wrong. I'd like to appeal. What will the specialist see?\": found Requesting a review or appealing a decision.",
-    "Searched the help docs for \"(docs for the store's issues)\": found Product barcode number (GTIN), Products that have no barcode (identifier exists), Price in the feed does not match the website, Automatic item updates for price and availability, What happens after you fix a product, Product image link, Automatic image improvements, Product title, Availability in the feed does not match the website, Shipping costs, CBD and other unapproved substances, Requesting a review or appealing a decision.",
-    "Handed off to a specialist: case CASE-20261008-184036-45311f (policy_appeal)."
+    "Loaded 12 help docs for the store's issues.",
+    "Handed off to a specialist: case CASE-20261008-184558-fe3f54 (policy_appeal)."
    ],
-   "reply": "Google's policy prohibits products containing or mentioning cannabidiol (CBD) in Shopping ads and free listings ([CBD and other unapproved substances](https://support.google.com/merchants/answer/6165956)). Since you disagree with this disapproval, you can request a review, but please keep in mind that you may only get one chance to disagree before a waiting period starts ([Requesting a review or appealing a decision](https://support.google.com/merchants/answer/13585221)).\n\nThis needs a specialist, so I've passed it on under case number CASE-20261008-184036-45311f. A specialist will review it, and the case already includes everything from this conversation\u2014including that your product is a scented candle with no THC\u2014so you won't need to repeat yourself.",
+   "reply": "Under Google's policy, products containing cannabidiol (CBD) are categorized as unapproved pharmaceuticals and supplements and are not allowed in Shopping ads or free listings, regardless of THC content ([CBD and other unapproved substances](https://support.google.com/merchants/answer/6165956)).\n\nWhen requesting a review to disagree with a decision, note that you may only get one chance to disagree before a waiting period applies ([Requesting a review or appealing a decision](https://support.google.com/merchants/answer/13585221)).\n\nThis needs a specialist, so I've passed it on. Your case number is CASE-20261008-184558-fe3f54. A specialist will review it, and the case already includes everything from this conversation, so you won't need to repeat yourself.",
    "case": {
     "status": "created",
-    "case_id": "CASE-20261008-184036-45311f",
+    "case_id": "CASE-20261008-184558-fe3f54",
     "preview": {
      "reason": "policy_appeal",
      "issues_found": [
       "restricted_product: HG-023"
      ],
      "already_tried": [
-      "Explained CBD healthcare policy and review process"
+      "Explained CBD policy and options to appeal."
      ],
-     "merchant_request": "The merchant wants to appeal the disapproval of their CBD candle.",
+     "merchant_request": "Merchant wants to appeal the disapproval of the CBD candle.",
      "merchant_reasons": [
-      "It is a scented candle with no THC, so they believe the disapproval is incorrect."
+      "It's a scented candle with no THC."
      ],
-     "suggested_next_step": "Review product HG-023 for policy compliance or assist with the formal appeal process.",
+     "suggested_next_step": "Review policy appeal for HG-023 under unapproved substances policy.",
      "cited_doc_ids": [
       "cbd-unapproved-substances",
       "request-review"
@@ -98,7 +98,7 @@
      }
     }
    },
-   "seconds": 5.54
+   "seconds": 4.75
   }
  ]
 }

@@ -15,8 +15,9 @@ The agent handles those fixes itself, in plain words and grounded in Google's he
 | Cost of a contact handled in a live channel (phone, chat, email) | **$8.01** average | Gartner, 2019 Customer Service and Support Leader poll ([Gartner press release, 25 Sep 2019](https://www.gartner.com/en/newsroom/press-releases/2019-09-25-gartner-says-only-9--of-customers-report-solving-thei); figure quoted by [destinationCRM, 26 Nov 2019](https://www.destinationcrm.com/Articles/CRM-Insights/Insight/Gartner-Survey-Finds-Self-Service-Insufficient-135436.aspx)) |
 | Cost of a self-service contact | **$0.10** average | Same Gartner poll |
 | Customers who fully solve their issue through self-service | **9%** | Same Gartner press release |
-| Model cost of one agent conversation | **$0.02** | Measured over 94 eval conversations (`docs/v1-results.md`) at Google's 2026 price for `gemini-3.6-flash`; about $0.04 at the 2027 price |
-| Plain data-fix cases the agent resolved without a handoff | **100%** (17 of 17, twice) | `docs/v1-results.md` (a scripted eval mix, not real traffic) |
+| Model cost of one agent conversation | **$0.0074** (v2) | Measured over 69 eval conversations (`docs/v2-results.md`) at Google's 2026 price for `gemini-3.6-flash`, with one model call per answer ([ADR 0008](decisions/0008-one-call-answers.md)). It was $0.02 in v1, and is about $0.015 at the 2027 price |
+| Plain data-fix cases the agent resolved without a handoff | **100%** | `docs/v1-results.md` and `docs/v2-results.md` (a scripted eval mix, not real traffic) |
+| Resolved cases that Merchant Center's automations couldn't have fixed (uniquely agent-resolved) | **82%** | `docs/v2-results.md`. The other 18% were price or availability mismatches, which automatic item updates can fix. There the agent recommends turning them on instead of claiming the fix |
 | Cases needing a person that it handed off, and handoffs that were needed | **100% and 100%** (16 of 16) | Same |
 
 The 9% figure is the point: ordinary self-service (help pages, FAQs) rarely finishes the job. The agent is self-service that actually resolves the problem, at a model cost much closer to self-service ($0.10) than to a live contact ($8.01).
@@ -38,15 +39,19 @@ Monthly support cost for 10,000 contacts:
 | | Contained by the agent | Agent cost | Specialist cost | Total | Saving vs. today |
 |---|---|---|---|---|---|
 | Today (all specialist) | 0 | $0 | $80,100 | $80,100 | |
-| Conservative | 30% | $200 | $56,070 | $56,270 | **$23,830 (30%)** |
-| Middle | 50% | $200 | $40,050 | $40,250 | **$39,850 (50%)** |
-| Optimistic | 70% | $200 | $24,030 | $24,230 | **$55,870 (70%)** |
+| Conservative | 30% | $74 | $56,070 | $56,144 | **$23,956 (30%)** |
+| Middle | 50% | $74 | $40,050 | $40,124 | **$39,976 (50%)** |
+| Optimistic | 70% | $74 | $24,030 | $24,104 | **$55,996 (70%)** |
 
-**Break-even:** the agent pays for its model cost once it contains about **1 contact in 400** (0.25%), because $0.02 against $8.01 is roughly 1 to 400. At 2027 prices it's about 1 in 200. The question isn't whether the model cost is worth paying. It's how well the agent resolves real contacts, and what it costs when it gets one wrong.
+**Crediting only what the agent uniquely solves.** If contained contacts mix like the eval set, 18% of them were problems an automation could have fixed. Credit only the other 82% to the agent:
+- the middle scenario's saving becomes about **$32,800 a month** (82% of $40,050, minus $74)
+- the rest is credited to turning on the automation the agent recommended
+
+**Break-even:** the agent pays for its model cost once it contains about **1 contact in 1,080** (0.09%), because $0.0074 against $8.01 is roughly 1 to 1,080. At 2027 prices it's about 1 in 540. (v1, with about three model calls per answer, needed about 1 in 400.) The question isn't whether the model cost is worth paying. It's how well the agent resolves real contacts, and what it costs when it gets one wrong.
 
 ## What could erode this
 
-- **Wrong advice.** A merchant acting on a bad answer comes back, or churns. This is measured at 0 to 3% of replies (target under 5%), and every rule must come from a cited help page.
+- **Wrong advice.** A merchant acting on a bad answer comes back, or churns. This is measured at 0% of replies in the v2 release candidate, and 0 to 3% in v1 (target under 5%), and every rule must come from a cited help page.
 - **Over-escalation.** Each needless handoff costs a full specialist contact. The evals caught one regression of this kind during development, and it was fixed (`docs/task11-before-after.md`).
 - **Under-escalation.** Missing a suspension or an appeal is the costliest failure, which is why handoff recall has the strictest target (95%).
 - **Reality differs from the evals.** The first production step should be a shadow pilot that measures real containment and accuracy before the agent faces merchants.
@@ -54,7 +59,7 @@ Monthly support cost for 10,000 contacts:
 ## Not counted, but real
 
 - **Faster fixes recover ad revenue.** Every hour a product stays disapproved is lost revenue for the merchant and for Google. The agent answers immediately, any time of day. I found no public data on how long disapprovals last, so this isn't quantified.
-- **Specialist time per case.** Cases arrive with the issues, the merchant's reasons, what was tried and the cited policy, so the specialist doesn't have to re-ask the merchant. The completeness metric (100% in v1) measures that directly.
+- **Specialist time per case.** Cases arrive with the issues, the merchant's reasons, what was tried and the cited policy, so the specialist doesn't have to re-ask the merchant. The completeness metric (100% in v1 and v2) measures that directly.
 
 ## Recommendation
 
