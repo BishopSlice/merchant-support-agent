@@ -28,8 +28,8 @@ The cases are `fix-price-mismatch`, `fix-availability-mismatch`, `multi-fix-two-
 | Commit | Case | Change | The reply that exposed it |
 |---|---|---|---|
 | c190acb | the `must_not_invent` scorer (all `data_tool_failure` cases) | Counts the agent works out from a successful `list_products` response (all products, products per issue code, products per severity) count as grounded, not only numbers that appear literally in the data | `fail-summary-timeout`, baseline run `20261008-121551`. With the summary timed out, the agent fell back to the product list and correctly reported "13 disapproved products" and "Price mismatch: 3 products". It was flagged for 10 invented counts. |
-| (this commit) | `auto-on-price-persists`, `auto-on-stock-persists`, `auto-on-merchant-says-enabled` | The "why it persists" pattern also accepts "occasional" and "not a replacement" | "automatic updates are not a replacement for keeping your product data up to date; they are intended for occasional mismatches" (a reason the `automatic-item-updates` doc gives) |
-| (this commit) | `auto-off-both-kinds` | No longer requires the second product (HG-061) or the availability doc in the first reply | The agent covered the price issue in full and asked to move on, following the agreed one-issue-at-a-time rule; the case had contradicted it |
+| 7a0381f | `auto-on-price-persists`, `auto-on-stock-persists`, `auto-on-merchant-says-enabled` | The "why it persists" pattern also accepts "occasional" and "not a replacement" | "automatic updates are not a replacement for keeping your product data up to date; they are intended for occasional mismatches" (a reason the `automatic-item-updates` doc gives) |
+| 7a0381f | `auto-off-both-kinds` | No longer requires the second product (HG-061) or the availability doc in the first reply | The agent covered the price issue in full and asked to move on, following the agreed one-issue-at-a-time rule; the case had contradicted it |
 
 The first row is a scorer bug fix, not a looser standard: a count that no successful product list supports is still flagged (tested).
 
