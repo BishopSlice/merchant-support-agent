@@ -25,7 +25,7 @@ Details for each task are in `tasks/plan.md`.
 - [x] Task 13: Merchant API models and mock, plus contract tests
 - [x] Task 14: Port the agent's data tools
 - [ ] Checkpoint E1: 47 v1 cases pass on the port, twice
-- [ ] Task 15: Eval format and scorers
+- [x] Task 15: Eval format and scorers
 - [ ] Task 16: v2 held-out set, written blind
 - [ ] Task 17: New expectations, re-labelled cases, automation help doc, baseline run
 - [ ] Task 18: Agent v2 behaviour
