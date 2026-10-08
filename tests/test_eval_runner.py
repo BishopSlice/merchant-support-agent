@@ -252,3 +252,5 @@ def test_the_ops_seed_holds_eval_traffic_only(tmp_path):
     assert build_seed([run], out) == 8
     with sqlite3.connect(out) as db:
         assert db.execute("select distinct source from conversations").fetchall() == [("eval",)]
+        # The eval grades come along, so /ops shows quality for eval traffic too.
+        assert db.execute("select count(*) from grades").fetchone() == (8,)

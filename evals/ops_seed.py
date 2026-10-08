@@ -1,8 +1,9 @@
 """Build the /ops seed baked into the hosted image: uv run python -m evals.ops_seed RUN.json...
 
 Cloud Run scales to zero and starts with an empty runtime/ folder, so the dashboard would show
-nothing until someone chats. The seed holds the release candidate's eval traffic, labelled as
-eval traffic, so /ops has data from the first visit. Live traffic is never in the seed.
+nothing until someone chats. The seed holds the release candidate's eval traffic and its AI
+grades, labelled as eval traffic, so /ops has data from the first visit. Live traffic is never
+in the seed.
 """
 
 import sys
@@ -23,10 +24,21 @@ def build_seed(paths: list[Path], out: Path = SEED_PATH) -> int:
     count = 0
     for path in paths:
         run_file = RunFile.model_validate_json(path.read_text())
-        for record in run_file.runs.values():
-            if record.status == "ok":
-                log_events(store, record, run_file.price, run_label=path.stem)
-                count += 1
+        for case_id, record in run_file.runs.items():
+            if record.status != "ok":
+                continue
+            log_events(store, record, run_file.price, run_label=path.stem)
+            count += 1
+            grade = run_file.grades.get(case_id)
+            if grade and not grade.error:
+                replies = grade.wrong_advice.replies if grade.wrong_advice else []
+                wrong = (
+                    sum(r.verdict == "unsupported" for r in replies) / len(replies)
+                    if replies
+                    else None
+                )
+                completeness = grade.completeness.verdict if grade.completeness else None
+                store.record_grade(record.conversation_id, wrong, completeness, grade.cost_usd)
     return count
 
 

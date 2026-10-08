@@ -141,7 +141,9 @@ function render(data) {
     ),
     card("2. Quality",
       el("div", { class: "tiles" },
-        tile("Conversations graded", q.graded, "About 10% of live conversations, within a daily budget"),
+        tile("Conversations graded", q.graded, data.source === "eval"
+          ? "Eval grading: every eval conversation, by the eval grader"
+          : "About 10% of live conversations, within a daily budget"),
         tile("Wrong advice rate (graded)", pct(q.wrong_advice_rate), "Target under 5%", q.wrong_advice_rate > 0.05),
         tile("Case completeness (graded)", pct(q.case_completeness), "Target 90% or higher", q.case_completeness != null && q.case_completeness < 0.9),
       ),
