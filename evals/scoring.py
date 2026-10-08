@@ -227,6 +227,29 @@ def _successful_data(run: CaseRun) -> str:
     )
 
 
+def _derived_counts(run: CaseRun) -> set[str]:
+    """Counts the agent can work out from a successful product list: all products, products
+    per issue code, and products per severity."""
+    counts: set[str] = set()
+    for t in run.turns:
+        for c in t.tool_calls:
+            response = c.response
+            if c.name != "list_products" or not isinstance(response, dict) or "error" in response:
+                continue
+            products = response.get("products")
+            if not isinstance(products, list):
+                continue
+            groups: dict[str, set[str]] = defaultdict(set)
+            for product in products:
+                issues = product.get("productStatus", {}).get("itemLevelIssues", [])
+                for issue in issues:
+                    groups[issue.get("code", "")].add(product.get("offerId", ""))
+                    groups[issue.get("severity", "")].add(product.get("offerId", ""))
+            counts.add(str(len(products)))
+            counts.update(str(len(ids)) for ids in groups.values())
+    return counts
+
+
 def _invented_failures(case: EvalCase, run: CaseRun) -> list[str]:
     """Every product id and product count in the replies must come from a successful data call."""
     if not case.expect.must_not_invent:
@@ -238,9 +261,10 @@ def _invented_failures(case: EvalCase, run: CaseRun) -> list[str]:
         for offer_id in dict.fromkeys(OFFER_ID.findall(replies))
         if offer_id not in data
     ]
+    derived = _derived_counts(run)
     for match in PRODUCT_COUNT.finditer(replies):
         number = match.group(1)
-        if f'"{number}"' not in data and f": {number}" not in data:
+        if f'"{number}"' not in data and f": {number}" not in data and number not in derived:
             failures.append(f"invented count {match.group(0)!r}")
     return failures
 

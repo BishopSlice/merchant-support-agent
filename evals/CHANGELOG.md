@@ -23,6 +23,14 @@ These follow from v2's switch to Merchant API-shaped data ([ADR 0004](../docs/de
 
 The cases are `fix-price-mismatch`, `fix-availability-mismatch`, `multi-fix-two-in-a-row`, `angry-fixable-price`, `no-handoff-fix-it-for-me` and `frustration-price-twice`. Their v1 expectations are unchanged.
 
+### Changed after seeing results
+
+| Commit | Case | Change | The reply that exposed it |
+|---|---|---|---|
+| (this commit) | the `must_not_invent` scorer (all `data_tool_failure` cases) | Counts the agent works out from a successful `list_products` response (all products, products per issue code, products per severity) count as grounded, not only numbers that appear literally in the data | `fail-summary-timeout`, baseline run `20261008-121551`. With the summary timed out, the agent fell back to the product list and correctly reported "13 disapproved products" and "Price mismatch: 3 products". It was flagged for 10 invented counts. |
+
+This is a scorer bug fix, not a looser standard: a count that no successful product list supports is still flagged (tested).
+
 ### Rubric changes, calibrated before any v2 run (8 Oct 2026)
 
 From SPEC, Evals (g):

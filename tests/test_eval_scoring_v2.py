@@ -92,6 +92,36 @@ def test_ids_or_counts_without_a_successful_source_are_invented():
     assert "invented count '7 products'" in failures
 
 
+def test_counts_worked_out_from_a_successful_product_list_are_not_invented():
+    # Post-result fix (fail-summary-timeout, baseline 20261008-121551): with the summary down,
+    # the agent counted products per issue from list_products. Those totals aren't literal
+    # strings in the data, but they are grounded in it.
+    def product(offer_id, *issues):
+        return {
+            "offerId": offer_id,
+            "productStatus": {
+                "itemLevelIssues": [{"code": c, "severity": sev} for c, sev in issues]
+            },
+        }
+
+    listed = call(
+        "list_products",
+        {},
+        {
+            "products": [
+                product("HG-001", ("price_mismatch", "DISAPPROVED")),
+                product("HG-002", ("price_mismatch", "DISAPPROVED"), ("missing_gtin", "DEMOTED")),
+                product("HG-003", ("missing_gtin", "DEMOTED")),
+                product("HG-005"),
+            ]
+        },
+    )
+    reply = "2 products are disapproved for price, 2 products are demoted, and you have 4 products."
+    assert score_case(case(must_not_invent=True), run(reply, listed)).passed
+    failures = score_case(case(must_not_invent=True), run("5 products are broken.", listed))
+    assert "invented count '5 products'" in failures.failures
+
+
 # --- preview ---
 
 
