@@ -31,6 +31,7 @@ The cases are `fix-price-mismatch`, `fix-availability-mismatch`, `multi-fix-two-
 | 7a0381f | `auto-on-price-persists`, `auto-on-stock-persists`, `auto-on-merchant-says-enabled` | The "why it persists" pattern also accepts "occasional" and "not a replacement" | "automatic updates are not a replacement for keeping your product data up to date; they are intended for occasional mismatches" (a reason the `automatic-item-updates` doc gives) |
 | 7a0381f | `auto-off-both-kinds` | No longer requires the second product (HG-061) or the availability doc in the first reply | The agent covered the price issue in full and asked to move on, following the agreed one-issue-at-a-time rule; the case had contradicted it |
 
+| (this commit) | `warnings-gtin-only` (a v1 case) | The warning pattern also accepts "limit their visibility" | "you have 1 warning affecting 2 products due to a missing product barcode number (GTIN), which can limit their visibility" (baseline `20261008-121551`) |
 The first row is a scorer bug fix, not a looser standard: a count that no successful product list supports is still flagged (tested).
 
 ### Rubric changes, calibrated before any v2 run (8 Oct 2026)

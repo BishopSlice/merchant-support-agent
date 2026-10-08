@@ -400,3 +400,9 @@ def test_two_kinds_case_follows_one_issue_at_a_time():
     case = next(c for c in load_cases() if c.id == "auto-off-both-kinds")
     assert "availability-mismatch" not in case.expect.must_cite
     assert not any("HG-061" in p for p in case.expect.must_mention)
+
+
+def test_limit_their_visibility_counts_as_explaining_a_warning():
+    # Real reply, Task 17 baseline 20261008-121551.
+    reply = "You have 1 warning affecting 2 products, which can limit their visibility."
+    assert _mentions_all("warnings-gtin-only", reply)
