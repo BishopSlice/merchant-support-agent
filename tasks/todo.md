@@ -51,5 +51,5 @@ Details for each task are in `tasks/plan.md`.
 - [x] Task 21d: The /ops page, with plain SVG charts (no chart library needed). Panels 1 to 4 and traces; panel 5 (releases) not built
 - [ ] Checkpoint F2: /ops correct, definitions match the evals, no added wait
 - [ ] Task 22: Replays and hosting. Replays recorded and checked against the agent version; container setup ready. Hosting waits for Vikrant's choice of host
-- [ ] Task 23: Final evals and write-up. Done: `docs/v2-results.md`, README, business case, responsible AI. Waiting: Vikrant's review of `evals/hand-check-v2.md`
+- [x] Task 23: Final evals and write-up: `docs/v2-results.md`, README, business case, responsible AI, and the v2 hand-check (Vikrant agreed with 10 of 10)
 - [ ] Checkpoint G: v2 release gates

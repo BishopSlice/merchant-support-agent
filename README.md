@@ -98,7 +98,7 @@ flowchart LR
   - the order issues are raised in
   - no invented ids or counts when data fails to load
   - the preview matches the saved case
-- **AI grader:** a second model call grades two things against fixed rubrics: unsupported advice, and whether a specialist could act on the case without re-asking. The grader stays on `gemini-3.6-flash`, so scores stay comparable. Vikrant hand-checked 10 v1 items and agreed with all 10. A v2 sample is ready for review in [evals/hand-check-v2.md](evals/hand-check-v2.md).
+- **AI grader:** a second model call grades two things against fixed rubrics: unsupported advice, and whether a specialist could act on the case without re-asking. The grader stays on `gemini-3.6-flash`, so scores stay comparable. Vikrant hand-checked 10 graded items in v1 and 10 more in v2 ([evals/hand-check-v2.md](evals/hand-check-v2.md)), and agreed with all 20.
 - **Held-out sets:** written and committed before the prompt changes they test, and never edited. A test fails if the agent's instructions quote an eval case.
 - **Disclosure:** every expectation change, scorer fix, stopped run and agent change made after seeing results is in [evals/CHANGELOG.md](evals/CHANGELOG.md).
 

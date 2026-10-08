@@ -67,5 +67,5 @@ What changed, in order:
 ## Disclosure
 
 - **Every change after seeing results is logged.** Expectation changes, scorer fixes and agent changes are all in [evals/CHANGELOG.md](../evals/CHANGELOG.md), with the reply or result that led to each. That includes the runs that were stopped and the false alarms left unchanged.
-- **Grader hand-check.** A new 10-item sample from three v2 runs is in [evals/hand-check-v2.md](../evals/hand-check-v2.md) for Vikrant to review. Its agreement rate will be added here when it's done.
+- **Grader hand-check.** Vikrant reviewed a new 10-item sample from three v2 runs and agreed with all 10 ([evals/hand-check-v2.md](../evals/hand-check-v2.md)). That matches v1's 10 of 10, but it's still a small sample.
 - **Spend.** All evals on 8 Oct cost $20.07: $12.95 for the agent and $7.12 for grading. The SPEC estimated about $8; the extra came from the two agent redesigns and their full re-runs.
