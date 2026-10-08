@@ -135,6 +135,8 @@ def test_eval_traffic_metrics_match_the_eval_scorecard(store):
     cases = {c.id: c for c in load_cases()}
     scorecard = summarize([score_case(cases[r.case_id], r) for r in runs], runs)
     ops = summary(store, source="eval")
+    assert ops["operations"]["model_calls_per_turn"] == scorecard.model_calls_per_turn
+    assert ops["operations"]["fallback_rate"] == scorecard.fallback_rate
     assert ops["operations"]["latency_p50"] == scorecard.latency_p50_seconds
     assert ops["operations"]["latency_p95"] == scorecard.latency_p95_seconds
     assert ops["safety"]["write_calls"] == scorecard.write_calls

@@ -136,6 +136,8 @@ def summary(store: EventStore, source: str = "live", days: int = 30, now=None) -
             ),
             "spend_today": sum(t["cost_usd"] for t in turns if t["at"].startswith(today))
             + sum(g["cost_usd"] for g in grades if g["at"].startswith(today)),
+            "model_calls_per_turn": metrics.model_calls_per_turn(_TurnRow(t) for t in turns),
+            "fallback_rate": metrics.fallback_rate(_TurnRow(t) for t in turns),
             "tool_errors": dict(failed_calls),
             "tool_error_rate": metrics.rate(sum(failed_calls.values()), len(calls)),
             "agent_versions": sorted({c["agent_version"] for c in convs}),
@@ -145,6 +147,14 @@ def summary(store: EventStore, source: str = "live", days: int = 30, now=None) -
     }
     data["alerts"] = _alerts(data)
     return data
+
+
+class _TurnRow:
+    """A stored turn in the shape the shared metrics read."""
+
+    def __init__(self, row: sqlite3.Row) -> None:
+        self.usage = type("Usage", (), {"model_calls": row["model_calls"]})
+        self.path = row["path"] or "tool_loop"
 
 
 def _by_day(convs) -> list[dict]:

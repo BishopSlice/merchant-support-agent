@@ -41,7 +41,8 @@ create table if not exists turns (
   input_tokens integer not null,
   output_tokens integer not null,
   cost_usd real not null,
-  checks text
+  checks text,
+  path text
 );
 create table if not exists tool_calls (
   turn_id text not null references turns(id),
@@ -104,6 +105,8 @@ class EventStore:
             turn_columns = [row[1] for row in db.execute("pragma table_info(turns)")]
             if turn_columns and "checks" not in turn_columns:
                 db.execute("alter table turns add column checks text")
+            if turn_columns and "path" not in turn_columns:
+                db.execute("alter table turns add column path text")
 
     def _db(self) -> sqlite3.Connection:
         db = sqlite3.connect(self.path)
@@ -160,8 +163,8 @@ class EventStore:
         with self._db() as db:
             db.execute(
                 "insert into turns (id, conversation_id, at, merchant, reply, seconds, "
-                "model_calls, input_tokens, output_tokens, cost_usd, checks) "
-                "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                "model_calls, input_tokens, output_tokens, cost_usd, checks, path) "
+                "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 (
                     turn_id,
                     conversation_id,
@@ -174,6 +177,7 @@ class EventStore:
                     usage.output_tokens,
                     cost_usd,
                     json.dumps(checks or {}),
+                    getattr(turn, "path", "tool_loop"),
                 ),
             )
             for call in turn.tool_calls:

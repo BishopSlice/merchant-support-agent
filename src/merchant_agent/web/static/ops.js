@@ -161,6 +161,8 @@ function render(data) {
         tile("Latency p50 per turn", secs(ops.latency_p50), "Target 8 s or less", ops.latency_p50 > 8),
         tile("Latency p95 per turn", secs(ops.latency_p95), "Target 20 s or less", ops.latency_p95 > 20),
         tile("Cost per conversation", usd(ops.cost_per_conversation), "Target $0.03 or less", ops.cost_per_conversation > 0.03),
+        tile("Model calls per turn", ops.model_calls_per_turn == null ? "No data" : ops.model_calls_per_turn.toFixed(2), "One-call design aims for 1"),
+        tile("Fallback to the tool loop", pct(ops.fallback_rate)),
         tile("Tokens per conversation", ops.tokens_per_conversation == null ? "No data" : Math.round(ops.tokens_per_conversation)),
         tile("Spend today", usd(ops.spend_today, 2), "Agent and grading"),
       ),
