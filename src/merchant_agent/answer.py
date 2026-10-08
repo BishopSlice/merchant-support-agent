@@ -123,7 +123,16 @@ class HandoffRequest(BaseModel):
 
 
 class Answer(BaseModel):
-    reply: str = Field(description="The reply to the merchant, in Markdown")
+    reply: str = Field(
+        description=(
+            "The reply to the merchant, in Markdown. When you set handoff, the reply still "
+            "explains the issue and the policy with citations as the rules say (for an appeal, "
+            "also that they may only get one chance to disagree, citing the request review doc), "
+            "then says it needs a specialist, gives the case number as {CASE_NUMBER}, says a "
+            "specialist will review it, and says the case already includes everything from this "
+            "conversation, so they won't need to repeat themselves."
+        )
+    )
     handoff: HandoffRequest | None = Field(
         default=None, description="Set only when a handoff rule applies"
     )
