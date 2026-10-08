@@ -238,7 +238,7 @@ def create_app(
         if app.state.grade_generate is None:
             from evals.grader import gemini_generate
 
-            app.state.grade_generate = gemini_generate(get_settings().model_name)
+            app.state.grade_generate = gemini_generate(get_settings().grader_model_name)
         return app.state.grade_generate
 
     def session(response: Response, sid: Annotated[str | None, Cookie()] = None) -> WebSession:
@@ -353,7 +353,7 @@ def create_app(
                 current.event_conversation,
                 list(current.transcript),
                 grade_generate(),
-                MODEL_PRICES.get(model),
+                MODEL_PRICES.get(get_settings().grader_model_name),
             )
         created = [
             c.response

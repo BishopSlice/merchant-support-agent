@@ -16,7 +16,7 @@ from pydantic import BaseModel, Field, ValidationError
 
 from evals.records import CaseRun, TokenUsage
 from merchant_agent.chat import Usage
-from merchant_agent.config import PROJECT_ROOT, ModelPrice, cost_usd, get_settings
+from merchant_agent.config import MODEL_PRICES, PROJECT_ROOT, ModelPrice, cost_usd, get_settings
 from merchant_agent.metrics import DATA_TOOL_NAMES
 from merchant_agent.tools.help_search import load_help_docs
 
@@ -180,7 +180,9 @@ def grade_run(
     run_file: "RunFile", save: Callable[[], None], generate: Generate | None = None
 ) -> None:
     """Grade every finished case that has no grade (or a failed one), saving after each."""
-    generate = generate or gemini_generate(get_settings().model_name)
+    grader = get_settings().grader_model_name
+    generate = generate or gemini_generate(grader)
+    price = MODEL_PRICES.get(grader)
     pending = [
         (case_id, run)
         for case_id, run in run_file.runs.items()
@@ -188,7 +190,7 @@ def grade_run(
     ]
     for number, (case_id, run) in enumerate(pending, start=1):
         try:
-            run_file.grades[case_id] = grade_case(run, generate, run_file.price)
+            run_file.grades[case_id] = grade_case(run, generate, price)
             status = "ok"
         except GradingFailed as error:
             run_file.grades[case_id] = CaseGrade(error=str(error))

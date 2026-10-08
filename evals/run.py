@@ -41,6 +41,7 @@ class RunFile(BaseModel):
     """Everything saved for one eval run."""
 
     model: str
+    grader_model: str = ""  # empty in runs from before the grader had its own setting
     agent_version: str = ""
     case_set: str = "main"
     started_at: datetime
@@ -91,6 +92,7 @@ def write_scorecard(run_file: RunFile, cases: list[EvalCase], path: Path) -> str
         "Model": run_file.model,
         "Started": f"{run_file.started_at:%Y-%m-%d %H:%M} UTC",
         "Agent version": run_file.agent_version or "not recorded (pre-v2 run)",
+        "Grader model": run_file.grader_model or run_file.model,
     }
     if run_file.grades:
         grading_cost = sum(grade.cost_usd for grade in run_file.grades.values())
@@ -142,6 +144,7 @@ def main(argv: list[str] | None = None) -> None:
         case_ids, categories = args.case, args.category
         run_file = RunFile(
             model=model,
+            grader_model=get_settings().grader_model_name,
             agent_version=agent_version(),
             case_set=args.set,
             started_at=now,
