@@ -1,0 +1,13 @@
+{
+  "source": "https://developers.google.com/merchant/api/reference/rest/accounts_v1/accounts.issues (read 8 Oct 2026). The name follows the documented example format.",
+  "example": {
+    "name": "accounts/123456/issues/misrepresentation-of-self-or-products-unacceptable-business-practice-policy",
+    "title": "Misrepresentation",
+    "severity": "CRITICAL",
+    "impactedDestinations": [
+      {"reportingContext": "SHOPPING_ADS", "impacts": [{"regionCode": "US", "severity": "CRITICAL"}]}
+    ],
+    "detail": "The website is missing a returns policy and business contact details.",
+    "documentationUri": "https://support.google.com/merchants/answer/6150127"
+  }
+}

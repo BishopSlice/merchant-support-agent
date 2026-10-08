@@ -1,0 +1,41 @@
+{
+  "source": "https://developers.google.com/merchant/api/reference/rest/products_v1/accounts.products (read 8 Oct 2026). Example values are ours; field names and enum values are Google's.",
+  "example": {
+    "name": "accounts/123/products/en~US~sku123",
+    "offerId": "sku123",
+    "contentLanguage": "en",
+    "feedLabel": "US",
+    "productAttributes": {
+      "title": "Stoneware Mug",
+      "link": "https://shop.example/mug",
+      "imageLink": "https://cdn.shop.example/mug.jpg",
+      "price": {"amountMicros": "14000000", "currencyCode": "USD"},
+      "availability": "IN_STOCK",
+      "brand": "Acme",
+      "gtins": ["0850012345012"],
+      "productTypes": ["Home & Garden > Kitchen & Dining > Mugs"],
+      "identifierExists": true
+    },
+    "productStatus": {
+      "destinationStatuses": [
+        {"reportingContext": "SHOPPING_ADS", "approvedCountries": [], "pendingCountries": [], "disapprovedCountries": ["US"]}
+      ],
+      "itemLevelIssues": [
+        {
+          "code": "price_mismatch",
+          "severity": "DISAPPROVED",
+          "resolution": "merchant_action",
+          "attribute": "price",
+          "reportingContext": "SHOPPING_ADS",
+          "description": "Mismatched value (page crawl) [price]",
+          "detail": "Feed price is 14.00 USD but the product page shows 18.00 USD.",
+          "documentation": "https://support.google.com/merchants/answer/12159029",
+          "applicableCountries": ["US"]
+        }
+      ],
+      "creationDate": "2026-10-01T00:00:00Z",
+      "lastUpdateDate": "2026-10-07T00:00:00Z",
+      "googleExpirationDate": "2026-11-06T00:00:00Z"
+    }
+  }
+}

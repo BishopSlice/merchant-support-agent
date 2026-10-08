@@ -1,0 +1,23 @@
+{
+  "source": "https://developers.google.com/merchant/api/reference/rest/accounts_v1/accounts.automaticImprovements (read 8 Oct 2026).",
+  "example": {
+    "name": "accounts/123/automaticImprovements",
+    "itemUpdates": {
+      "accountItemUpdatesSettings": {
+        "allowPriceUpdates": false,
+        "allowAvailabilityUpdates": false,
+        "allowStrictAvailabilityUpdates": false,
+        "allowConditionUpdates": false
+      },
+      "effectiveAllowPriceUpdates": false,
+      "effectiveAllowAvailabilityUpdates": false,
+      "effectiveAllowStrictAvailabilityUpdates": false,
+      "effectiveAllowConditionUpdates": false
+    },
+    "imageImprovements": {
+      "effectiveAllowAutomaticImageImprovements": true,
+      "accountImageImprovementsSettings": {"allowAutomaticImageImprovements": true}
+    },
+    "shippingImprovements": {"allowShippingImprovements": false}
+  }
+}

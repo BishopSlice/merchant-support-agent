@@ -1,0 +1,21 @@
+{
+  "source": "https://developers.google.com/merchant/api/reference/rest/issueresolution_v1/accounts.aggregateProductStatuses (read 8 Oct 2026).",
+  "example": {
+    "name": "accounts/123/aggregateProductStatuses/SHOPPING_ADS~US",
+    "reportingContext": "SHOPPING_ADS",
+    "country": "US",
+    "stats": {"activeCount": "17", "pendingCount": "0", "disapprovedCount": "13", "expiringCount": "0"},
+    "itemLevelIssues": [
+      {
+        "code": "price_mismatch",
+        "severity": "DISAPPROVED",
+        "resolution": "MERCHANT_ACTION",
+        "attribute": "price",
+        "description": "Mismatched value (page crawl) [price]",
+        "detail": "The price in your product data doesn't match the price on your product page.",
+        "documentationUri": "https://support.google.com/merchants/answer/12159029",
+        "productCount": "3"
+      }
+    ]
+  }
+}
