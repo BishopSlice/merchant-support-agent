@@ -191,7 +191,7 @@ The page also lists what a production system would page someone on.
 
 ### Dependencies
 
-- OpenTelemetry already comes with ADK. Declaring it directly is **pending approval**, so per-call timings in traces wait for it.
+- **OpenTelemetry** (`opentelemetry-api` and `opentelemetry-sdk` 1.42.1, the versions ADK uses) is declared directly, approved by Vikrant on 8 Oct. Spans go to the event store; prompts aren't captured unless `CAPTURE_PROMPTS=1`.
 - **Charts are plain SVG** drawn by our own code, so no chart library is needed.
 - **Built (8 Oct):** panels 1 to 4 and the trace view. Panel 5 (releases) is not built yet.
 
