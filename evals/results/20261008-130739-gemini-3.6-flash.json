@@ -1,0 +1,921 @@
+{
+  "model": "gemini-3.6-flash",
+  "agent_version": "6419f20ebf19",
+  "case_set": "main",
+  "started_at": "2026-10-08T13:07:39.382620Z",
+  "finished_at": "2026-10-08T13:08:37.235651Z",
+  "price": {
+    "input_per_million": 0.75,
+    "cached_input_per_million": 0.075,
+    "output_per_million": 3.75
+  },
+  "case_filter": [],
+  "category_filter": [
+    "triage_order"
+  ],
+  "runs": {
+    "triage-account-only": {
+      "case_id": "triage-account-only",
+      "category": "triage_order",
+      "agent_version": "6419f20ebf19",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "What should I fix first?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "Your account is suspended due to **Misrepresentation**. Specifically, your website is missing a return policy and business contact details.\n\nUnder Google's policy on [Misrepresentation and account suspension](https://support.google.com/merchants/answer/6150127):\n> Google's misrepresentation policy does not allow listings that leave out important information or mislead shoppers about the product or the business. For example, payment terms, shipping costs and what happens after purchase must be shown clearly before the shopper commits to buy.\n\n### Product Summary\n- **Disapproved products:** 0 products\n- **Active products:** 3 products (note: account suspensions affect all products)\n- **Warnings (DEMOTED issues):** None\n\nThis needs a specialist, so I've passed it on. Your case number is **CASE-20261008-130747-1fb9fc**. A specialist will review it, and your case already includes everything from this conversation so you won't need to repeat yourself.",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": [
+                  {
+                    "name": "accounts/suspended-store/issues/misrepresentation",
+                    "title": "Misrepresentation",
+                    "severity": "CRITICAL",
+                    "impactedDestinations": [
+                      {
+                        "reportingContext": "SHOPPING_ADS",
+                        "impacts": [
+                          {
+                            "regionCode": "US",
+                            "severity": "CRITICAL"
+                          }
+                        ]
+                      }
+                    ],
+                    "detail": "Misrepresentation: the website is missing a returns policy and business contact details.",
+                    "documentationUri": "https://support.google.com/merchants/answer/6150127"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/suspended-store/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "3",
+                      "pendingCount": "0",
+                      "disapprovedCount": "0",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": []
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "misrepresentation"
+              },
+              "response": {
+                "query": "misrepresentation",
+                "results": [
+                  {
+                    "doc_id": "misrepresentation",
+                    "title": "Misrepresentation and account suspension",
+                    "source_url": "https://support.google.com/merchants/answer/6150127",
+                    "passage": "Google's misrepresentation policy does not allow listings that leave out important information or mislead shoppers about the product or the business. For example, payment terms, shipping costs and what happens after purchase must be shown clearly before the shopper commits to buy.",
+                    "score": 3
+                  }
+                ]
+              }
+            },
+            {
+              "name": "create_handoff_case",
+              "args": {
+                "already_tried": [
+                  "Checked account issues and aggregate product statuses"
+                ],
+                "cited_doc_ids": [
+                  "misrepresentation"
+                ],
+                "merchant_reasons": [],
+                "reason": "account_suspended",
+                "issues_found": [
+                  "misrepresentation"
+                ],
+                "suggested_next_step": "Review the account suspension for Misrepresentation regarding missing return policy and business contact details.",
+                "merchant_request": "The merchant asked what to fix first, but their account is suspended for Misrepresentation."
+              },
+              "response": {
+                "status": "created",
+                "case_id": "CASE-20261008-130747-1fb9fc",
+                "preview": {
+                  "reason": "account_suspended",
+                  "issues_found": [
+                    "misrepresentation"
+                  ],
+                  "already_tried": [
+                    "Checked account issues and aggregate product statuses"
+                  ],
+                  "merchant_request": "The merchant asked what to fix first, but their account is suspended for Misrepresentation.",
+                  "merchant_reasons": [],
+                  "suggested_next_step": "Review the account suspension for Misrepresentation regarding missing return policy and business contact details.",
+                  "cited_doc_ids": [
+                    "misrepresentation"
+                  ],
+                  "account_issues": [
+                    "Misrepresentation: the website is missing a returns policy and business contact details."
+                  ],
+                  "automation": {
+                    "price_updates": false,
+                    "availability_updates": false,
+                    "image_improvements": false,
+                    "shipping_improvements": false
+                  }
+                }
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 4,
+            "input_tokens": 13958,
+            "cached_tokens": 0,
+            "output_tokens": 1798
+          },
+          "seconds": 13.9
+        }
+      ],
+      "handoff_cases": [
+        {
+          "case_id": "CASE-20261008-130747-1fb9fc",
+          "store_id": "suspended-store",
+          "created_at": "2026-10-08T13:07:47.443889Z",
+          "reason": "account_suspended",
+          "issues_found": [
+            "misrepresentation"
+          ],
+          "already_tried": [
+            "Checked account issues and aggregate product statuses"
+          ],
+          "merchant_request": "The merchant asked what to fix first, but their account is suspended for Misrepresentation.",
+          "merchant_reasons": [],
+          "suggested_next_step": "Review the account suspension for Misrepresentation regarding missing return policy and business contact details.",
+          "cited_doc_ids": [
+            "misrepresentation"
+          ],
+          "account_issues": [
+            "Misrepresentation: the website is missing a returns policy and business contact details."
+          ],
+          "automation": {
+            "price_updates": false,
+            "availability_updates": false,
+            "image_improvements": false,
+            "shipping_improvements": false
+          }
+        }
+      ],
+      "usage": {
+        "model_calls": 4,
+        "input_tokens": 13958,
+        "cached_tokens": 0,
+        "output_tokens": 1798
+      },
+      "cost_usd": 0.017211,
+      "seconds": 13.9
+    },
+    "triage-biggest-group-first": {
+      "case_id": "triage-biggest-group-first",
+      "category": "triage_order",
+      "agent_version": "6419f20ebf19",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Rank what I should tackle on my listings, most urgent first.",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "Here is the summary of your account and listings status, ranked by urgency:\n\n### Summary\n* **Account issues:** None. Your account is active.\n* **Disapproved products (6 total):**\n  1. **Missing shipping information:** 3 products\n  2. **Price mismatch:** 2 products\n  3. **Title too long:** 1 product\n* **Warnings (Demoted):**\n  * **Missing product barcode number (GTIN):** 2 products (these products can still show, but reach fewer shoppers)\n\n---\n\n### Issue 1: Missing shipping information (3 products)\n\n**What is wrong:**\nGoogle requires shipping information, including cost and delivery speed, for products sold in the United States. No shipping cost is set for these items, so they have been disapproved and cannot show to shoppers.\n\n**Affected products:**\n* **Enamel Pie Dish, 9 inch** (ID: `HG-080`)\n* **Glass Storage Jar, 1 Litre** (ID: `HG-081`)\n* **Copper Measuring Cups, Set of 4** (ID: `HG-082`)\n\n**How to fix:**\nThe recommended way is to set up shipping settings directly in your Merchant Center account settings, which will apply across your products. Alternatively, you can add the shipping attribute directly to your product data feed for these items. \n\nFor more details, see the Google help guide on [Shipping costs](https://support.google.com/merchants/answer/6324484).\n\n---\n\nWould you like to move on to the next issue?",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": []
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/v2-triage-counts/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "3",
+                      "pendingCount": "0",
+                      "disapprovedCount": "6",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "missing_shipping",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "shipping",
+                        "description": "Missing shipping information",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324484",
+                        "productCount": "3"
+                      },
+                      {
+                        "code": "price_mismatch",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "price",
+                        "description": "Mismatched value (page crawl) [price]",
+                        "documentationUri": "https://support.google.com/merchants/answer/12159029",
+                        "productCount": "2"
+                      },
+                      {
+                        "code": "missing_gtin",
+                        "severity": "DEMOTED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "gtins",
+                        "description": "Missing value [gtin]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324461",
+                        "productCount": "2"
+                      },
+                      {
+                        "code": "title_too_long",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "title",
+                        "description": "Text too long [title]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324415",
+                        "productCount": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_products",
+              "args": {
+                "issue_code": "missing_shipping"
+              },
+              "response": {
+                "products": [
+                  {
+                    "name": "accounts/v2-triage-counts/products/en~US~HG-080",
+                    "offerId": "HG-080",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Enamel Pie Dish, 9 inch",
+                      "description": "Enamel Pie Dish, 9 inch. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-080",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/hg-080.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Hearth & Hollow",
+                      "gtins": [
+                        "0850012345807"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Kitchen & Dining > Bakeware"
+                      ],
+                      "shipping": [],
+                      "price": {
+                        "amountMicros": "19000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "missing_shipping",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "shipping",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Missing shipping information",
+                          "detail": "No shipping cost is set for this product.",
+                          "documentation": "https://support.google.com/merchants/answer/6324484",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "name": "accounts/v2-triage-counts/products/en~US~HG-081",
+                    "offerId": "HG-081",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Glass Storage Jar, 1 Litre",
+                      "description": "Glass Storage Jar, 1 Litre. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-081",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/hg-081.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Hearth & Hollow",
+                      "gtins": [
+                        "0850012345814"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Kitchen & Dining > Food Storage"
+                      ],
+                      "shipping": [],
+                      "price": {
+                        "amountMicros": "12000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "missing_shipping",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "shipping",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Missing shipping information",
+                          "detail": "No shipping cost is set for this product.",
+                          "documentation": "https://support.google.com/merchants/answer/6324484",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "name": "accounts/v2-triage-counts/products/en~US~HG-082",
+                    "offerId": "HG-082",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Copper Measuring Cups, Set of 4",
+                      "description": "Copper Measuring Cups, Set of 4. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-082",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/hg-082.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Hearth & Hollow",
+                      "gtins": [
+                        "0850012345821"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Kitchen & Dining > Measuring Tools"
+                      ],
+                      "shipping": [],
+                      "price": {
+                        "amountMicros": "34000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "missing_shipping",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "shipping",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Missing shipping information",
+                          "detail": "No shipping cost is set for this product.",
+                          "documentation": "https://support.google.com/merchants/answer/6324484",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "missing_shipping"
+              },
+              "response": {
+                "query": "missing_shipping",
+                "results": [
+                  {
+                    "doc_id": "shipping",
+                    "title": "Shipping costs",
+                    "source_url": "https://support.google.com/merchants/answer/6324484",
+                    "passage": "In the United States and many other countries, products need shipping information, including cost and delivery speed. Products with missing or wrong shipping information can be disapproved.",
+                    "score": 9
+                  },
+                  {
+                    "doc_id": "shipping",
+                    "title": "Shipping costs",
+                    "source_url": "https://support.google.com/merchants/answer/6324484",
+                    "passage": "The recommended way is to set up shipping in your Merchant Center account settings, which then applies to your products. Use the shipping value in your product data only to override those settings for specific products.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "shipping",
+                    "title": "Shipping costs",
+                    "source_url": "https://support.google.com/merchants/answer/6324484",
+                    "passage": "Delivery speed is made of two parts: handling time, from the order until it is handed to the carrier, and transit time, from the carrier to the customer.",
+                    "score": 7
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 3,
+            "input_tokens": 11810,
+            "cached_tokens": 0,
+            "output_tokens": 1641
+          },
+          "seconds": 11.84
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 3,
+        "input_tokens": 11810,
+        "cached_tokens": 0,
+        "output_tokens": 1641
+      },
+      "cost_usd": 0.01501125,
+      "seconds": 11.9
+    },
+    "triage-one-product-several": {
+      "case_id": "triage-one-product-several",
+      "category": "triage_order",
+      "agent_version": "6419f20ebf19",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Only one item has trouble. What's wrong with it?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "Here is the summary of your account and product status:\n\n* **Account issues:** None.\n* **Disapproved products:** 1 product is disapproved due to a missing image link and missing shipping information.\n* **Warnings (DEMOTED):** 1 product has a warning due to a missing product barcode number (GTIN).\n\n---\n\n### Disapproval 1: Invalid or Missing Image Link\n\n**Affected product:**\n* **Brass Candle Snuffer** (ID: `HG-090`) — No image link is set.\n\n**How to fix:**\nEvery product needs a main image link; without one, the product cannot show. Add a main image link for this item. The image must show the actual product and be at least 500 by 500 pixels (1500 by 1500 pixels or larger is recommended), with no promotional text, logos, or watermarks.\n\nFor more information, see [Product image link](https://support.google.com/merchants/answer/6324350).\n\nWould you like to move on to the next issue?",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": []
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/v2-one-product-many/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "3",
+                      "pendingCount": "0",
+                      "disapprovedCount": "1",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "missing_gtin",
+                        "severity": "DEMOTED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "gtins",
+                        "description": "Missing value [gtin]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324461",
+                        "productCount": "1"
+                      },
+                      {
+                        "code": "invalid_image",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "imageLink",
+                        "description": "Invalid or placeholder image [image_link]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324350",
+                        "productCount": "1"
+                      },
+                      {
+                        "code": "missing_shipping",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "shipping",
+                        "description": "Missing shipping information",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324484",
+                        "productCount": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_products",
+              "args": {
+                "issue_code": "invalid_image"
+              },
+              "response": {
+                "products": [
+                  {
+                    "name": "accounts/v2-one-product-many/products/en~US~HG-090",
+                    "offerId": "HG-090",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Brass Candle Snuffer",
+                      "description": "Brass Candle Snuffer. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-090",
+                      "availability": "IN_STOCK",
+                      "brand": "Hearth & Hollow",
+                      "gtins": [],
+                      "productTypes": [
+                        "Home & Garden > Decor > Candle Accessories"
+                      ],
+                      "shipping": [],
+                      "price": {
+                        "amountMicros": "17000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "missing_gtin",
+                          "severity": "DEMOTED",
+                          "resolution": "merchant_action",
+                          "attribute": "gtins",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Missing value [gtin]",
+                          "detail": "No GTIN (barcode number) is set for this product.",
+                          "documentation": "https://support.google.com/merchants/answer/6324461",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        },
+                        {
+                          "code": "invalid_image",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "imageLink",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Invalid or placeholder image [image_link]",
+                          "detail": "No image link is set.",
+                          "documentation": "https://support.google.com/merchants/answer/6324350",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        },
+                        {
+                          "code": "missing_shipping",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "shipping",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Missing shipping information",
+                          "detail": "No shipping cost is set for this product.",
+                          "documentation": "https://support.google.com/merchants/answer/6324484",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "invalid_image"
+              },
+              "response": {
+                "query": "invalid_image",
+                "results": [
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "Every product needs a main image link. Without one the product cannot show.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "The image must show the actual product. Placeholder images, generic images and graphics that do not show the product are not allowed.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "Images must be at least 500 by 500 pixels, and around 1500 by 1500 pixels or larger is recommended. Do not add promotional text, logos, watermarks or other overlays to the main image.",
+                    "score": 8
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "missing_shipping"
+              },
+              "response": {
+                "query": "missing_shipping",
+                "results": [
+                  {
+                    "doc_id": "shipping",
+                    "title": "Shipping costs",
+                    "source_url": "https://support.google.com/merchants/answer/6324484",
+                    "passage": "In the United States and many other countries, products need shipping information, including cost and delivery speed. Products with missing or wrong shipping information can be disapproved.",
+                    "score": 9
+                  },
+                  {
+                    "doc_id": "shipping",
+                    "title": "Shipping costs",
+                    "source_url": "https://support.google.com/merchants/answer/6324484",
+                    "passage": "The recommended way is to set up shipping in your Merchant Center account settings, which then applies to your products. Use the shipping value in your product data only to override those settings for specific products.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "shipping",
+                    "title": "Shipping costs",
+                    "source_url": "https://support.google.com/merchants/answer/6324484",
+                    "passage": "Delivery speed is made of two parts: handling time, from the order until it is handed to the carrier, and transit time, from the carrier to the customer.",
+                    "score": 7
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 5,
+            "input_tokens": 20923,
+            "cached_tokens": 0,
+            "output_tokens": 1991
+          },
+          "seconds": 16.66
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 5,
+        "input_tokens": 20923,
+        "cached_tokens": 0,
+        "output_tokens": 1991
+      },
+      "cost_usd": 0.0231585,
+      "seconds": 16.7
+    },
+    "triage-suspended-then-products": {
+      "case_id": "triage-suspended-then-products",
+      "category": "triage_order",
+      "agent_version": "6419f20ebf19",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Where do I even start with this account?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "Your account is **suspended** due to a critical account-level issue:\n* **Misrepresentation**: The website does not show a refund policy.\n\nAccording to [Misrepresentation and account suspension](https://support.google.com/merchants/answer/6150127), Google's misrepresentation policy does not allow listings that leave out important information or mislead shoppers about the product or the business. For example, payment terms, shipping costs, and what happens after purchase must be shown clearly before the shopper commits to buy.\n\n### Summary of Product Issues\n* **Disapproved products**: 3 products are disapproved and cannot show to shoppers at all (2 for invalid or placeholder images, and 1 for a title that is too long).\n* **Warnings**: 1 warning affecting 2 products for missing product barcode numbers (GTINs). These products still show, but reach fewer shoppers.\n\nBecause your account is suspended, this needs a specialist, so I've passed it on. \n\n* **Case ID**: `CASE-20261008-130831-9fe022`\n\nA specialist will review your case. It already includes everything from this conversation, so you won't need to repeat yourself.",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": [
+                  {
+                    "name": "accounts/v2-triage-busy/issues/misrepresentation",
+                    "title": "Misrepresentation",
+                    "severity": "CRITICAL",
+                    "impactedDestinations": [
+                      {
+                        "reportingContext": "SHOPPING_ADS",
+                        "impacts": [
+                          {
+                            "regionCode": "US",
+                            "severity": "CRITICAL"
+                          }
+                        ]
+                      }
+                    ],
+                    "detail": "Misrepresentation: the website does not show a refund policy.",
+                    "documentationUri": "https://support.google.com/merchants/answer/6150127"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/v2-triage-busy/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "3",
+                      "pendingCount": "0",
+                      "disapprovedCount": "3",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "invalid_image",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "imageLink",
+                        "description": "Invalid or placeholder image [image_link]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324350",
+                        "productCount": "2"
+                      },
+                      {
+                        "code": "missing_gtin",
+                        "severity": "DEMOTED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "gtins",
+                        "description": "Missing value [gtin]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324461",
+                        "productCount": "2"
+                      },
+                      {
+                        "code": "title_too_long",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "title",
+                        "description": "Text too long [title]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324415",
+                        "productCount": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "misrepresentation"
+              },
+              "response": {
+                "query": "misrepresentation",
+                "results": [
+                  {
+                    "doc_id": "misrepresentation",
+                    "title": "Misrepresentation and account suspension",
+                    "source_url": "https://support.google.com/merchants/answer/6150127",
+                    "passage": "Google's misrepresentation policy does not allow listings that leave out important information or mislead shoppers about the product or the business. For example, payment terms, shipping costs and what happens after purchase must be shown clearly before the shopper commits to buy.",
+                    "score": 3
+                  }
+                ]
+              }
+            },
+            {
+              "name": "create_handoff_case",
+              "args": {
+                "issues_found": [
+                  "misrepresentation"
+                ],
+                "merchant_request": "The merchant wants to know how to resolve their account issues and get started.",
+                "reason": "account_suspended",
+                "suggested_next_step": "Review account suspension for misrepresentation due to missing refund policy on website.",
+                "already_tried": [
+                  "Checked account status and aggregate product issues"
+                ],
+                "cited_doc_ids": [
+                  "misrepresentation"
+                ],
+                "merchant_reasons": []
+              },
+              "response": {
+                "status": "created",
+                "case_id": "CASE-20261008-130831-9fe022",
+                "preview": {
+                  "reason": "account_suspended",
+                  "issues_found": [
+                    "misrepresentation"
+                  ],
+                  "already_tried": [
+                    "Checked account status and aggregate product issues"
+                  ],
+                  "merchant_request": "The merchant wants to know how to resolve their account issues and get started.",
+                  "merchant_reasons": [],
+                  "suggested_next_step": "Review account suspension for misrepresentation due to missing refund policy on website.",
+                  "cited_doc_ids": [
+                    "misrepresentation"
+                  ],
+                  "account_issues": [
+                    "Misrepresentation: the website does not show a refund policy."
+                  ],
+                  "automation": {
+                    "price_updates": false,
+                    "availability_updates": false,
+                    "image_improvements": false,
+                    "shipping_improvements": false
+                  }
+                }
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 4,
+            "input_tokens": 15189,
+            "cached_tokens": 0,
+            "output_tokens": 2139
+          },
+          "seconds": 15.27
+        }
+      ],
+      "handoff_cases": [
+        {
+          "case_id": "CASE-20261008-130831-9fe022",
+          "store_id": "v2-triage-busy",
+          "created_at": "2026-10-08T13:08:31.445218Z",
+          "reason": "account_suspended",
+          "issues_found": [
+            "misrepresentation"
+          ],
+          "already_tried": [
+            "Checked account status and aggregate product issues"
+          ],
+          "merchant_request": "The merchant wants to know how to resolve their account issues and get started.",
+          "merchant_reasons": [],
+          "suggested_next_step": "Review account suspension for misrepresentation due to missing refund policy on website.",
+          "cited_doc_ids": [
+            "misrepresentation"
+          ],
+          "account_issues": [
+            "Misrepresentation: the website does not show a refund policy."
+          ],
+          "automation": {
+            "price_updates": false,
+            "availability_updates": false,
+            "image_improvements": false,
+            "shipping_improvements": false
+          }
+        }
+      ],
+      "usage": {
+        "model_calls": 4,
+        "input_tokens": 15189,
+        "cached_tokens": 0,
+        "output_tokens": 2139
+      },
+      "cost_usd": 0.019413,
+      "seconds": 15.3
+    }
+  },
+  "grades": {}
+}

@@ -1,0 +1,585 @@
+{
+  "model": "gemini-3.6-flash",
+  "agent_version": "6419f20ebf19",
+  "case_set": "main",
+  "started_at": "2026-10-08T13:11:09.377540Z",
+  "finished_at": "2026-10-08T13:11:54.360738Z",
+  "price": {
+    "input_per_million": 0.75,
+    "cached_input_per_million": 0.075,
+    "output_per_million": 3.75
+  },
+  "case_filter": [],
+  "category_filter": [
+    "handoff_suspended"
+  ],
+  "runs": {
+    "suspended-after-fixing-site": {
+      "case_id": "suspended-after-fixing-site",
+      "category": "handoff_suspended",
+      "agent_version": "6419f20ebf19",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "I added a returns policy and a contact page to my website. Can you unsuspend my account now?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "Your account is currently suspended due to **Misrepresentation**: the website is missing a returns policy and business contact details.\n\nUnder Google's policy explained in [Misrepresentation and account suspension](https://support.google.com/merchants/answer/6150127), listings must not leave out important information or mislead shoppers about the product or business. Important details such as payment terms, shipping costs, and what happens after purchase must be clearly shown before purchase.\n\n**Product Summary:**\n- Account status: Suspended (affects all products)\n- Active products: 3\n- Disapproved products: 0\n- Warnings (demoted products): 0\n\nThis needs a specialist, so I've passed it on. Your case number is **CASE-20261008-131121-585dbb**. A specialist will review your case, and it already includes everything from this conversation, so you won't need to repeat yourself.",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": [
+                  {
+                    "name": "accounts/suspended-store/issues/misrepresentation",
+                    "title": "Misrepresentation",
+                    "severity": "CRITICAL",
+                    "impactedDestinations": [
+                      {
+                        "reportingContext": "SHOPPING_ADS",
+                        "impacts": [
+                          {
+                            "regionCode": "US",
+                            "severity": "CRITICAL"
+                          }
+                        ]
+                      }
+                    ],
+                    "detail": "Misrepresentation: the website is missing a returns policy and business contact details.",
+                    "documentationUri": "https://support.google.com/merchants/answer/6150127"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/suspended-store/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "3",
+                      "pendingCount": "0",
+                      "disapprovedCount": "0",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": []
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "misrepresentation"
+              },
+              "response": {
+                "query": "misrepresentation",
+                "results": [
+                  {
+                    "doc_id": "misrepresentation",
+                    "title": "Misrepresentation and account suspension",
+                    "source_url": "https://support.google.com/merchants/answer/6150127",
+                    "passage": "Google's misrepresentation policy does not allow listings that leave out important information or mislead shoppers about the product or the business. For example, payment terms, shipping costs and what happens after purchase must be shown clearly before the shopper commits to buy.",
+                    "score": 3
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "request review account suspension"
+              },
+              "response": {
+                "query": "request review account suspension",
+                "results": [
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "When a product or account has an issue, Merchant Center may offer a \"Request review\" option. For product issues it is in the product's details on the Needs attention tab. For account issues it is under View setup and policy issues.",
+                    "score": 7
+                  },
+                  {
+                    "doc_id": "misrepresentation",
+                    "title": "Misrepresentation and account suspension",
+                    "source_url": "https://support.google.com/merchants/answer/6150127",
+                    "passage": "To fix the problem, update your website and your product data so they follow the policy. After that, you can ask Google to review the account.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "A review can take up to 7 business days. Your ads may not show while the account or products are under review.",
+                    "score": 6
+                  }
+                ]
+              }
+            },
+            {
+              "name": "create_handoff_case",
+              "args": {
+                "reason": "account_suspended",
+                "merchant_reasons": [
+                  "Added a returns policy and a contact page to my website"
+                ],
+                "suggested_next_step": "Review merchant website for misrepresentation compliance and lift account suspension if requirement is satisfied",
+                "issues_found": [
+                  "misrepresentation (account level suspension)"
+                ],
+                "already_tried": [
+                  "Merchant added returns policy and contact page to their website"
+                ],
+                "cited_doc_ids": [
+                  "misrepresentation",
+                  "request-review"
+                ],
+                "merchant_request": "Merchant asks to unsuspend their account after adding a returns policy and contact page"
+              },
+              "response": {
+                "status": "created",
+                "case_id": "CASE-20261008-131121-585dbb",
+                "preview": {
+                  "reason": "account_suspended",
+                  "issues_found": [
+                    "misrepresentation (account level suspension)"
+                  ],
+                  "already_tried": [
+                    "Merchant added returns policy and contact page to their website"
+                  ],
+                  "merchant_request": "Merchant asks to unsuspend their account after adding a returns policy and contact page",
+                  "merchant_reasons": [
+                    "Added a returns policy and a contact page to my website"
+                  ],
+                  "suggested_next_step": "Review merchant website for misrepresentation compliance and lift account suspension if requirement is satisfied",
+                  "cited_doc_ids": [
+                    "misrepresentation",
+                    "request-review"
+                  ],
+                  "account_issues": [
+                    "Misrepresentation: the website is missing a returns policy and business contact details."
+                  ],
+                  "automation": {
+                    "price_updates": false,
+                    "availability_updates": false,
+                    "image_improvements": false,
+                    "shipping_improvements": false
+                  }
+                }
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 5,
+            "input_tokens": 18842,
+            "cached_tokens": 0,
+            "output_tokens": 1741
+          },
+          "seconds": 16.31
+        }
+      ],
+      "handoff_cases": [
+        {
+          "case_id": "CASE-20261008-131121-585dbb",
+          "store_id": "suspended-store",
+          "created_at": "2026-10-08T13:11:21.032498Z",
+          "reason": "account_suspended",
+          "issues_found": [
+            "misrepresentation (account level suspension)"
+          ],
+          "already_tried": [
+            "Merchant added returns policy and contact page to their website"
+          ],
+          "merchant_request": "Merchant asks to unsuspend their account after adding a returns policy and contact page",
+          "merchant_reasons": [
+            "Added a returns policy and a contact page to my website"
+          ],
+          "suggested_next_step": "Review merchant website for misrepresentation compliance and lift account suspension if requirement is satisfied",
+          "cited_doc_ids": [
+            "misrepresentation",
+            "request-review"
+          ],
+          "account_issues": [
+            "Misrepresentation: the website is missing a returns policy and business contact details."
+          ],
+          "automation": {
+            "price_updates": false,
+            "availability_updates": false,
+            "image_improvements": false,
+            "shipping_improvements": false
+          }
+        }
+      ],
+      "usage": {
+        "model_calls": 5,
+        "input_tokens": 18842,
+        "cached_tokens": 0,
+        "output_tokens": 1741
+      },
+      "cost_usd": 0.02066025,
+      "seconds": 16.4
+    },
+    "suspended-asks-to-reactivate": {
+      "case_id": "suspended-asks-to-reactivate",
+      "category": "handoff_suspended",
+      "agent_version": "6419f20ebf19",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "My account got suspended. Can you just reactivate it for me?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "Your account is suspended due to an account-level issue: **Misrepresentation** (the website is missing a returns policy and business contact details).\n\nGoogle's misrepresentation policy does not allow listings that leave out important information or mislead shoppers about the product or business. For example, payment terms, shipping costs, and what happens after purchase must be shown clearly before a shopper commits to buy. For more details, see the help doc [Misrepresentation and account suspension](https://support.google.com/merchants/answer/6150127).\n\n### Account & Product Summary\n* **Account Issue:** Suspended for Misrepresentation (affects all products).\n* **Product Disapprovals:** 0 products disapproved (3 active products).\n* **Warnings:** None.\n\nBecause your account is suspended, this needs a specialist, so I have passed it on. \n\nYour case number is **CASE-20261008-131134-9b021d**. A specialist will review your case. The case already includes everything from our conversation, so you will not need to repeat yourself.",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": [
+                  {
+                    "name": "accounts/suspended-store/issues/misrepresentation",
+                    "title": "Misrepresentation",
+                    "severity": "CRITICAL",
+                    "impactedDestinations": [
+                      {
+                        "reportingContext": "SHOPPING_ADS",
+                        "impacts": [
+                          {
+                            "regionCode": "US",
+                            "severity": "CRITICAL"
+                          }
+                        ]
+                      }
+                    ],
+                    "detail": "Misrepresentation: the website is missing a returns policy and business contact details.",
+                    "documentationUri": "https://support.google.com/merchants/answer/6150127"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/suspended-store/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "3",
+                      "pendingCount": "0",
+                      "disapprovedCount": "0",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": []
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "misrepresentation"
+              },
+              "response": {
+                "query": "misrepresentation",
+                "results": [
+                  {
+                    "doc_id": "misrepresentation",
+                    "title": "Misrepresentation and account suspension",
+                    "source_url": "https://support.google.com/merchants/answer/6150127",
+                    "passage": "Google's misrepresentation policy does not allow listings that leave out important information or mislead shoppers about the product or the business. For example, payment terms, shipping costs and what happens after purchase must be shown clearly before the shopper commits to buy.",
+                    "score": 3
+                  }
+                ]
+              }
+            },
+            {
+              "name": "create_handoff_case",
+              "args": {
+                "merchant_request": "Merchant wants their account reactivated.",
+                "suggested_next_step": "Review the store website for missing returns policy and business contact details to resolve misrepresentation suspension.",
+                "issues_found": [
+                  "Account suspension due to Misrepresentation (missing returns policy and business contact details)."
+                ],
+                "merchant_reasons": [
+                  "Merchant asked to reactivate their suspended account."
+                ],
+                "cited_doc_ids": [
+                  "misrepresentation"
+                ],
+                "already_tried": [
+                  "Checked account issues and product status summary."
+                ],
+                "reason": "account_suspended"
+              },
+              "response": {
+                "status": "created",
+                "case_id": "CASE-20261008-131134-9b021d",
+                "preview": {
+                  "reason": "account_suspended",
+                  "issues_found": [
+                    "Account suspension due to Misrepresentation (missing returns policy and business contact details)."
+                  ],
+                  "already_tried": [
+                    "Checked account issues and product status summary."
+                  ],
+                  "merchant_request": "Merchant wants their account reactivated.",
+                  "merchant_reasons": [
+                    "Merchant asked to reactivate their suspended account."
+                  ],
+                  "suggested_next_step": "Review the store website for missing returns policy and business contact details to resolve misrepresentation suspension.",
+                  "cited_doc_ids": [
+                    "misrepresentation"
+                  ],
+                  "account_issues": [
+                    "Misrepresentation: the website is missing a returns policy and business contact details."
+                  ],
+                  "automation": {
+                    "price_updates": false,
+                    "availability_updates": false,
+                    "image_improvements": false,
+                    "shipping_improvements": false
+                  }
+                }
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 4,
+            "input_tokens": 14184,
+            "cached_tokens": 0,
+            "output_tokens": 1563
+          },
+          "seconds": 15.02
+        }
+      ],
+      "handoff_cases": [
+        {
+          "case_id": "CASE-20261008-131134-9b021d",
+          "store_id": "suspended-store",
+          "created_at": "2026-10-08T13:11:34.707129Z",
+          "reason": "account_suspended",
+          "issues_found": [
+            "Account suspension due to Misrepresentation (missing returns policy and business contact details)."
+          ],
+          "already_tried": [
+            "Checked account issues and product status summary."
+          ],
+          "merchant_request": "Merchant wants their account reactivated.",
+          "merchant_reasons": [
+            "Merchant asked to reactivate their suspended account."
+          ],
+          "suggested_next_step": "Review the store website for missing returns policy and business contact details to resolve misrepresentation suspension.",
+          "cited_doc_ids": [
+            "misrepresentation"
+          ],
+          "account_issues": [
+            "Misrepresentation: the website is missing a returns policy and business contact details."
+          ],
+          "automation": {
+            "price_updates": false,
+            "availability_updates": false,
+            "image_improvements": false,
+            "shipping_improvements": false
+          }
+        }
+      ],
+      "usage": {
+        "model_calls": 4,
+        "input_tokens": 14184,
+        "cached_tokens": 0,
+        "output_tokens": 1563
+      },
+      "cost_usd": 0.01649925,
+      "seconds": 15.1
+    },
+    "suspended-why-not-showing": {
+      "case_id": "suspended-why-not-showing",
+      "category": "handoff_suspended",
+      "agent_version": "6419f20ebf19",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "None of my products are showing on Google. Why?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "Your account is suspended due to **Misrepresentation**. Specifically, the website is missing a returns policy and business contact details.\n\nAccording to Google's policy, listings cannot leave out important information or mislead shoppers about the product or business. For example, payment terms, shipping costs, and what happens after purchase must be shown clearly before the shopper commits to buy. For details, see [Misrepresentation and account suspension](https://support.google.com/merchants/answer/6150127).\n\n**Product Summary:**\nYou have 3 active products and 0 disapproved products, but because of the account suspension, none of your products can show on Google Shopping.\n\nThis needs a specialist, so I have passed it on. Your case number is **CASE-20261008-131149-120300**. A specialist will review it, and your case already includes everything from this conversation, so you won't need to repeat yourself.",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": [
+                  {
+                    "name": "accounts/suspended-store/issues/misrepresentation",
+                    "title": "Misrepresentation",
+                    "severity": "CRITICAL",
+                    "impactedDestinations": [
+                      {
+                        "reportingContext": "SHOPPING_ADS",
+                        "impacts": [
+                          {
+                            "regionCode": "US",
+                            "severity": "CRITICAL"
+                          }
+                        ]
+                      }
+                    ],
+                    "detail": "Misrepresentation: the website is missing a returns policy and business contact details.",
+                    "documentationUri": "https://support.google.com/merchants/answer/6150127"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/suspended-store/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "3",
+                      "pendingCount": "0",
+                      "disapprovedCount": "0",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": []
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "misrepresentation"
+              },
+              "response": {
+                "query": "misrepresentation",
+                "results": [
+                  {
+                    "doc_id": "misrepresentation",
+                    "title": "Misrepresentation and account suspension",
+                    "source_url": "https://support.google.com/merchants/answer/6150127",
+                    "passage": "Google's misrepresentation policy does not allow listings that leave out important information or mislead shoppers about the product or the business. For example, payment terms, shipping costs and what happens after purchase must be shown clearly before the shopper commits to buy.",
+                    "score": 3
+                  }
+                ]
+              }
+            },
+            {
+              "name": "create_handoff_case",
+              "args": {
+                "merchant_reasons": [
+                  "Merchant asked: None of my products are showing on Google. Why?"
+                ],
+                "merchant_request": "Merchant wants to resolve the account suspension so their products can show on Google.",
+                "issues_found": [
+                  "account_suspended: misrepresentation"
+                ],
+                "reason": "account_suspended",
+                "cited_doc_ids": [
+                  "misrepresentation"
+                ],
+                "already_tried": [
+                  "Checked account issues and confirmed critical account suspension for Misrepresentation."
+                ],
+                "suggested_next_step": "Review the store website for missing return policy and business contact details, and assist with account review/appeal."
+              },
+              "response": {
+                "status": "created",
+                "case_id": "CASE-20261008-131149-120300",
+                "preview": {
+                  "reason": "account_suspended",
+                  "issues_found": [
+                    "account_suspended: misrepresentation"
+                  ],
+                  "already_tried": [
+                    "Checked account issues and confirmed critical account suspension for Misrepresentation."
+                  ],
+                  "merchant_request": "Merchant wants to resolve the account suspension so their products can show on Google.",
+                  "merchant_reasons": [
+                    "Merchant asked: None of my products are showing on Google. Why?"
+                  ],
+                  "suggested_next_step": "Review the store website for missing return policy and business contact details, and assist with account review/appeal.",
+                  "cited_doc_ids": [
+                    "misrepresentation"
+                  ],
+                  "account_issues": [
+                    "Misrepresentation: the website is missing a returns policy and business contact details."
+                  ],
+                  "automation": {
+                    "price_updates": false,
+                    "availability_updates": false,
+                    "image_improvements": false,
+                    "shipping_improvements": false
+                  }
+                }
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 4,
+            "input_tokens": 14548,
+            "cached_tokens": 0,
+            "output_tokens": 1746
+          },
+          "seconds": 13.52
+        }
+      ],
+      "handoff_cases": [
+        {
+          "case_id": "CASE-20261008-131149-120300",
+          "store_id": "suspended-store",
+          "created_at": "2026-10-08T13:11:49.962679Z",
+          "reason": "account_suspended",
+          "issues_found": [
+            "account_suspended: misrepresentation"
+          ],
+          "already_tried": [
+            "Checked account issues and confirmed critical account suspension for Misrepresentation."
+          ],
+          "merchant_request": "Merchant wants to resolve the account suspension so their products can show on Google.",
+          "merchant_reasons": [
+            "Merchant asked: None of my products are showing on Google. Why?"
+          ],
+          "suggested_next_step": "Review the store website for missing return policy and business contact details, and assist with account review/appeal.",
+          "cited_doc_ids": [
+            "misrepresentation"
+          ],
+          "account_issues": [
+            "Misrepresentation: the website is missing a returns policy and business contact details."
+          ],
+          "automation": {
+            "price_updates": false,
+            "availability_updates": false,
+            "image_improvements": false,
+            "shipping_improvements": false
+          }
+        }
+      ],
+      "usage": {
+        "model_calls": 4,
+        "input_tokens": 14548,
+        "cached_tokens": 0,
+        "output_tokens": 1746
+      },
+      "cost_usd": 0.0174585,
+      "seconds": 13.6
+    }
+  },
+  "grades": {}
+}
