@@ -1,0 +1,795 @@
+{
+  "model": "gemini-3.6-flash",
+  "agent_version": "af3c0c1f7a41",
+  "case_set": "main",
+  "started_at": "2026-10-08T12:51:03.765711Z",
+  "finished_at": "2026-10-08T12:52:06.190900Z",
+  "price": {
+    "input_per_million": 0.75,
+    "cached_input_per_million": 0.075,
+    "output_per_million": 3.75
+  },
+  "case_filter": [],
+  "category_filter": [
+    "case_preview"
+  ],
+  "runs": {
+    "preview-oil-appeal": {
+      "case_id": "preview-oil-appeal",
+      "category": "case_preview",
+      "agent_version": "af3c0c1f7a41",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Why can't my massage oil be advertised?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "You have 1 disapproved product in your account, and 0 warnings (demoted products).\n\n### Disapproved Product\n* **Product:** Hemp Extract Massage Oil, Lavender, 100 ml (ID: `HG-040`)\n* **Issue:** Restricted product (`restricted_product`) – unapproved substances policy\n\n**Why this happens:**\nGoogle's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD) and related restricted substances, which are not allowed in Shopping ads or free listings. Because this is a policy decision rather than a data error, editing the product details will not resolve the issue. \n\nFor full details, see the help article: [CBD and other unapproved substances](https://support.google.com/merchants/answer/6165956).\n\nIf you believe this decision is incorrect or wish to submit an appeal to have a specialist review this product, please let me know and I can pass your request to a specialist.",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": []
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/restricted-oil/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "2",
+                      "pendingCount": "0",
+                      "disapprovedCount": "1",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "restricted_product",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "productTypes",
+                        "description": "Restricted product (unapproved substances policy)",
+                        "documentationUri": "https://support.google.com/merchants/answer/6165956",
+                        "productCount": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_products",
+              "args": {
+                "issue_code": "restricted_product"
+              },
+              "response": {
+                "products": [
+                  {
+                    "name": "accounts/restricted-oil/products/en~US~HG-040",
+                    "offerId": "HG-040",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Hemp Extract Massage Oil, Lavender, 100 ml",
+                      "description": "Hemp Extract Massage Oil, Lavender. A relaxing body oil for massage.",
+                      "link": "https://www.hearthandhollow.example/products/hg-040",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/hg-040.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Hearth & Hollow",
+                      "gtins": [
+                        "0850012345401"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Bath & Body > Massage Oil"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "30000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "restricted_product",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "productTypes",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Restricted product (unapproved substances policy)",
+                          "detail": "Mentions 'Hemp Extract', which is a restricted product category.",
+                          "documentation": "https://support.google.com/merchants/answer/6165956",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "restricted_product unapproved substances policy hemp"
+              },
+              "response": {
+                "query": "restricted_product unapproved substances policy hemp",
+                "results": [
+                  {
+                    "doc_id": "cbd-unapproved-substances",
+                    "title": "CBD and other unapproved substances",
+                    "source_url": "https://support.google.com/merchants/answer/6165956",
+                    "passage": "Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD). Products on this list are not allowed in Shopping ads or free listings.",
+                    "score": 16
+                  },
+                  {
+                    "doc_id": "cbd-unapproved-substances",
+                    "title": "CBD and other unapproved substances",
+                    "source_url": "https://support.google.com/merchants/answer/6165956",
+                    "passage": "This is a policy decision, not a data problem, so it cannot be fixed by editing product details. Whether a specific product is allowed is decided by Google's policy team under the healthcare and medicines policy.",
+                    "score": 16
+                  },
+                  {
+                    "doc_id": "misrepresentation",
+                    "title": "Misrepresentation and account suspension",
+                    "source_url": "https://support.google.com/merchants/answer/6150127",
+                    "passage": "Google's misrepresentation policy does not allow listings that leave out important information or mislead shoppers about the product or the business. For example, payment terms, shipping costs and what happens after purchase must be shown clearly before the shopper commits to buy.",
+                    "score": 3
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 4,
+            "input_tokens": 12105,
+            "cached_tokens": 0,
+            "output_tokens": 1202
+          },
+          "seconds": 11.59
+        },
+        {
+          "merchant": "That's wrong, it's a cosmetic oil with zero THC. I want to appeal. Show me what you're passing on.",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "This needs a specialist, so I've passed it on. \n\nPlease note that per [Requesting a review or appealing a decision](https://support.google.com/merchants/answer/13585221), you may only get one chance to disagree before a waiting period starts.\n\nHere is a preview of the case details submitted to the specialist:\n\n* **Case ID:** `CASE-20261008-125122-d65d51`\n* **Issue Found:** `restricted_product` for product `HG-040`\n* **Your Request:** Merchant wants to appeal the product disapproval for product `HG-040`.\n* **Your Reason:** States it is a cosmetic oil with zero THC.\n* **What We Covered:** Explained restricted product policy (unapproved substances) regarding product `HG-040`.\n* **Suggested Next Step:** Review product `HG-040` under the unapproved substances policy considering the merchant's claim that it is cosmetic with zero THC.\n\nA specialist will review your case. It includes everything from this conversation, so you won't need to repeat yourself.",
+          "tool_calls": [
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "request review appeal policy disapproved product"
+              },
+              "response": {
+                "query": "request review appeal policy disapproved product",
+                "results": [
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "When a product or account has an issue, Merchant Center may offer a \"Request review\" option. For product issues it is in the product's details on the Needs attention tab. For account issues it is under View setup and policy issues.",
+                    "score": 14
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "You may only get one chance to disagree before a waiting period starts, so it is worth getting the request right.",
+                    "score": 12
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "A review can take up to 7 business days. Your ads may not show while the account or products are under review.",
+                    "score": 12
+                  }
+                ]
+              }
+            },
+            {
+              "name": "create_handoff_case",
+              "args": {
+                "cited_doc_ids": [
+                  "cbd-unapproved-substances",
+                  "request-review"
+                ],
+                "already_tried": [
+                  "Explained restricted product policy (unapproved substances) regarding product HG-040."
+                ],
+                "reason": "policy_appeal",
+                "suggested_next_step": "Review product HG-040 under the unapproved substances policy considering the merchant's claim that it is cosmetic with zero THC.",
+                "issues_found": [
+                  "restricted_product for HG-040"
+                ],
+                "merchant_request": "Merchant wants to appeal the product disapproval for product HG-040.",
+                "merchant_reasons": [
+                  "States it is a cosmetic oil with zero THC"
+                ]
+              },
+              "response": {
+                "status": "created",
+                "case_id": "CASE-20261008-125122-d65d51",
+                "preview": {
+                  "reason": "policy_appeal",
+                  "issues_found": [
+                    "restricted_product for HG-040"
+                  ],
+                  "already_tried": [
+                    "Explained restricted product policy (unapproved substances) regarding product HG-040."
+                  ],
+                  "merchant_request": "Merchant wants to appeal the product disapproval for product HG-040.",
+                  "merchant_reasons": [
+                    "States it is a cosmetic oil with zero THC"
+                  ],
+                  "suggested_next_step": "Review product HG-040 under the unapproved substances policy considering the merchant's claim that it is cosmetic with zero THC.",
+                  "cited_doc_ids": [
+                    "cbd-unapproved-substances",
+                    "request-review"
+                  ],
+                  "account_issues": [],
+                  "automation": {
+                    "price_updates": false,
+                    "availability_updates": false,
+                    "image_improvements": false,
+                    "shipping_improvements": false
+                  }
+                }
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 3,
+            "input_tokens": 15846,
+            "cached_tokens": 0,
+            "output_tokens": 1900
+          },
+          "seconds": 12.24
+        }
+      ],
+      "handoff_cases": [
+        {
+          "case_id": "CASE-20261008-125122-d65d51",
+          "store_id": "restricted-oil",
+          "created_at": "2026-10-08T12:51:22.109635Z",
+          "reason": "policy_appeal",
+          "issues_found": [
+            "restricted_product for HG-040"
+          ],
+          "already_tried": [
+            "Explained restricted product policy (unapproved substances) regarding product HG-040."
+          ],
+          "merchant_request": "Merchant wants to appeal the product disapproval for product HG-040.",
+          "merchant_reasons": [
+            "States it is a cosmetic oil with zero THC"
+          ],
+          "suggested_next_step": "Review product HG-040 under the unapproved substances policy considering the merchant's claim that it is cosmetic with zero THC.",
+          "cited_doc_ids": [
+            "cbd-unapproved-substances",
+            "request-review"
+          ],
+          "account_issues": [],
+          "automation": {
+            "price_updates": false,
+            "availability_updates": false,
+            "image_improvements": false,
+            "shipping_improvements": false
+          }
+        }
+      ],
+      "usage": {
+        "model_calls": 7,
+        "input_tokens": 27951,
+        "cached_tokens": 0,
+        "output_tokens": 3102
+      },
+      "cost_usd": 0.03259575,
+      "seconds": 23.9
+    },
+    "preview-person-request": {
+      "case_id": "preview-person-request",
+      "category": "case_preview",
+      "agent_version": "af3c0c1f7a41",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "I'd rather deal with an actual human about my listings.",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "This needs a specialist, so I've passed it on. \n\nYour case number is **CASE-20261008-125138-c983e7**. A specialist will review your case. It includes everything from our conversation, so you won't need to repeat yourself.",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": []
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/sample-store/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "17",
+                      "pendingCount": "0",
+                      "disapprovedCount": "13",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "missing_gtin",
+                        "severity": "DEMOTED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "gtins",
+                        "description": "Missing value [gtin]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324461",
+                        "productCount": "6"
+                      },
+                      {
+                        "code": "price_mismatch",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "price",
+                        "description": "Mismatched value (page crawl) [price]",
+                        "documentationUri": "https://support.google.com/merchants/answer/12159029",
+                        "productCount": "3"
+                      },
+                      {
+                        "code": "invalid_image",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "imageLink",
+                        "description": "Invalid or placeholder image [image_link]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324350",
+                        "productCount": "3"
+                      },
+                      {
+                        "code": "title_too_long",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "title",
+                        "description": "Text too long [title]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324415",
+                        "productCount": "2"
+                      },
+                      {
+                        "code": "availability_mismatch",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "availability",
+                        "description": "Mismatched value (page crawl) [availability]",
+                        "documentationUri": "https://support.google.com/merchants/answer/12470049",
+                        "productCount": "2"
+                      },
+                      {
+                        "code": "missing_shipping",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "shipping",
+                        "description": "Missing shipping information",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324484",
+                        "productCount": "2"
+                      },
+                      {
+                        "code": "restricted_product",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "productTypes",
+                        "description": "Restricted product (unapproved substances policy)",
+                        "documentationUri": "https://support.google.com/merchants/answer/6165956",
+                        "productCount": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "contact support"
+              },
+              "response": {
+                "query": "contact support",
+                "results": [],
+                "message": "No help doc matches this question. Do not answer from memory: tell the merchant you could not find official guidance on it."
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "request review"
+              },
+              "response": {
+                "query": "request review",
+                "results": [
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "When a product or account has an issue, Merchant Center may offer a \"Request review\" option. For product issues it is in the product's details on the Needs attention tab. For account issues it is under View setup and policy issues.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "You may only get one chance to disagree before a waiting period starts, so it is worth getting the request right.",
+                    "score": 5
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "A review can take up to 7 business days. Your ads may not show while the account or products are under review.",
+                    "score": 5
+                  }
+                ]
+              }
+            },
+            {
+              "name": "create_handoff_case",
+              "args": {
+                "reason": "merchant_requested_human",
+                "issues_found": [
+                  "price_mismatch",
+                  "invalid_image",
+                  "title_too_long",
+                  "availability_mismatch",
+                  "missing_shipping",
+                  "restricted_product",
+                  "missing_gtin"
+                ],
+                "cited_doc_ids": [
+                  "request-review"
+                ],
+                "suggested_next_step": "Contact the merchant to assist with their product listing disapprovals and warnings.",
+                "merchant_request": "The merchant wants to deal with a human specialist about their listings.",
+                "merchant_reasons": [
+                  "I'd rather deal with an actual human about my listings."
+                ],
+                "already_tried": [
+                  "Merchant requested to speak with a human support representative."
+                ]
+              },
+              "response": {
+                "status": "created",
+                "case_id": "CASE-20261008-125138-c983e7",
+                "preview": {
+                  "reason": "merchant_requested_human",
+                  "issues_found": [
+                    "price_mismatch",
+                    "invalid_image",
+                    "title_too_long",
+                    "availability_mismatch",
+                    "missing_shipping",
+                    "restricted_product",
+                    "missing_gtin"
+                  ],
+                  "already_tried": [
+                    "Merchant requested to speak with a human support representative."
+                  ],
+                  "merchant_request": "The merchant wants to deal with a human specialist about their listings.",
+                  "merchant_reasons": [
+                    "I'd rather deal with an actual human about my listings."
+                  ],
+                  "suggested_next_step": "Contact the merchant to assist with their product listing disapprovals and warnings.",
+                  "cited_doc_ids": [
+                    "request-review"
+                  ],
+                  "account_issues": [],
+                  "automation": {
+                    "price_updates": false,
+                    "availability_updates": false,
+                    "image_improvements": false,
+                    "shipping_improvements": false
+                  }
+                }
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 5,
+            "input_tokens": 18162,
+            "cached_tokens": 0,
+            "output_tokens": 1181
+          },
+          "seconds": 13.33
+        },
+        {
+          "merchant": "Before it goes, what exactly will they get from you?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "The specialist receives a summary containing:\n\n* **Your request and comments:** The exact reason you provided for wanting to speak with a specialist.\n* **Store and product issues:** The list of current disapprovals and warnings detected on your store (such as price and availability mismatches, image issues, title length, missing shipping, restricted product flags, and missing product barcode numbers).\n* **Account settings:** Your Merchant Center account status and automatic improvement settings.\n* **Conversation history:** A summary of what was discussed, along with suggested next steps for the specialist.",
+          "tool_calls": [
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "handoff case support details"
+              },
+              "response": {
+                "query": "handoff case support details",
+                "results": [],
+                "message": "No help doc matches this question. Do not answer from memory: tell the merchant you could not find official guidance on it."
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 2,
+            "input_tokens": 10429,
+            "cached_tokens": 0,
+            "output_tokens": 902
+          },
+          "seconds": 7.5
+        }
+      ],
+      "handoff_cases": [
+        {
+          "case_id": "CASE-20261008-125138-c983e7",
+          "store_id": "sample-store",
+          "created_at": "2026-10-08T12:51:38.284869Z",
+          "reason": "merchant_requested_human",
+          "issues_found": [
+            "price_mismatch",
+            "invalid_image",
+            "title_too_long",
+            "availability_mismatch",
+            "missing_shipping",
+            "restricted_product",
+            "missing_gtin"
+          ],
+          "already_tried": [
+            "Merchant requested to speak with a human support representative."
+          ],
+          "merchant_request": "The merchant wants to deal with a human specialist about their listings.",
+          "merchant_reasons": [
+            "I'd rather deal with an actual human about my listings."
+          ],
+          "suggested_next_step": "Contact the merchant to assist with their product listing disapprovals and warnings.",
+          "cited_doc_ids": [
+            "request-review"
+          ],
+          "account_issues": [],
+          "automation": {
+            "price_updates": false,
+            "availability_updates": false,
+            "image_improvements": false,
+            "shipping_improvements": false
+          }
+        }
+      ],
+      "usage": {
+        "model_calls": 7,
+        "input_tokens": 28591,
+        "cached_tokens": 0,
+        "output_tokens": 2083
+      },
+      "cost_usd": 0.0292545,
+      "seconds": 20.9
+    },
+    "preview-suspension-summary": {
+      "case_id": "preview-suspension-summary",
+      "category": "case_preview",
+      "agent_version": "af3c0c1f7a41",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Google suspended me. What happens now?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "Your account is suspended due to **Misrepresentation**. The specific reason given is that your website is missing a returns policy and business contact details.\n\nAccording to the help documentation [Misrepresentation and account suspension](https://support.google.com/merchants/answer/6150127), Google's misrepresentation policy does not allow listings that leave out important information or mislead shoppers about the product or the business. Information such as payment terms, shipping costs, and what happens after purchase must be shown clearly before a shopper commits to buy.\n\nThis needs a specialist, so I've passed it on. Your case number is **CASE-20261008-125157-f44465**. A specialist will review your account. The case already includes everything from this conversation, so you won't need to repeat yourself.",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": [
+                  {
+                    "name": "accounts/suspended-store/issues/misrepresentation",
+                    "title": "Misrepresentation",
+                    "severity": "CRITICAL",
+                    "impactedDestinations": [
+                      {
+                        "reportingContext": "SHOPPING_ADS",
+                        "impacts": [
+                          {
+                            "regionCode": "US",
+                            "severity": "CRITICAL"
+                          }
+                        ]
+                      }
+                    ],
+                    "detail": "Misrepresentation: the website is missing a returns policy and business contact details.",
+                    "documentationUri": "https://support.google.com/merchants/answer/6150127"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/suspended-store/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "3",
+                      "pendingCount": "0",
+                      "disapprovedCount": "0",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": []
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "misrepresentation"
+              },
+              "response": {
+                "query": "misrepresentation",
+                "results": [
+                  {
+                    "doc_id": "misrepresentation",
+                    "title": "Misrepresentation and account suspension",
+                    "source_url": "https://support.google.com/merchants/answer/6150127",
+                    "passage": "Google's misrepresentation policy does not allow listings that leave out important information or mislead shoppers about the product or the business. For example, payment terms, shipping costs and what happens after purchase must be shown clearly before the shopper commits to buy.",
+                    "score": 3
+                  }
+                ]
+              }
+            },
+            {
+              "name": "create_handoff_case",
+              "args": {
+                "suggested_next_step": "Review the website for missing return policy and business contact details to assist the merchant with account reinstatement.",
+                "already_tried": [
+                  "Checked account issues and found an account suspension for Misrepresentation."
+                ],
+                "merchant_reasons": [
+                  "Merchant asked: \"Google suspended me. What happens now?\""
+                ],
+                "reason": "account_suspended",
+                "cited_doc_ids": [
+                  "misrepresentation"
+                ],
+                "issues_found": [
+                  "Misrepresentation account-level suspension: website is missing a returns policy and business contact details"
+                ],
+                "merchant_request": "Merchant wants to resolve the account suspension and know what happens next."
+              },
+              "response": {
+                "status": "created",
+                "case_id": "CASE-20261008-125157-f44465",
+                "preview": {
+                  "reason": "account_suspended",
+                  "issues_found": [
+                    "Misrepresentation account-level suspension: website is missing a returns policy and business contact details"
+                  ],
+                  "already_tried": [
+                    "Checked account issues and found an account suspension for Misrepresentation."
+                  ],
+                  "merchant_request": "Merchant wants to resolve the account suspension and know what happens next.",
+                  "merchant_reasons": [
+                    "Merchant asked: \"Google suspended me. What happens now?\""
+                  ],
+                  "suggested_next_step": "Review the website for missing return policy and business contact details to assist the merchant with account reinstatement.",
+                  "cited_doc_ids": [
+                    "misrepresentation"
+                  ],
+                  "account_issues": [
+                    "Misrepresentation: the website is missing a returns policy and business contact details."
+                  ],
+                  "automation": {
+                    "price_updates": false,
+                    "availability_updates": false,
+                    "image_improvements": false,
+                    "shipping_improvements": false
+                  }
+                }
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 4,
+            "input_tokens": 12382,
+            "cached_tokens": 0,
+            "output_tokens": 1530
+          },
+          "seconds": 13.3
+        },
+        {
+          "merchant": "What does the case you made say about my situation?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "Here is what is included in the case for the specialist:\n\n* **Reason for case:** Account suspension\n* **Issues identified:** Misrepresentation (your website is missing a returns policy and business contact details)\n* **What you asked:** You asked what happens now regarding your Google account suspension\n* **What was checked:** We checked your account status and verified the account-level suspension reason\n* **Suggested next step:** A specialist will review your website for the missing return policy and contact details to help you work toward account reinstatement",
+          "tool_calls": [],
+          "usage": {
+            "model_calls": 1,
+            "input_tokens": 4580,
+            "cached_tokens": 0,
+            "output_tokens": 612
+          },
+          "seconds": 4.33
+        }
+      ],
+      "handoff_cases": [
+        {
+          "case_id": "CASE-20261008-125157-f44465",
+          "store_id": "suspended-store",
+          "created_at": "2026-10-08T12:51:57.655050Z",
+          "reason": "account_suspended",
+          "issues_found": [
+            "Misrepresentation account-level suspension: website is missing a returns policy and business contact details"
+          ],
+          "already_tried": [
+            "Checked account issues and found an account suspension for Misrepresentation."
+          ],
+          "merchant_request": "Merchant wants to resolve the account suspension and know what happens next.",
+          "merchant_reasons": [
+            "Merchant asked: \"Google suspended me. What happens now?\""
+          ],
+          "suggested_next_step": "Review the website for missing return policy and business contact details to assist the merchant with account reinstatement.",
+          "cited_doc_ids": [
+            "misrepresentation"
+          ],
+          "account_issues": [
+            "Misrepresentation: the website is missing a returns policy and business contact details."
+          ],
+          "automation": {
+            "price_updates": false,
+            "availability_updates": false,
+            "image_improvements": false,
+            "shipping_improvements": false
+          }
+        }
+      ],
+      "usage": {
+        "model_calls": 5,
+        "input_tokens": 16962,
+        "cached_tokens": 0,
+        "output_tokens": 2142
+      },
+      "cost_usd": 0.020754,
+      "seconds": 17.7
+    }
+  },
+  "grades": {}
+}

@@ -1,0 +1,1067 @@
+{
+  "model": "gemini-3.6-flash",
+  "agent_version": "af3c0c1f7a41",
+  "case_set": "main",
+  "started_at": "2026-10-08T12:50:09.520940Z",
+  "finished_at": "2026-10-08T12:51:03.081541Z",
+  "price": {
+    "input_per_million": 0.75,
+    "cached_input_per_million": 0.075,
+    "output_per_million": 3.75
+  },
+  "case_filter": [],
+  "category_filter": [
+    "entry_context"
+  ],
+  "runs": {
+    "context-gtin-row": {
+      "case_id": "context-gtin-row",
+      "category": "entry_context",
+      "agent_version": "af3c0c1f7a41",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Is this one serious?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "You currently have 0 disapproved products. However, there is 1 warning affecting 2 products for a missing product barcode number (GTIN).\n\nNo, this is not a disapproval—it is a warning (DEMOTED). That means your product can still show to shoppers, but it may get limited visibility. If a product does have a product barcode number (GTIN) and you leave it out, the product could eventually be disapproved.\n\nThe 2 affected products are:\n- **Linen Napkins, Set of 4, Natural** (ID: `HG-002`) – Missing product barcode number (GTIN).\n- **Wool Throw Blanket, Charcoal Herringbone** (ID: `HG-007`) – Missing product barcode number (GTIN).\n\n**How to fix it:**\nA GTIN is the barcode number a manufacturer gives a product, such as a UPC in North America or an EAN in Europe. Valid GTINs are 8, 12, 13, or 14 digits long. Copy the number exactly from the packaging or from your supplier.\n\nFor more details, see [Product barcode number (GTIN)](https://support.google.com/merchants/answer/6324461).",
+          "tool_calls": [
+            {
+              "name": "get_product_by_name",
+              "args": {
+                "name": "accounts/gtin-only/products/en~US~HG-002"
+              },
+              "response": {
+                "name": "accounts/gtin-only/products/en~US~HG-002",
+                "offerId": "HG-002",
+                "contentLanguage": "en",
+                "feedLabel": "US",
+                "productAttributes": {
+                  "title": "Linen Napkins, Set of 4, Natural",
+                  "description": "Linen Napkins, Set of 4, Natural. Made for everyday use at home.",
+                  "link": "https://www.hearthandhollow.example/products/hg-002",
+                  "imageLink": "https://cdn.hearthandhollow.example/img/hg-002.jpg",
+                  "availability": "IN_STOCK",
+                  "brand": "Hearth & Hollow",
+                  "gtins": [],
+                  "productTypes": [
+                    "Home & Garden > Linens & Bedding > Table Linens"
+                  ],
+                  "shipping": [
+                    {
+                      "country": "US",
+                      "price": {
+                        "amountMicros": "5950000",
+                        "currencyCode": "USD"
+                      }
+                    }
+                  ],
+                  "price": {
+                    "amountMicros": "24000000",
+                    "currencyCode": "USD"
+                  }
+                },
+                "productStatus": {
+                  "destinationStatuses": [
+                    {
+                      "reportingContext": "SHOPPING_ADS",
+                      "approvedCountries": [
+                        "US"
+                      ],
+                      "pendingCountries": [],
+                      "disapprovedCountries": []
+                    }
+                  ],
+                  "itemLevelIssues": [
+                    {
+                      "code": "missing_gtin",
+                      "severity": "DEMOTED",
+                      "resolution": "merchant_action",
+                      "attribute": "gtins",
+                      "reportingContext": "SHOPPING_ADS",
+                      "description": "Missing value [gtin]",
+                      "detail": "No GTIN (barcode number) is set for this product.",
+                      "documentation": "https://support.google.com/merchants/answer/6324461",
+                      "applicableCountries": [
+                        "US"
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": []
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/gtin-only/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "5",
+                      "pendingCount": "0",
+                      "disapprovedCount": "0",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "missing_gtin",
+                        "severity": "DEMOTED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "gtins",
+                        "description": "Missing value [gtin]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324461",
+                        "productCount": "2"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "missing_gtin"
+              },
+              "response": {
+                "query": "missing_gtin",
+                "results": [
+                  {
+                    "doc_id": "gtin",
+                    "title": "Product barcode number (GTIN)",
+                    "source_url": "https://support.google.com/merchants/answer/6324461",
+                    "passage": "Products with a missing or wrong GTIN may get limited visibility. If a product does have a GTIN and you leave it out, the product could be disapproved.",
+                    "score": 9
+                  },
+                  {
+                    "doc_id": "gtin",
+                    "title": "Product barcode number (GTIN)",
+                    "source_url": "https://support.google.com/merchants/answer/6324461",
+                    "passage": "A GTIN is the barcode number a manufacturer gives a product, such as a UPC in North America or an EAN in Europe. Google recommends sending it for every product that has one.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "gtin",
+                    "title": "Product barcode number (GTIN)",
+                    "source_url": "https://support.google.com/merchants/answer/6324461",
+                    "passage": "Valid GTINs are 8, 12, 13 or 14 digits long. Spaces and dashes are ignored. The last digit is a check digit and must be correct, so copy the number exactly from the packaging or from your supplier.",
+                    "score": 8
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_products",
+              "args": {
+                "issue_code": "missing_gtin"
+              },
+              "response": {
+                "products": [
+                  {
+                    "name": "accounts/gtin-only/products/en~US~HG-002",
+                    "offerId": "HG-002",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Linen Napkins, Set of 4, Natural",
+                      "description": "Linen Napkins, Set of 4, Natural. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-002",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/hg-002.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Hearth & Hollow",
+                      "gtins": [],
+                      "productTypes": [
+                        "Home & Garden > Linens & Bedding > Table Linens"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "24000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [
+                            "US"
+                          ],
+                          "pendingCountries": [],
+                          "disapprovedCountries": []
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "missing_gtin",
+                          "severity": "DEMOTED",
+                          "resolution": "merchant_action",
+                          "attribute": "gtins",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Missing value [gtin]",
+                          "detail": "No GTIN (barcode number) is set for this product.",
+                          "documentation": "https://support.google.com/merchants/answer/6324461",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "name": "accounts/gtin-only/products/en~US~HG-007",
+                    "offerId": "HG-007",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Wool Throw Blanket, Charcoal Herringbone",
+                      "description": "Wool Throw Blanket, Charcoal Herringbone. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-007",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/hg-007.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Hearth & Hollow",
+                      "gtins": [],
+                      "productTypes": [
+                        "Home & Garden > Linens & Bedding > Blankets"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "120000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [
+                            "US"
+                          ],
+                          "pendingCountries": [],
+                          "disapprovedCountries": []
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "missing_gtin",
+                          "severity": "DEMOTED",
+                          "resolution": "merchant_action",
+                          "attribute": "gtins",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Missing value [gtin]",
+                          "detail": "No GTIN (barcode number) is set for this product.",
+                          "documentation": "https://support.google.com/merchants/answer/6324461",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 3,
+            "input_tokens": 10916,
+            "cached_tokens": 0,
+            "output_tokens": 2436
+          },
+          "seconds": 15.13
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 3,
+        "input_tokens": 10916,
+        "cached_tokens": 0,
+        "output_tokens": 2436
+      },
+      "cost_usd": 0.017322,
+      "seconds": 15.2
+    },
+    "context-image-row": {
+      "case_id": "context-image-row",
+      "category": "entry_context",
+      "agent_version": "af3c0c1f7a41",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "What do I need to change here?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "You currently have **2 disapproved products** due to invalid or missing image links. There are **no warnings** affecting your products.\n\n### Issue: Invalid or placeholder image (`invalid_image`)\n\nEvery product needs a main image link showing the actual product. Placeholder or generic images are not allowed, and images must be at least 500 by 500 pixels without promotional text, logos, or watermarks ([Product image link](https://support.google.com/merchants/answer/6324350)).\n\nHere are the affected products and what needs to be changed for each:\n\n1. **Ceramic Table Lamp, Matte White** (`accounts/image-only/products/en~US~HG-006`)\n   - **What's wrong:** No image link is set. You need to provide a link to a photo of this product.\n2. **Walnut Wall Shelf, 24 inch** (`accounts/image-only/products/en~US~HG-013`)\n   - **What's wrong:** The image link (`https://cdn.hearthandhollow.example/img/placeholder.png`) points to a placeholder image rather than an actual photo of the product. You need to replace it with a valid product photo link.\n\nOnce you update the image links in your product data to valid product photos, Google will review them. \n\nWould you like to move on, or do you have any questions about updating these image links?",
+          "tool_calls": [
+            {
+              "name": "get_product_by_name",
+              "args": {
+                "name": "accounts/image-only/products/en~US~HG-006"
+              },
+              "response": {
+                "name": "accounts/image-only/products/en~US~HG-006",
+                "offerId": "HG-006",
+                "contentLanguage": "en",
+                "feedLabel": "US",
+                "productAttributes": {
+                  "title": "Ceramic Table Lamp, Matte White",
+                  "description": "Ceramic Table Lamp, Matte White. Made for everyday use at home.",
+                  "link": "https://www.hearthandhollow.example/products/hg-006",
+                  "availability": "IN_STOCK",
+                  "brand": "Lumen Home",
+                  "gtins": [
+                    "0850012345067"
+                  ],
+                  "productTypes": [
+                    "Home & Garden > Lighting > Lamps"
+                  ],
+                  "shipping": [
+                    {
+                      "country": "US",
+                      "price": {
+                        "amountMicros": "5950000",
+                        "currencyCode": "USD"
+                      }
+                    }
+                  ],
+                  "price": {
+                    "amountMicros": "89000000",
+                    "currencyCode": "USD"
+                  }
+                },
+                "productStatus": {
+                  "destinationStatuses": [
+                    {
+                      "reportingContext": "SHOPPING_ADS",
+                      "approvedCountries": [],
+                      "pendingCountries": [],
+                      "disapprovedCountries": [
+                        "US"
+                      ]
+                    }
+                  ],
+                  "itemLevelIssues": [
+                    {
+                      "code": "invalid_image",
+                      "severity": "DISAPPROVED",
+                      "resolution": "merchant_action",
+                      "attribute": "imageLink",
+                      "reportingContext": "SHOPPING_ADS",
+                      "description": "Invalid or placeholder image [image_link]",
+                      "detail": "No image link is set.",
+                      "documentation": "https://support.google.com/merchants/answer/6324350",
+                      "applicableCountries": [
+                        "US"
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": []
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/image-only/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "3",
+                      "pendingCount": "0",
+                      "disapprovedCount": "2",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "invalid_image",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "imageLink",
+                        "description": "Invalid or placeholder image [image_link]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324350",
+                        "productCount": "2"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "invalid_image"
+              },
+              "response": {
+                "query": "invalid_image",
+                "results": [
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "Every product needs a main image link. Without one the product cannot show.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "The image must show the actual product. Placeholder images, generic images and graphics that do not show the product are not allowed.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "Images must be at least 500 by 500 pixels, and around 1500 by 1500 pixels or larger is recommended. Do not add promotional text, logos, watermarks or other overlays to the main image.",
+                    "score": 8
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_products",
+              "args": {
+                "issue_code": "invalid_image"
+              },
+              "response": {
+                "products": [
+                  {
+                    "name": "accounts/image-only/products/en~US~HG-006",
+                    "offerId": "HG-006",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Ceramic Table Lamp, Matte White",
+                      "description": "Ceramic Table Lamp, Matte White. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-006",
+                      "availability": "IN_STOCK",
+                      "brand": "Lumen Home",
+                      "gtins": [
+                        "0850012345067"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Lighting > Lamps"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "89000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "invalid_image",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "imageLink",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Invalid or placeholder image [image_link]",
+                          "detail": "No image link is set.",
+                          "documentation": "https://support.google.com/merchants/answer/6324350",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "name": "accounts/image-only/products/en~US~HG-013",
+                    "offerId": "HG-013",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Walnut Wall Shelf, 24 inch",
+                      "description": "Walnut Wall Shelf, 24 inch. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-013",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/placeholder.png",
+                      "availability": "IN_STOCK",
+                      "brand": "Timberline",
+                      "gtins": [
+                        "0850012345135"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Furniture > Shelving"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "65000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "invalid_image",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "imageLink",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Invalid or placeholder image [image_link]",
+                          "detail": "Image link 'https://cdn.hearthandhollow.example/img/placeholder.png' points to a placeholder, not a real product photo.",
+                          "documentation": "https://support.google.com/merchants/answer/6324350",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 3,
+            "input_tokens": 11057,
+            "cached_tokens": 0,
+            "output_tokens": 2291
+          },
+          "seconds": 13.57
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 3,
+        "input_tokens": 11057,
+        "cached_tokens": 0,
+        "output_tokens": 2291
+      },
+      "cost_usd": 0.016884,
+      "seconds": 13.6
+    },
+    "context-price-row": {
+      "case_id": "context-price-row",
+      "category": "entry_context",
+      "agent_version": "af3c0c1f7a41",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "How do I sort this out?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "You currently have **1 disapproved product** due to a price mismatch between your product data and your website. There are no warning issues affecting your account.\n\n### Disapproved Issue: Price Mismatch\nThe price in your product data must match the price shown on the product page and at checkout in the same currency. If they differ, Google disapproves the product.\n\n**Affected product:**\n* **Waffle Weave Bath Towel, Sage** (ID: `HG-004`)  \n  * **What's wrong:** The price in your product data is $32.00 USD, but the product page shows $36.00 USD.\n\n### How to fix it:\nChange the price in your product data so it matches your product page exactly, then upload the corrected data.\n\nFor full guidance, see [Price in the feed does not match the website](https://support.google.com/merchants/answer/12159029).",
+          "tool_calls": [
+            {
+              "name": "get_product_by_name",
+              "args": {
+                "name": "accounts/price-only/products/en~US~HG-004"
+              },
+              "response": {
+                "name": "accounts/price-only/products/en~US~HG-004",
+                "offerId": "HG-004",
+                "contentLanguage": "en",
+                "feedLabel": "US",
+                "productAttributes": {
+                  "title": "Waffle Weave Bath Towel, Sage",
+                  "description": "Waffle Weave Bath Towel, Sage. Made for everyday use at home.",
+                  "link": "https://www.hearthandhollow.example/products/hg-004",
+                  "imageLink": "https://cdn.hearthandhollow.example/img/hg-004.jpg",
+                  "availability": "IN_STOCK",
+                  "brand": "Hearth & Hollow",
+                  "gtins": [
+                    "0850012345043"
+                  ],
+                  "productTypes": [
+                    "Home & Garden > Linens & Bedding > Towels"
+                  ],
+                  "shipping": [
+                    {
+                      "country": "US",
+                      "price": {
+                        "amountMicros": "5950000",
+                        "currencyCode": "USD"
+                      }
+                    }
+                  ],
+                  "price": {
+                    "amountMicros": "32000000",
+                    "currencyCode": "USD"
+                  }
+                },
+                "productStatus": {
+                  "destinationStatuses": [
+                    {
+                      "reportingContext": "SHOPPING_ADS",
+                      "approvedCountries": [],
+                      "pendingCountries": [],
+                      "disapprovedCountries": [
+                        "US"
+                      ]
+                    }
+                  ],
+                  "itemLevelIssues": [
+                    {
+                      "code": "price_mismatch",
+                      "severity": "DISAPPROVED",
+                      "resolution": "merchant_action",
+                      "attribute": "price",
+                      "reportingContext": "SHOPPING_ADS",
+                      "description": "Mismatched value (page crawl) [price]",
+                      "detail": "Feed price is 32.00 USD but the product page shows 36.00 USD.",
+                      "documentation": "https://support.google.com/merchants/answer/12159029",
+                      "applicableCountries": [
+                        "US"
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": []
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/price-only/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "3",
+                      "pendingCount": "0",
+                      "disapprovedCount": "1",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "price_mismatch",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "price",
+                        "description": "Mismatched value (page crawl) [price]",
+                        "documentationUri": "https://support.google.com/merchants/answer/12159029",
+                        "productCount": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "price_mismatch"
+              },
+              "response": {
+                "query": "price_mismatch",
+                "results": [
+                  {
+                    "doc_id": "price-mismatch",
+                    "title": "Price in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12159029",
+                    "passage": "The price you send must match the price shown on the product's page and at checkout, in the same currency. If they differ, Google disapproves the product.",
+                    "score": 10
+                  },
+                  {
+                    "doc_id": "price-mismatch",
+                    "title": "Price in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12159029",
+                    "passage": "Common causes are a delay between changing the price on your website and updating your product data, a sale price with the wrong dates, or price markup on the page that differs from the price shoppers see.",
+                    "score": 10
+                  },
+                  {
+                    "doc_id": "price-mismatch",
+                    "title": "Price in the feed does not match the website",
+                    "source_url": "https://support.google.com/merchants/answer/12159029",
+                    "passage": "To fix it, change the price in your product data so it matches the product page exactly, then upload the corrected data. You can edit products one at a time in Merchant Center or download the list of affected products and fix them in bulk.",
+                    "score": 10
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_products",
+              "args": {
+                "issue_code": "price_mismatch"
+              },
+              "response": {
+                "products": [
+                  {
+                    "name": "accounts/price-only/products/en~US~HG-004",
+                    "offerId": "HG-004",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Waffle Weave Bath Towel, Sage",
+                      "description": "Waffle Weave Bath Towel, Sage. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-004",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/hg-004.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Hearth & Hollow",
+                      "gtins": [
+                        "0850012345043"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Linens & Bedding > Towels"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "32000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "price_mismatch",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "price",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Mismatched value (page crawl) [price]",
+                          "detail": "Feed price is 32.00 USD but the product page shows 36.00 USD.",
+                          "documentation": "https://support.google.com/merchants/answer/12159029",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 3,
+            "input_tokens": 11092,
+            "cached_tokens": 0,
+            "output_tokens": 1812
+          },
+          "seconds": 13.27
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 3,
+        "input_tokens": 11092,
+        "cached_tokens": 0,
+        "output_tokens": 1812
+      },
+      "cost_usd": 0.015114,
+      "seconds": 13.3
+    },
+    "context-shipping-row": {
+      "case_id": "context-shipping-row",
+      "category": "entry_context",
+      "agent_version": "af3c0c1f7a41",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Walk me through fixing this please.",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "You have **1 disapproved product** due to missing shipping information. There are no warnings affecting your products.\n\n### Disapproved Product: Missing Shipping Information\nProducts in the United States need shipping information, including cost and delivery speed (handling and transit time).\n\n* **Outdoor String Lights, 48 ft** (ID: `HG-030`): No shipping cost or delivery speed is set for this product.\n\n**How to fix:**\nAccording to [Shipping costs](https://support.google.com/merchants/answer/6324484), the recommended approach is to set up shipping settings directly in your Merchant Center account, which applies across your products. Alternatively, you can add shipping attribute values directly to the product data to set or override shipping costs for specific items.\n\nWould you like help with anything else, or have you made these updates?",
+          "tool_calls": [
+            {
+              "name": "get_product_by_name",
+              "args": {
+                "name": "accounts/shipping-only/products/en~US~HG-030"
+              },
+              "response": {
+                "name": "accounts/shipping-only/products/en~US~HG-030",
+                "offerId": "HG-030",
+                "contentLanguage": "en",
+                "feedLabel": "US",
+                "productAttributes": {
+                  "title": "Outdoor String Lights, 48 ft",
+                  "description": "Outdoor String Lights, 48 ft. Made for everyday use at home.",
+                  "link": "https://www.hearthandhollow.example/products/hg-030",
+                  "imageLink": "https://cdn.hearthandhollow.example/img/hg-030.jpg",
+                  "availability": "IN_STOCK",
+                  "brand": "Lumen Home",
+                  "gtins": [
+                    "0850012345296"
+                  ],
+                  "productTypes": [
+                    "Home & Garden > Lighting > Outdoor Lighting"
+                  ],
+                  "shipping": [],
+                  "price": {
+                    "amountMicros": "42000000",
+                    "currencyCode": "USD"
+                  }
+                },
+                "productStatus": {
+                  "destinationStatuses": [
+                    {
+                      "reportingContext": "SHOPPING_ADS",
+                      "approvedCountries": [],
+                      "pendingCountries": [],
+                      "disapprovedCountries": [
+                        "US"
+                      ]
+                    }
+                  ],
+                  "itemLevelIssues": [
+                    {
+                      "code": "missing_shipping",
+                      "severity": "DISAPPROVED",
+                      "resolution": "merchant_action",
+                      "attribute": "shipping",
+                      "reportingContext": "SHOPPING_ADS",
+                      "description": "Missing shipping information",
+                      "detail": "No shipping cost is set for this product.",
+                      "documentation": "https://support.google.com/merchants/answer/6324484",
+                      "applicableCountries": [
+                        "US"
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": []
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/shipping-only/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "3",
+                      "pendingCount": "0",
+                      "disapprovedCount": "1",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "missing_shipping",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "shipping",
+                        "description": "Missing shipping information",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324484",
+                        "productCount": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "missing_shipping"
+              },
+              "response": {
+                "query": "missing_shipping",
+                "results": [
+                  {
+                    "doc_id": "shipping",
+                    "title": "Shipping costs",
+                    "source_url": "https://support.google.com/merchants/answer/6324484",
+                    "passage": "In the United States and many other countries, products need shipping information, including cost and delivery speed. Products with missing or wrong shipping information can be disapproved.",
+                    "score": 9
+                  },
+                  {
+                    "doc_id": "shipping",
+                    "title": "Shipping costs",
+                    "source_url": "https://support.google.com/merchants/answer/6324484",
+                    "passage": "The recommended way is to set up shipping in your Merchant Center account settings, which then applies to your products. Use the shipping value in your product data only to override those settings for specific products.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "shipping",
+                    "title": "Shipping costs",
+                    "source_url": "https://support.google.com/merchants/answer/6324484",
+                    "passage": "Delivery speed is made of two parts: handling time, from the order until it is handed to the carrier, and transit time, from the carrier to the customer.",
+                    "score": 7
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_products",
+              "args": {
+                "issue_code": "missing_shipping"
+              },
+              "response": {
+                "products": [
+                  {
+                    "name": "accounts/shipping-only/products/en~US~HG-030",
+                    "offerId": "HG-030",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Outdoor String Lights, 48 ft",
+                      "description": "Outdoor String Lights, 48 ft. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-030",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/hg-030.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Lumen Home",
+                      "gtins": [
+                        "0850012345296"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Lighting > Outdoor Lighting"
+                      ],
+                      "shipping": [],
+                      "price": {
+                        "amountMicros": "42000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "missing_shipping",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "shipping",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Missing shipping information",
+                          "detail": "No shipping cost is set for this product.",
+                          "documentation": "https://support.google.com/merchants/answer/6324484",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 3,
+            "input_tokens": 10664,
+            "cached_tokens": 0,
+            "output_tokens": 1521
+          },
+          "seconds": 11.4
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 3,
+        "input_tokens": 10664,
+        "cached_tokens": 0,
+        "output_tokens": 1521
+      },
+      "cost_usd": 0.01370175,
+      "seconds": 11.4
+    }
+  },
+  "grades": {}
+}
