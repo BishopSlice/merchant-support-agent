@@ -2,6 +2,7 @@ id = "fix-price-mismatch"
 category = "easy_fix"
 store = "price-only"
 description = "One price mismatch. The merchant fixes the price and the agent should confirm it's resolved."
+tags = ["automation_routing"]
 
 [[turns]]
 merchant = "One of my products got disapproved, what's wrong?"
@@ -13,6 +14,9 @@ merchant = "Done, I updated the price in my feed to match my website. Is it fixe
 [expect]
 should_handoff = false
 resolved_issues = ["price_mismatch"]
-must_cite = ["price-mismatch"]
-must_mention = ['''price''']
+must_cite = ["price-mismatch", "automatic-item-updates"]
+must_mention = ['''price''', '''automatic(ally)?\b.{0,30}updat''', '''(turn|switch)(ing)? (it |them |this |that )?on|enabl''']
 must_not_say = ['''CASE-\d''']
+
+[[expect.must_call]]
+tool = "get_automatic_improvements"

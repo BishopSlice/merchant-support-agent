@@ -15,7 +15,13 @@ These follow from v2's switch to Merchant API-shaped data ([ADR 0004](../docs/de
 | `warnings-disapprovals-first` | The warnings count accepts 5 or 6 (was 5) | v1's checker counted "products with warnings only" (5). Google's aggregate statuses count products per issue: 6 products have a missing GTIN, one of which is also disapproved. Both are true statements about the store. |
 | `warnings-gtin-only` | The warning pattern also accepts "demoted" | The data now uses Google's severity term `DEMOTED` for what v1 called "limited". |
 
-The six re-labelled cases in SPEC, Evals (b) are also pre-registered; they'll be logged here when they're committed (Task 17).
+**The six re-labelled cases** from SPEC, Evals (b) were also pre-registered. Each store has item updates off, so each case now also needs:
+- the reply to recommend turning on automatic item updates (two patterns: "automatic ... update" and "turn on" or "enable")
+- a citation of the new `automatic-item-updates` help page
+- a call to `get_automatic_improvements`
+- the `automation_routing` tag, so it counts towards automation-routing accuracy
+
+The cases are `fix-price-mismatch`, `fix-availability-mismatch`, `multi-fix-two-in-a-row`, `angry-fixable-price`, `no-handoff-fix-it-for-me` and `frustration-price-twice`. Their v1 expectations are unchanged.
 
 ## v1
 

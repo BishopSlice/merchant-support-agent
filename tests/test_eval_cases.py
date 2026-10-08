@@ -219,6 +219,32 @@ def test_demoted_counts_as_explaining_a_warning():
     )
 
 
+RELABELLED = [
+    "fix-price-mismatch",
+    "fix-availability-mismatch",
+    "multi-fix-two-in-a-row",
+    "angry-fixable-price",
+    "no-handoff-fix-it-for-me",
+    "frustration-price-twice",
+]
+
+
+@pytest.mark.parametrize("case_id", RELABELLED)
+def test_relabelled_cases_require_the_item_updates_recommendation(case_id):
+    # Pre-registered in SPEC, Evals (b): with item updates off, recommend turning them on.
+    case = next(c for c in load_cases() if c.id == case_id)
+    assert "automation_routing" in case.tags
+    assert "automatic-item-updates" in case.expect.must_cite
+    assert [m.tool for m in case.expect.must_call] == ["get_automatic_improvements"]
+    recommend = "You can turn on automatic item updates so the price stays in sync."
+    manual_only = "Change the price in your product data to match the page, then re-upload."
+    import re
+
+    patterns = case.expect.must_mention[-2:]
+    assert all(re.search(p, recommend, re.IGNORECASE) for p in patterns)
+    assert not all(re.search(p, manual_only, re.IGNORECASE) for p in patterns)
+
+
 # --- v2 case fields ---
 
 V2_CASE = """

@@ -2,6 +2,7 @@ id = "no-handoff-fix-it-for-me"
 category = "no_handoff_data_fix"
 store = "price-only"
 description = "Merchant asks the agent to make the fix. It can't edit their feed, and this is not a handoff."
+tags = ["automation_routing"]
 
 [[turns]]
 merchant = "Why is my towel disapproved?"
@@ -10,6 +11,10 @@ merchant = "Why is my towel disapproved?"
 merchant = "Can't you just fix the price for me?"
 
 [expect]
+must_mention = ['''automatic(ally)?\b.{0,30}updat''', '''(turn|switch)(ing)? (it |them |this |that )?on|enabl''']
 should_handoff = false
-must_cite = ["price-mismatch"]
+must_cite = ["price-mismatch", "automatic-item-updates"]
 must_not_say = ['''I('ve| have) (fixed|updated|changed) (the|your) price''', '''CASE-\d''']
+
+[[expect.must_call]]
+tool = "get_automatic_improvements"

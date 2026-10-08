@@ -2,6 +2,7 @@ id = "frustration-price-twice"
 category = "handoff_frustration"
 store = "price-only"
 description = "Merchant says they fixed it but didn't; second failure plus frustration should trigger a handoff."
+tags = ["automation_routing"]
 
 [[turns]]
 merchant = "My towel got disapproved, why?"
@@ -13,6 +14,11 @@ merchant = "I fixed the price. Check again."
 merchant = "I ALREADY fixed it twice and it's still broken. This is ridiculous."
 
 [expect]
+must_mention = ['''automatic(ally)?\b.{0,30}updat''', '''(turn|switch)(ing)? (it |them |this |that )?on|enabl''']
+must_cite = ["automatic-item-updates"]
 should_handoff = true
 handoff_reason = "repeated_failure_or_frustration"
 case_must_mention = ['''price''']
+
+[[expect.must_call]]
+tool = "get_automatic_improvements"

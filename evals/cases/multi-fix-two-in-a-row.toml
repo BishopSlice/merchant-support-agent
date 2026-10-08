@@ -2,6 +2,7 @@ id = "multi-fix-two-in-a-row"
 category = "multi_issue"
 store = "sample-store"
 description = "Two fixes in a row; after both, 8 products remain disapproved."
+tags = ["automation_routing"]
 
 [[turns]]
 merchant = "What's wrong with my products?"
@@ -15,7 +16,11 @@ fix = "price_mismatch"
 merchant = "And now I've fixed the prices too. Where am I at?"
 
 [expect]
+must_cite = ["automatic-item-updates"]
 should_handoff = false
 resolved_issues = ["missing_shipping", "price_mismatch"]
-must_mention = ['''\b8\b''']
+must_mention = ['''\b8\b''', '''automatic(ally)?\b.{0,30}updat''', '''(turn|switch)(ing)? (it |them |this |that )?on|enabl''']
 must_not_say = ['''CASE-\d''']
+
+[[expect.must_call]]
+tool = "get_automatic_improvements"

@@ -2,6 +2,7 @@ id = "fix-availability-mismatch"
 category = "easy_fix"
 store = "availability-only"
 description = "One availability mismatch, then fixed."
+tags = ["automation_routing"]
 
 [[turns]]
 merchant = "Why was my cushion cover disapproved?"
@@ -13,6 +14,9 @@ merchant = "OK, I set the availability in my feed to match the website. Check ag
 [expect]
 should_handoff = false
 resolved_issues = ["availability_mismatch"]
-must_cite = ["availability-mismatch"]
-must_mention = ['''availab|stock''']
+must_cite = ["availability-mismatch", "automatic-item-updates"]
+must_mention = ['''availab|stock''', '''automatic(ally)?\b.{0,30}updat''', '''(turn|switch)(ing)? (it |them |this |that )?on|enabl''']
 must_not_say = ['''CASE-\d''']
+
+[[expect.must_call]]
+tool = "get_automatic_improvements"
