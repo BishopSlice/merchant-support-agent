@@ -1,0 +1,2299 @@
+{
+  "model": "gemini-3.6-flash",
+  "agent_version": "6548a2f6710c",
+  "case_set": "heldout",
+  "started_at": "2026-10-08T15:21:51.234007Z",
+  "finished_at": "2026-10-08T15:45:06.088497Z",
+  "price": {
+    "input_per_million": 0.75,
+    "cached_input_per_million": 0.075,
+    "output_per_million": 3.75
+  },
+  "case_filter": [],
+  "category_filter": [],
+  "runs": {
+    "heldout-angry-many-images": {
+      "case_id": "heldout-angry-many-images",
+      "category": "angry_merchant",
+      "agent_version": "6548a2f6710c",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Three of my products are broken AGAIN and I'm sick of this. Just tell me what to fix.",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "Here is a summary of your account status:\n\n* **Account Issues:** None. Your account is active and has no account-level issues.\n* **Disapprovals:** 3 products are disapproved due to invalid image links.\n* **Warnings:** 0 products affected by warnings (DEMOTED issues).\n\n---\n\n### Disapproval: Invalid or placeholder image\n\nAccording to [Product image link](https://support.google.com/merchants/answer/6324350), every product needs a main image link showing the actual product. Placeholder images, generic graphics, or invalid web addresses are not allowed.\n\nHere are the 3 affected products and what needs to be changed:\n\n1. **Ceramic Table Lamp, Matte White** (ID: `HG-006`)\n   * **What is wrong:** No image link is set.\n   * **Fix:** Add a full web address URL pointing to a photo of the product.\n\n2. **Walnut Wall Shelf, 24 inch** (ID: `HG-013`)\n   * **What is wrong:** The image link (`https://cdn.hearthandhollow.example/img/placeholder.png`) points to a placeholder image, not a real product photo.\n   * **Fix:** Replace the placeholder link with a full web address URL showing the actual product photo.\n\n3. **Soy Wax Candle, Cedar and Smoke, 8 oz** (ID: `HG-010`)\n   * **What is wrong:** The image link (`candle-photo.jpg`) is incomplete and not a full web address.\n   * **Fix:** Update the link to a full web address URL (starting with `https://`).\n\n---\n\n### What happens next\nAfter you update and re-upload your product data, Google will check them again. According to [What happens after you fix a product](https://support.google.com/merchants/answer/12153802), these checks usually finish within 24 to 48 hours.\n\nPlease let me know if you have any questions or once you've updated these links!",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": []
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/images-three/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "2",
+                      "pendingCount": "0",
+                      "disapprovedCount": "3",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "invalid_image",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "imageLink",
+                        "description": "Invalid or placeholder image [image_link]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324350",
+                        "productCount": "3"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_products",
+              "args": {
+                "issue_code": "invalid_image"
+              },
+              "response": {
+                "products": [
+                  {
+                    "name": "accounts/images-three/products/en~US~HG-006",
+                    "offerId": "HG-006",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Ceramic Table Lamp, Matte White",
+                      "description": "Ceramic Table Lamp, Matte White. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-006",
+                      "availability": "IN_STOCK",
+                      "brand": "Lumen Home",
+                      "gtins": [
+                        "0850012345067"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Lighting > Lamps"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "89000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "invalid_image",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "imageLink",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Invalid or placeholder image [image_link]",
+                          "detail": "No image link is set.",
+                          "documentation": "https://support.google.com/merchants/answer/6324350",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "name": "accounts/images-three/products/en~US~HG-013",
+                    "offerId": "HG-013",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Walnut Wall Shelf, 24 inch",
+                      "description": "Walnut Wall Shelf, 24 inch. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-013",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/placeholder.png",
+                      "availability": "IN_STOCK",
+                      "brand": "Timberline",
+                      "gtins": [
+                        "0850012345135"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Furniture > Shelving"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "65000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "invalid_image",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "imageLink",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Invalid or placeholder image [image_link]",
+                          "detail": "Image link 'https://cdn.hearthandhollow.example/img/placeholder.png' points to a placeholder, not a real product photo.",
+                          "documentation": "https://support.google.com/merchants/answer/6324350",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "name": "accounts/images-three/products/en~US~HG-010",
+                    "offerId": "HG-010",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Soy Wax Candle, Cedar and Smoke, 8 oz",
+                      "description": "Soy Wax Candle, Cedar and Smoke, 8 oz. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-010",
+                      "imageLink": "candle-photo.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Ember Co",
+                      "gtins": [
+                        "0850012345104"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Decor > Candles"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "22000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "invalid_image",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "imageLink",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Invalid or placeholder image [image_link]",
+                          "detail": "Image link 'candle-photo.jpg' is not a full web address.",
+                          "documentation": "https://support.google.com/merchants/answer/6324350",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "invalid_image"
+              },
+              "response": {
+                "query": "invalid_image",
+                "results": [
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "Every product needs a main image link. Without one the product cannot show.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "The image must show the actual product. Placeholder images, generic images and graphics that do not show the product are not allowed.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "Images must be at least 500 by 500 pixels, and around 1500 by 1500 pixels or larger is recommended. Do not add promotional text, logos, watermarks or other overlays to the main image.",
+                    "score": 8
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "after a fix"
+              },
+              "response": {
+                "query": "after a fix",
+                "results": [
+                  {
+                    "doc_id": "after-a-fix",
+                    "title": "What happens after you fix a product",
+                    "source_url": "https://support.google.com/merchants/answer/12153802",
+                    "passage": "To fix a product issue, correct the product data and upload it again. Some issues also offer a suggested automatic fix in Merchant Center.",
+                    "score": 5
+                  },
+                  {
+                    "doc_id": "after-a-fix",
+                    "title": "What happens after you fix a product",
+                    "source_url": "https://support.google.com/merchants/answer/12153802",
+                    "passage": "After you update your products, Google checks them again. These checks usually finish within 24 to 48 hours, and products show as pending while they are reviewed.",
+                    "score": 5
+                  },
+                  {
+                    "doc_id": "after-a-fix",
+                    "title": "What happens after you fix a product",
+                    "source_url": "https://support.google.com/merchants/answer/12153802",
+                    "passage": "Product issues only affect the products involved. Account issues affect every product in the account. Product issues are listed on the Needs attention tab under Products, and account issues show in a banner at the top of Merchant Center.",
+                    "score": 4
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 4,
+            "input_tokens": 17087,
+            "cached_tokens": 0,
+            "output_tokens": 2823
+          },
+          "seconds": 148.94
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 4,
+        "input_tokens": 17087,
+        "cached_tokens": 0,
+        "output_tokens": 2823
+      },
+      "cost_usd": 0.0234015,
+      "seconds": 149.0
+    },
+    "heldout-appeal-hemp-oil": {
+      "case_id": "heldout-appeal-hemp-oil",
+      "category": "handoff_appeal",
+      "agent_version": "6548a2f6710c",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Why was my lavender massage oil disapproved?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "### Summary\n* **Account status:** No account-level issues.\n* **Disapproved products:** 1 product is disapproved due to a restricted product policy.\n* **Warnings:** No warnings or demoted products.\n\n---\n\n### Disapproved Product Details\n* **Product:** Hemp Extract Massage Oil, Lavender, 100 ml (ID: `HG-040`)\n* **Issue:** Restricted product (unapproved substances policy)\n\n### Why it was disapproved\nThis product mentions \"Hemp Extract\". Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD), and products on this list are not allowed in Shopping ads or free listings. \n\nThis is a policy decision, not a data problem, so it cannot be fixed by editing product details. Whether a specific product is allowed is decided by Google's policy team under the healthcare and medicines policy. For more information, see [CBD and other unapproved substances](https://support.google.com/merchants/answer/6165956).\n\nIf you disagree with this decision, an appeal can be submitted. You may only get one chance to disagree before a waiting period starts. See [Requesting a review or appealing a decision](https://support.google.com/merchants/answer/13585221).\n\nPlease let me know if you would like to submit an appeal so I can hand this over to a specialist, or if you need help with anything else!",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": []
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/restricted-oil/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "2",
+                      "pendingCount": "0",
+                      "disapprovedCount": "1",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "restricted_product",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "productTypes",
+                        "description": "Restricted product (unapproved substances policy)",
+                        "documentationUri": "https://support.google.com/merchants/answer/6165956",
+                        "productCount": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_products",
+              "args": {
+                "issue_code": "restricted_product"
+              },
+              "response": {
+                "products": [
+                  {
+                    "name": "accounts/restricted-oil/products/en~US~HG-040",
+                    "offerId": "HG-040",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Hemp Extract Massage Oil, Lavender, 100 ml",
+                      "description": "Hemp Extract Massage Oil, Lavender. A relaxing body oil for massage.",
+                      "link": "https://www.hearthandhollow.example/products/hg-040",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/hg-040.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Hearth & Hollow",
+                      "gtins": [
+                        "0850012345401"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Bath & Body > Massage Oil"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "30000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "restricted_product",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "productTypes",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Restricted product (unapproved substances policy)",
+                          "detail": "Mentions 'Hemp Extract', which is a restricted product category.",
+                          "documentation": "https://support.google.com/merchants/answer/6165956",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "restricted_product"
+              },
+              "response": {
+                "query": "restricted_product",
+                "results": [
+                  {
+                    "doc_id": "cbd-unapproved-substances",
+                    "title": "CBD and other unapproved substances",
+                    "source_url": "https://support.google.com/merchants/answer/6165956",
+                    "passage": "Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD). Products on this list are not allowed in Shopping ads or free listings.",
+                    "score": 7
+                  },
+                  {
+                    "doc_id": "cbd-unapproved-substances",
+                    "title": "CBD and other unapproved substances",
+                    "source_url": "https://support.google.com/merchants/answer/6165956",
+                    "passage": "This is a policy decision, not a data problem, so it cannot be fixed by editing product details. Whether a specific product is allowed is decided by Google's policy team under the healthcare and medicines policy.",
+                    "score": 7
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "request review"
+              },
+              "response": {
+                "query": "request review",
+                "results": [
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "When a product or account has an issue, Merchant Center may offer a \"Request review\" option. For product issues it is in the product's details on the Needs attention tab. For account issues it is under View setup and policy issues.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "You may only get one chance to disagree before a waiting period starts, so it is worth getting the request right.",
+                    "score": 5
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "A review can take up to 7 business days. Your ads may not show while the account or products are under review.",
+                    "score": 5
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 4,
+            "input_tokens": 15750,
+            "cached_tokens": 0,
+            "output_tokens": 2495
+          },
+          "seconds": 17.18
+        },
+        {
+          "merchant": "It's a cosmetic oil for the skin and it's sold legally in every shop near me. Please get someone to look at this again.",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "This needs a specialist, so I've passed it on.\n\nYour case number is **CASE-20261008-154231-c34099**. A specialist will review your request. \n\nEverything from our conversation—including your explanation that this is a cosmetic oil for the skin sold in local stores—has been included in the case, so you won't need to repeat yourself.",
+          "tool_calls": [
+            {
+              "name": "create_handoff_case",
+              "args": {
+                "already_tried": [
+                  "Explained restricted product policy regarding hemp extract/CBD and shared policy and review documentation."
+                ],
+                "issues_found": [
+                  "restricted_product (HG-040)"
+                ],
+                "cited_doc_ids": [
+                  "cbd-unapproved-substances",
+                  "request-review"
+                ],
+                "merchant_request": [
+                  "Merchant wants an appeal/review for disapproved product HG-040."
+                ],
+                "merchant_reasons": [
+                  "It's a cosmetic oil for the skin and it's sold legally in every shop near me.",
+                  "Wants someone to look at this again."
+                ],
+                "reason": "policy_appeal",
+                "suggested_next_step": "Review product HG-040 under the healthcare and medicines policy appeal process."
+              },
+              "response": {
+                "status": "error",
+                "message": "Case not saved. merchant_request: Input should be a valid string"
+              }
+            },
+            {
+              "name": "create_handoff_case",
+              "args": {
+                "reason": "policy_appeal",
+                "merchant_reasons": [
+                  "It's a cosmetic oil for the skin and it's sold legally in every shop near me.",
+                  "Wants someone to look at this again."
+                ],
+                "already_tried": [
+                  "Explained restricted product policy regarding hemp extract/CBD and shared policy and review documentation."
+                ],
+                "issues_found": [
+                  "restricted_product (HG-040)"
+                ],
+                "cited_doc_ids": [
+                  "cbd-unapproved-substances",
+                  "request-review"
+                ],
+                "suggested_next_step": "Review product HG-040 under the healthcare and medicines policy appeal process.",
+                "merchant_request": "Merchant wants an appeal/review for disapproved product HG-040."
+              },
+              "response": {
+                "status": "created",
+                "case_id": "CASE-20261008-154231-c34099",
+                "preview": {
+                  "reason": "policy_appeal",
+                  "issues_found": [
+                    "restricted_product (HG-040)"
+                  ],
+                  "already_tried": [
+                    "Explained restricted product policy regarding hemp extract/CBD and shared policy and review documentation."
+                  ],
+                  "merchant_request": "Merchant wants an appeal/review for disapproved product HG-040.",
+                  "merchant_reasons": [
+                    "It's a cosmetic oil for the skin and it's sold legally in every shop near me.",
+                    "Wants someone to look at this again."
+                  ],
+                  "suggested_next_step": "Review product HG-040 under the healthcare and medicines policy appeal process.",
+                  "cited_doc_ids": [
+                    "cbd-unapproved-substances",
+                    "request-review"
+                  ],
+                  "account_issues": [],
+                  "product_issues": {
+                    "restricted_product": [
+                      "HG-040"
+                    ]
+                  },
+                  "automation": {
+                    "price_updates": false,
+                    "availability_updates": false,
+                    "image_improvements": false,
+                    "shipping_improvements": false
+                  }
+                }
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 3,
+            "input_tokens": 21994,
+            "cached_tokens": 0,
+            "output_tokens": 1433
+          },
+          "seconds": 10.72
+        }
+      ],
+      "handoff_cases": [
+        {
+          "case_id": "CASE-20261008-154231-c34099",
+          "store_id": "restricted-oil",
+          "created_at": "2026-10-08T15:42:31.526854Z",
+          "reason": "policy_appeal",
+          "issues_found": [
+            "restricted_product (HG-040)"
+          ],
+          "already_tried": [
+            "Explained restricted product policy regarding hemp extract/CBD and shared policy and review documentation."
+          ],
+          "merchant_request": "Merchant wants an appeal/review for disapproved product HG-040.",
+          "merchant_reasons": [
+            "It's a cosmetic oil for the skin and it's sold legally in every shop near me.",
+            "Wants someone to look at this again."
+          ],
+          "suggested_next_step": "Review product HG-040 under the healthcare and medicines policy appeal process.",
+          "cited_doc_ids": [
+            "cbd-unapproved-substances",
+            "request-review"
+          ],
+          "account_issues": [],
+          "product_issues": {
+            "restricted_product": [
+              "HG-040"
+            ]
+          },
+          "automation": {
+            "price_updates": false,
+            "availability_updates": false,
+            "image_improvements": false,
+            "shipping_improvements": false
+          }
+        }
+      ],
+      "usage": {
+        "model_calls": 7,
+        "input_tokens": 37744,
+        "cached_tokens": 0,
+        "output_tokens": 3928
+      },
+      "cost_usd": 0.043038,
+      "seconds": 27.9
+    },
+    "heldout-appeal-other-shops": {
+      "case_id": "heldout-appeal-other-shops",
+      "category": "handoff_appeal",
+      "agent_version": "6548a2f6710c",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Other shops sell CBD candles on Google Shopping all the time, so why can't I? I want to challenge this decision.",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "Here is a quick summary of your store's status:\n- **Account status:** There are no account-level issues.\n- **Disapproved products:** 13 products are disapproved (due to price mismatches, invalid images, text too long, availability mismatches, missing shipping, and 1 restricted product issue).\n- **Warnings:** There is 1 warning for missing product barcode number (GTIN) affecting 6 products.\n\n### CBD Policy Explanation\nYour product **CBD Infused Lavender Relaxation Candle, 6 oz** (ID: `HG-023`) is disapproved under the restricted product policy. \n\nAccording to [CBD and other unapproved substances](https://support.google.com/merchants/answer/6165956), cannabidiol (CBD) is included on Google's list of unapproved pharmaceuticals and supplements, and products on this list are not allowed in Shopping ads or free listings. This is a policy decision rather than a product data issue, so it cannot be fixed by editing product details.\n\nAs noted in [Requesting a review or appealing a decision](https://support.google.com/merchants/answer/13585221), you may only get one chance to disagree before a waiting period starts.\n\n### Handoff Details\nSince you want to challenge this decision, this needs a specialist, so I've passed it on.\n\n* **Case ID:** `CASE-20261008-154249-cbc7f9`\n* A specialist will review your case. \n* The case already includes everything from this conversation, so you won't need to repeat yourself.",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": []
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/sample-store/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "17",
+                      "pendingCount": "0",
+                      "disapprovedCount": "13",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "missing_gtin",
+                        "severity": "DEMOTED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "gtins",
+                        "description": "Missing value [gtin]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324461",
+                        "productCount": "6"
+                      },
+                      {
+                        "code": "price_mismatch",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "price",
+                        "description": "Mismatched value (page crawl) [price]",
+                        "documentationUri": "https://support.google.com/merchants/answer/12159029",
+                        "productCount": "3"
+                      },
+                      {
+                        "code": "invalid_image",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "imageLink",
+                        "description": "Invalid or placeholder image [image_link]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324350",
+                        "productCount": "3"
+                      },
+                      {
+                        "code": "title_too_long",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "title",
+                        "description": "Text too long [title]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324415",
+                        "productCount": "2"
+                      },
+                      {
+                        "code": "availability_mismatch",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "availability",
+                        "description": "Mismatched value (page crawl) [availability]",
+                        "documentationUri": "https://support.google.com/merchants/answer/12470049",
+                        "productCount": "2"
+                      },
+                      {
+                        "code": "missing_shipping",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "shipping",
+                        "description": "Missing shipping information",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324484",
+                        "productCount": "2"
+                      },
+                      {
+                        "code": "restricted_product",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "productTypes",
+                        "description": "Restricted product (unapproved substances policy)",
+                        "documentationUri": "https://support.google.com/merchants/answer/6165956",
+                        "productCount": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_products",
+              "args": {
+                "issue_code": "restricted_product"
+              },
+              "response": {
+                "products": [
+                  {
+                    "name": "accounts/sample-store/products/en~US~HG-023",
+                    "offerId": "HG-023",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "CBD Infused Lavender Relaxation Candle, 6 oz",
+                      "description": "CBD Infused Lavender Relaxation Candle, 6 oz. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-023",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/hg-023.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Ember Co",
+                      "gtins": [
+                        "0850012345234"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Decor > Candles > CBD Products"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "38000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "restricted_product",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "productTypes",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Restricted product (unapproved substances policy)",
+                          "detail": "Mentions 'CBD', which is a restricted product category.",
+                          "documentation": "https://support.google.com/merchants/answer/6165956",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "restricted_product CBD"
+              },
+              "response": {
+                "query": "restricted_product CBD",
+                "results": [
+                  {
+                    "doc_id": "cbd-unapproved-substances",
+                    "title": "CBD and other unapproved substances",
+                    "source_url": "https://support.google.com/merchants/answer/6165956",
+                    "passage": "Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD). Products on this list are not allowed in Shopping ads or free listings.",
+                    "score": 10
+                  },
+                  {
+                    "doc_id": "cbd-unapproved-substances",
+                    "title": "CBD and other unapproved substances",
+                    "source_url": "https://support.google.com/merchants/answer/6165956",
+                    "passage": "This is a policy decision, not a data problem, so it cannot be fixed by editing product details. Whether a specific product is allowed is decided by Google's policy team under the healthcare and medicines policy.",
+                    "score": 9
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "request review policy appeal"
+              },
+              "response": {
+                "query": "request review policy appeal",
+                "results": [
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "When a product or account has an issue, Merchant Center may offer a \"Request review\" option. For product issues it is in the product's details on the Needs attention tab. For account issues it is under View setup and policy issues.",
+                    "score": 14
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "You may only get one chance to disagree before a waiting period starts, so it is worth getting the request right.",
+                    "score": 12
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "A review can take up to 7 business days. Your ads may not show while the account or products are under review.",
+                    "score": 12
+                  }
+                ]
+              }
+            },
+            {
+              "name": "create_handoff_case",
+              "args": {
+                "cited_doc_ids": [
+                  "cbd-unapproved-substances",
+                  "request-review"
+                ],
+                "merchant_request": "Merchant wants to challenge/appeal the policy disapproval for their CBD candle listing.",
+                "suggested_next_step": "Review the policy disapproval for product HG-023 under Google's unapproved substances policy.",
+                "reason": "policy_appeal",
+                "merchant_reasons": [
+                  "Says other shops sell CBD candles on Google Shopping all the time, so they want to challenge the decision"
+                ],
+                "issues_found": [
+                  "restricted_product: HG-023"
+                ],
+                "already_tried": [
+                  "Checked account status and aggregate product issues",
+                  "Found product HG-023 disapproved under restricted_product policy",
+                  "Searched help docs for CBD unapproved substances policy and request review guidelines"
+                ]
+              },
+              "response": {
+                "status": "created",
+                "case_id": "CASE-20261008-154249-cbc7f9",
+                "preview": {
+                  "reason": "policy_appeal",
+                  "issues_found": [
+                    "restricted_product: HG-023"
+                  ],
+                  "already_tried": [
+                    "Checked account status and aggregate product issues",
+                    "Found product HG-023 disapproved under restricted_product policy",
+                    "Searched help docs for CBD unapproved substances policy and request review guidelines"
+                  ],
+                  "merchant_request": "Merchant wants to challenge/appeal the policy disapproval for their CBD candle listing.",
+                  "merchant_reasons": [
+                    "Says other shops sell CBD candles on Google Shopping all the time, so they want to challenge the decision"
+                  ],
+                  "suggested_next_step": "Review the policy disapproval for product HG-023 under Google's unapproved substances policy.",
+                  "cited_doc_ids": [
+                    "cbd-unapproved-substances",
+                    "request-review"
+                  ],
+                  "account_issues": [],
+                  "product_issues": {
+                    "missing_gtin": [
+                      "HG-002",
+                      "HG-007",
+                      "HG-011",
+                      "HG-019",
+                      "HG-024",
+                      "HG-028"
+                    ],
+                    "price_mismatch": [
+                      "HG-004",
+                      "HG-015",
+                      "HG-021"
+                    ],
+                    "invalid_image": [
+                      "HG-006",
+                      "HG-013",
+                      "HG-027"
+                    ],
+                    "title_too_long": [
+                      "HG-009",
+                      "HG-017"
+                    ],
+                    "availability_mismatch": [
+                      "HG-012",
+                      "HG-025"
+                    ],
+                    "missing_shipping": [
+                      "HG-019",
+                      "HG-030"
+                    ],
+                    "restricted_product": [
+                      "HG-023"
+                    ]
+                  },
+                  "automation": {
+                    "price_updates": false,
+                    "availability_updates": false,
+                    "image_improvements": false,
+                    "shipping_improvements": false
+                  }
+                }
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 6,
+            "input_tokens": 27448,
+            "cached_tokens": 0,
+            "output_tokens": 3498
+          },
+          "seconds": 24.79
+        }
+      ],
+      "handoff_cases": [
+        {
+          "case_id": "CASE-20261008-154249-cbc7f9",
+          "store_id": "sample-store",
+          "created_at": "2026-10-08T15:42:49.228923Z",
+          "reason": "policy_appeal",
+          "issues_found": [
+            "restricted_product: HG-023"
+          ],
+          "already_tried": [
+            "Checked account status and aggregate product issues",
+            "Found product HG-023 disapproved under restricted_product policy",
+            "Searched help docs for CBD unapproved substances policy and request review guidelines"
+          ],
+          "merchant_request": "Merchant wants to challenge/appeal the policy disapproval for their CBD candle listing.",
+          "merchant_reasons": [
+            "Says other shops sell CBD candles on Google Shopping all the time, so they want to challenge the decision"
+          ],
+          "suggested_next_step": "Review the policy disapproval for product HG-023 under Google's unapproved substances policy.",
+          "cited_doc_ids": [
+            "cbd-unapproved-substances",
+            "request-review"
+          ],
+          "account_issues": [],
+          "product_issues": {
+            "missing_gtin": [
+              "HG-002",
+              "HG-007",
+              "HG-011",
+              "HG-019",
+              "HG-024",
+              "HG-028"
+            ],
+            "price_mismatch": [
+              "HG-004",
+              "HG-015",
+              "HG-021"
+            ],
+            "invalid_image": [
+              "HG-006",
+              "HG-013",
+              "HG-027"
+            ],
+            "title_too_long": [
+              "HG-009",
+              "HG-017"
+            ],
+            "availability_mismatch": [
+              "HG-012",
+              "HG-025"
+            ],
+            "missing_shipping": [
+              "HG-019",
+              "HG-030"
+            ],
+            "restricted_product": [
+              "HG-023"
+            ]
+          },
+          "automation": {
+            "price_updates": false,
+            "availability_updates": false,
+            "image_improvements": false,
+            "shipping_improvements": false
+          }
+        }
+      ],
+      "usage": {
+        "model_calls": 6,
+        "input_tokens": 27448,
+        "cached_tokens": 0,
+        "output_tokens": 3498
+      },
+      "cost_usd": 0.0337035,
+      "seconds": 24.8
+    },
+    "heldout-suspended-asks-timeline": {
+      "case_id": "heldout-suspended-asks-timeline",
+      "category": "handoff_suspended",
+      "agent_version": "6548a2f6710c",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "I've put a returns policy and a contact page on my site. How long until the suspension is lifted?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "Your account is currently suspended due to **Misrepresentation** because the website was missing a returns policy and business contact details. \n\nThere are currently no disapproved products or warnings affecting your 3 active products.\n\nUnder Google's policy, listings cannot leave out important information or mislead shoppers about the product or business ([Misrepresentation and account suspension](https://support.google.com/merchants/answer/6150127)). When you request a review for an account issue, a review can take up to 7 business days, and ads may not show while the account is under review ([Requesting a review or appealing a decision](https://support.google.com/merchants/answer/13585221)).\n\nBecause your account is suspended, this needs a specialist, so I've passed it on. Your case number is **CASE-20261008-154308-b44e56**. A specialist will review it, and the case already includes everything from this conversation, so you won't need to repeat yourself.",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": [
+                  {
+                    "name": "accounts/suspended-store/issues/misrepresentation",
+                    "title": "Misrepresentation",
+                    "severity": "CRITICAL",
+                    "impactedDestinations": [
+                      {
+                        "reportingContext": "SHOPPING_ADS",
+                        "impacts": [
+                          {
+                            "regionCode": "US",
+                            "severity": "CRITICAL"
+                          }
+                        ]
+                      }
+                    ],
+                    "detail": "Misrepresentation: the website is missing a returns policy and business contact details.",
+                    "documentationUri": "https://support.google.com/merchants/answer/6150127"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/suspended-store/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "3",
+                      "pendingCount": "0",
+                      "disapprovedCount": "0",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": []
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "misrepresentation"
+              },
+              "response": {
+                "query": "misrepresentation",
+                "results": [
+                  {
+                    "doc_id": "misrepresentation",
+                    "title": "Misrepresentation and account suspension",
+                    "source_url": "https://support.google.com/merchants/answer/6150127",
+                    "passage": "Google's misrepresentation policy does not allow listings that leave out important information or mislead shoppers about the product or the business. For example, payment terms, shipping costs and what happens after purchase must be shown clearly before the shopper commits to buy.",
+                    "score": 3
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "request review suspension"
+              },
+              "response": {
+                "query": "request review suspension",
+                "results": [
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "When a product or account has an issue, Merchant Center may offer a \"Request review\" option. For product issues it is in the product's details on the Needs attention tab. For account issues it is under View setup and policy issues.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "You may only get one chance to disagree before a waiting period starts, so it is worth getting the request right.",
+                    "score": 5
+                  },
+                  {
+                    "doc_id": "request-review",
+                    "title": "Requesting a review or appealing a decision",
+                    "source_url": "https://support.google.com/merchants/answer/13585221",
+                    "passage": "A review can take up to 7 business days. Your ads may not show while the account or products are under review.",
+                    "score": 5
+                  }
+                ]
+              }
+            },
+            {
+              "name": "create_handoff_case",
+              "args": {
+                "already_tried": [
+                  "Merchant added a returns policy and contact page to their website and asked how long until the suspension is lifted."
+                ],
+                "suggested_next_step": "Review the website to confirm return policy and contact details are compliant and process the account review.",
+                "merchant_request": "Merchant wants to know when their account suspension will be lifted after updating their site with a returns policy and contact page.",
+                "issues_found": [
+                  "account_suspended: misrepresentation"
+                ],
+                "merchant_reasons": [
+                  "Added a returns policy and contact page on site"
+                ],
+                "cited_doc_ids": [
+                  "misrepresentation",
+                  "request-review"
+                ],
+                "reason": "account_suspended"
+              },
+              "response": {
+                "status": "created",
+                "case_id": "CASE-20261008-154308-b44e56",
+                "preview": {
+                  "reason": "account_suspended",
+                  "issues_found": [
+                    "account_suspended: misrepresentation"
+                  ],
+                  "already_tried": [
+                    "Merchant added a returns policy and contact page to their website and asked how long until the suspension is lifted."
+                  ],
+                  "merchant_request": "Merchant wants to know when their account suspension will be lifted after updating their site with a returns policy and contact page.",
+                  "merchant_reasons": [
+                    "Added a returns policy and contact page on site"
+                  ],
+                  "suggested_next_step": "Review the website to confirm return policy and contact details are compliant and process the account review.",
+                  "cited_doc_ids": [
+                    "misrepresentation",
+                    "request-review"
+                  ],
+                  "account_issues": [
+                    "Misrepresentation: the website is missing a returns policy and business contact details."
+                  ],
+                  "product_issues": {},
+                  "automation": {
+                    "price_updates": false,
+                    "availability_updates": false,
+                    "image_improvements": false,
+                    "shipping_improvements": false
+                  }
+                }
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 4,
+            "input_tokens": 15542,
+            "cached_tokens": 0,
+            "output_tokens": 2410
+          },
+          "seconds": 15.61
+        }
+      ],
+      "handoff_cases": [
+        {
+          "case_id": "CASE-20261008-154308-b44e56",
+          "store_id": "suspended-store",
+          "created_at": "2026-10-08T15:43:08.687556Z",
+          "reason": "account_suspended",
+          "issues_found": [
+            "account_suspended: misrepresentation"
+          ],
+          "already_tried": [
+            "Merchant added a returns policy and contact page to their website and asked how long until the suspension is lifted."
+          ],
+          "merchant_request": "Merchant wants to know when their account suspension will be lifted after updating their site with a returns policy and contact page.",
+          "merchant_reasons": [
+            "Added a returns policy and contact page on site"
+          ],
+          "suggested_next_step": "Review the website to confirm return policy and contact details are compliant and process the account review.",
+          "cited_doc_ids": [
+            "misrepresentation",
+            "request-review"
+          ],
+          "account_issues": [
+            "Misrepresentation: the website is missing a returns policy and business contact details."
+          ],
+          "product_issues": {},
+          "automation": {
+            "price_updates": false,
+            "availability_updates": false,
+            "image_improvements": false,
+            "shipping_improvements": false
+          }
+        }
+      ],
+      "usage": {
+        "model_calls": 4,
+        "input_tokens": 15542,
+        "cached_tokens": 0,
+        "output_tokens": 2410
+      },
+      "cost_usd": 0.020694,
+      "seconds": 15.7
+    },
+    "heldout-suspended-shipping-costs": {
+      "case_id": "heldout-suspended-shipping-costs",
+      "category": "handoff_suspended",
+      "agent_version": "6548a2f6710c",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Why did my account get suspended? I didn't do anything wrong.",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "Your account is suspended due to **Misrepresentation**. Specifically, shipping costs are not shown to shoppers before checkout.\n\nAccording to the [Misrepresentation and account suspension](https://support.google.com/merchants/answer/6150127) help article, Google's policy does not allow listings that leave out important information or mislead shoppers about the product or business. Shipping costs, payment terms, and what happens after purchase must be clearly shown before a shopper commits to buy.\n\n**Product Summary:**\n- Account status: Suspended\n- Disapproved products: 0\n- Active products: 2\n\nBecause account suspensions require manual review, this needs a specialist, so I've passed it on. \n\nYour case number is **CASE-20261008-154324-fd1e54**. A specialist will review your case. The case includes all details from this conversation, so you won't need to repeat yourself.",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": [
+                  {
+                    "name": "accounts/suspended-shipping/issues/misrepresentation",
+                    "title": "Misrepresentation",
+                    "severity": "CRITICAL",
+                    "impactedDestinations": [
+                      {
+                        "reportingContext": "SHOPPING_ADS",
+                        "impacts": [
+                          {
+                            "regionCode": "US",
+                            "severity": "CRITICAL"
+                          }
+                        ]
+                      }
+                    ],
+                    "detail": "Misrepresentation: shipping costs are not shown to shoppers before checkout.",
+                    "documentationUri": "https://support.google.com/merchants/answer/6150127"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/suspended-shipping/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "2",
+                      "pendingCount": "0",
+                      "disapprovedCount": "0",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": []
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "Misrepresentation shipping costs"
+              },
+              "response": {
+                "query": "Misrepresentation shipping costs",
+                "results": [
+                  {
+                    "doc_id": "shipping",
+                    "title": "Shipping costs",
+                    "source_url": "https://support.google.com/merchants/answer/6324484",
+                    "passage": "In the United States and many other countries, products need shipping information, including cost and delivery speed. Products with missing or wrong shipping information can be disapproved.",
+                    "score": 6
+                  },
+                  {
+                    "doc_id": "misrepresentation",
+                    "title": "Misrepresentation and account suspension",
+                    "source_url": "https://support.google.com/merchants/answer/6150127",
+                    "passage": "Google's misrepresentation policy does not allow listings that leave out important information or mislead shoppers about the product or the business. For example, payment terms, shipping costs and what happens after purchase must be shown clearly before the shopper commits to buy.",
+                    "score": 5
+                  },
+                  {
+                    "doc_id": "shipping",
+                    "title": "Shipping costs",
+                    "source_url": "https://support.google.com/merchants/answer/6324484",
+                    "passage": "The recommended way is to set up shipping in your Merchant Center account settings, which then applies to your products. Use the shipping value in your product data only to override those settings for specific products.",
+                    "score": 5
+                  }
+                ]
+              }
+            },
+            {
+              "name": "create_handoff_case",
+              "args": {
+                "suggested_next_step": "Review the store's checkout flow and shipping settings regarding display of shipping costs before checkout, and assist with account review.",
+                "issues_found": [
+                  "misrepresentation"
+                ],
+                "merchant_request": "Merchant wants to understand why their account is suspended and get assistance resolving the suspension.",
+                "cited_doc_ids": [
+                  "misrepresentation"
+                ],
+                "already_tried": [
+                  "Checked account issues and identified a critical account suspension due to Misrepresentation."
+                ],
+                "reason": "account_suspended",
+                "merchant_reasons": [
+                  "Merchant states they didn't do anything wrong and asks why the account was suspended."
+                ]
+              },
+              "response": {
+                "status": "created",
+                "case_id": "CASE-20261008-154324-fd1e54",
+                "preview": {
+                  "reason": "account_suspended",
+                  "issues_found": [
+                    "misrepresentation"
+                  ],
+                  "already_tried": [
+                    "Checked account issues and identified a critical account suspension due to Misrepresentation."
+                  ],
+                  "merchant_request": "Merchant wants to understand why their account is suspended and get assistance resolving the suspension.",
+                  "merchant_reasons": [
+                    "Merchant states they didn't do anything wrong and asks why the account was suspended."
+                  ],
+                  "suggested_next_step": "Review the store's checkout flow and shipping settings regarding display of shipping costs before checkout, and assist with account review.",
+                  "cited_doc_ids": [
+                    "misrepresentation"
+                  ],
+                  "account_issues": [
+                    "Misrepresentation: shipping costs are not shown to shoppers before checkout."
+                  ],
+                  "product_issues": {},
+                  "automation": {
+                    "price_updates": false,
+                    "availability_updates": false,
+                    "image_improvements": false,
+                    "shipping_improvements": false
+                  }
+                }
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 4,
+            "input_tokens": 15088,
+            "cached_tokens": 0,
+            "output_tokens": 1617
+          },
+          "seconds": 13.45
+        }
+      ],
+      "handoff_cases": [
+        {
+          "case_id": "CASE-20261008-154324-fd1e54",
+          "store_id": "suspended-shipping",
+          "created_at": "2026-10-08T15:43:24.186348Z",
+          "reason": "account_suspended",
+          "issues_found": [
+            "misrepresentation"
+          ],
+          "already_tried": [
+            "Checked account issues and identified a critical account suspension due to Misrepresentation."
+          ],
+          "merchant_request": "Merchant wants to understand why their account is suspended and get assistance resolving the suspension.",
+          "merchant_reasons": [
+            "Merchant states they didn't do anything wrong and asks why the account was suspended."
+          ],
+          "suggested_next_step": "Review the store's checkout flow and shipping settings regarding display of shipping costs before checkout, and assist with account review.",
+          "cited_doc_ids": [
+            "misrepresentation"
+          ],
+          "account_issues": [
+            "Misrepresentation: shipping costs are not shown to shoppers before checkout."
+          ],
+          "product_issues": {},
+          "automation": {
+            "price_updates": false,
+            "availability_updates": false,
+            "image_improvements": false,
+            "shipping_improvements": false
+          }
+        }
+      ],
+      "usage": {
+        "model_calls": 4,
+        "input_tokens": 15088,
+        "cached_tokens": 0,
+        "output_tokens": 1617
+      },
+      "cost_usd": 0.01737975,
+      "seconds": 13.5
+    },
+    "heldout-three-broken-images": {
+      "case_id": "heldout-three-broken-images",
+      "category": "multi_issue",
+      "agent_version": "6548a2f6710c",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Some of my products aren't showing. What's wrong?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "Here is a summary of your account and product status:\n\n* **Account status:** Your account has no account-level issues or suspensions.\n* **Disapproved products:** 3 products are disapproved because of invalid or placeholder image links.\n* **Warnings:** There are no warnings affecting your products.\n\n---\n\n### Disapproved Products: Invalid Image Link (`invalid_image`)\n\nEvery product needs a main image link pointing to a full web address that shows the actual product. Placeholder images, generic graphics, or incomplete URLs are not allowed ([Product image link](https://support.google.com/merchants/answer/6324350)).\n\nHere are the 3 affected products and what needs to be fixed for each:\n\n1. **Ceramic Table Lamp, Matte White** (ID: `HG-006`)\n   * **Issue:** No image link is set.\n2. **Walnut Wall Shelf, 24 inch** (ID: `HG-013`)\n   * **Issue:** The image link (`https://cdn.hearthandhollow.example/img/placeholder.png`) points to a placeholder image, not a real product photo.\n3. **Soy Wax Candle, Cedar and Smoke, 8 oz** (ID: `HG-010`)\n   * **Issue:** The image link (`candle-photo.jpg`) is not a full web address (must start with `http://` or `https://`).\n\n### How to fix this:\n* Update each product with a valid, full web address (URL) that leads directly to a clear photo of the actual product.\n\n### What happens after you fix it:\nTo fix a product issue, correct the product data and upload it again. After you update your products, Google checks them again. These checks usually finish within 24 to 48 hours, and products show as pending while they are reviewed ([What happens after you fix a product](https://support.google.com/merchants/answer/12153802)).\n\nPlease let me know once you've updated these or if you have any questions!",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": []
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/images-three/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "2",
+                      "pendingCount": "0",
+                      "disapprovedCount": "3",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "invalid_image",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "imageLink",
+                        "description": "Invalid or placeholder image [image_link]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324350",
+                        "productCount": "3"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_products",
+              "args": {
+                "issue_code": "invalid_image"
+              },
+              "response": {
+                "products": [
+                  {
+                    "name": "accounts/images-three/products/en~US~HG-006",
+                    "offerId": "HG-006",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Ceramic Table Lamp, Matte White",
+                      "description": "Ceramic Table Lamp, Matte White. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-006",
+                      "availability": "IN_STOCK",
+                      "brand": "Lumen Home",
+                      "gtins": [
+                        "0850012345067"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Lighting > Lamps"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "89000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "invalid_image",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "imageLink",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Invalid or placeholder image [image_link]",
+                          "detail": "No image link is set.",
+                          "documentation": "https://support.google.com/merchants/answer/6324350",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "name": "accounts/images-three/products/en~US~HG-013",
+                    "offerId": "HG-013",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Walnut Wall Shelf, 24 inch",
+                      "description": "Walnut Wall Shelf, 24 inch. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-013",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/placeholder.png",
+                      "availability": "IN_STOCK",
+                      "brand": "Timberline",
+                      "gtins": [
+                        "0850012345135"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Furniture > Shelving"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "65000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "invalid_image",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "imageLink",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Invalid or placeholder image [image_link]",
+                          "detail": "Image link 'https://cdn.hearthandhollow.example/img/placeholder.png' points to a placeholder, not a real product photo.",
+                          "documentation": "https://support.google.com/merchants/answer/6324350",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "name": "accounts/images-three/products/en~US~HG-010",
+                    "offerId": "HG-010",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Soy Wax Candle, Cedar and Smoke, 8 oz",
+                      "description": "Soy Wax Candle, Cedar and Smoke, 8 oz. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-010",
+                      "imageLink": "candle-photo.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Ember Co",
+                      "gtins": [
+                        "0850012345104"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Decor > Candles"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "22000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "invalid_image",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "imageLink",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Invalid or placeholder image [image_link]",
+                          "detail": "Image link 'candle-photo.jpg' is not a full web address.",
+                          "documentation": "https://support.google.com/merchants/answer/6324350",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "invalid_image"
+              },
+              "response": {
+                "query": "invalid_image",
+                "results": [
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "Every product needs a main image link. Without one the product cannot show.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "The image must show the actual product. Placeholder images, generic images and graphics that do not show the product are not allowed.",
+                    "score": 8
+                  },
+                  {
+                    "doc_id": "image-link",
+                    "title": "Product image link",
+                    "source_url": "https://support.google.com/merchants/answer/6324350",
+                    "passage": "Images must be at least 500 by 500 pixels, and around 1500 by 1500 pixels or larger is recommended. Do not add promotional text, logos, watermarks or other overlays to the main image.",
+                    "score": 8
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "after a fix"
+              },
+              "response": {
+                "query": "after a fix",
+                "results": [
+                  {
+                    "doc_id": "after-a-fix",
+                    "title": "What happens after you fix a product",
+                    "source_url": "https://support.google.com/merchants/answer/12153802",
+                    "passage": "To fix a product issue, correct the product data and upload it again. Some issues also offer a suggested automatic fix in Merchant Center.",
+                    "score": 5
+                  },
+                  {
+                    "doc_id": "after-a-fix",
+                    "title": "What happens after you fix a product",
+                    "source_url": "https://support.google.com/merchants/answer/12153802",
+                    "passage": "After you update your products, Google checks them again. These checks usually finish within 24 to 48 hours, and products show as pending while they are reviewed.",
+                    "score": 5
+                  },
+                  {
+                    "doc_id": "after-a-fix",
+                    "title": "What happens after you fix a product",
+                    "source_url": "https://support.google.com/merchants/answer/12153802",
+                    "passage": "Product issues only affect the products involved. Account issues affect every product in the account. Product issues are listed on the Needs attention tab under Products, and account issues show in a banner at the top of Merchant Center.",
+                    "score": 4
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 4,
+            "input_tokens": 17019,
+            "cached_tokens": 0,
+            "output_tokens": 1626
+          },
+          "seconds": 14.56
+        },
+        {
+          "merchant": "I've fixed all the images now.",
+          "fix": "invalid_image",
+          "fixed_product_ids": [
+            "HG-006",
+            "HG-013",
+            "HG-010"
+          ],
+          "reply": "Great news! I checked your account again, and the image issue is completely resolved.\n\nYou currently have **0 disapproved products** and no remaining flagged issues. All 5 of your products are now active!\n\nIs there anything else I can help you with today?",
+          "tool_calls": [
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/images-three/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "5",
+                      "pendingCount": "0",
+                      "disapprovedCount": "0",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": []
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 2,
+            "input_tokens": 13278,
+            "cached_tokens": 0,
+            "output_tokens": 427
+          },
+          "seconds": 5.85
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 6,
+        "input_tokens": 30297,
+        "cached_tokens": 0,
+        "output_tokens": 2053
+      },
+      "cost_usd": 0.0304215,
+      "seconds": 20.5
+    },
+    "heldout-two-long-titles": {
+      "case_id": "heldout-two-long-titles",
+      "category": "easy_fix",
+      "agent_version": "6548a2f6710c",
+      "status": "ok",
+      "error": "",
+      "turns": [
+        {
+          "merchant": "Why are two of my listings rejected?",
+          "fix": null,
+          "fixed_product_ids": [],
+          "reply": "**Summary:**\n- **Account status:** There are no account-level issues.\n- **Disapprovals:** 2 products are disapproved because their titles are too long.\n- **Warnings:** There are no warnings affecting your products.\n\n---\n\n### Disapproved Products: Title Too Long\nAccording to the [Product title](https://support.google.com/merchants/answer/6324415) documentation, a product title can be at most 150 characters long. To fix this issue, shorten the titles to 150 characters or less and keep the most important details near the start.\n\nHere are the affected products:\n\n1. **Title:** \"Handwoven Seagrass Storage Basket with Leather Handles for Living Room, Bedroom, Nursery, Laundry and Bathroom Organization, Extra Large 16 x 12 x 10 inch, Natural Color\"  \n   - **ID:** `HG-009`  \n   - **Issue:** The title is 169 characters long.\n\n2. **Title:** \"Premium Long Staple Egyptian Cotton Sateen Sheet Set, Queen Size, 400 Thread Count, Deep Pocket Fitted Sheet, Flat Sheet and Two Pillowcases, Hotel Quality Bedding in Dove Grey\"  \n   - **ID:** `HG-017`  \n   - **Issue:** The title is 176 characters long.\n\nOnce you shorten both titles to 150 characters or fewer, the disapprovals will be resolved.",
+          "tool_calls": [
+            {
+              "name": "list_account_issues",
+              "args": {},
+              "response": {
+                "accountIssues": []
+              }
+            },
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/titles-two/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "2",
+                      "pendingCount": "0",
+                      "disapprovedCount": "2",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": [
+                      {
+                        "code": "title_too_long",
+                        "severity": "DISAPPROVED",
+                        "resolution": "MERCHANT_ACTION",
+                        "attribute": "title",
+                        "description": "Text too long [title]",
+                        "documentationUri": "https://support.google.com/merchants/answer/6324415",
+                        "productCount": "2"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "list_products",
+              "args": {
+                "issue_code": "title_too_long"
+              },
+              "response": {
+                "products": [
+                  {
+                    "name": "accounts/titles-two/products/en~US~HG-009",
+                    "offerId": "HG-009",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Handwoven Seagrass Storage Basket with Leather Handles for Living Room, Bedroom, Nursery, Laundry and Bathroom Organization, Extra Large 16 x 12 x 10 inch, Natural Color",
+                      "description": "Handwoven Seagrass Storage Basket with Leather Handles for Living Room, Bedroom, Nursery, Laundry and Bathroom Organization, Extra Large 16 x 12 x 10 inch, Natural Color. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-009",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/hg-009.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Hearth & Hollow",
+                      "gtins": [
+                        "0850012345098"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Decor > Baskets"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "46000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "title_too_long",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "title",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Text too long [title]",
+                          "detail": "Title is 169 characters; the limit is 150.",
+                          "documentation": "https://support.google.com/merchants/answer/6324415",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "name": "accounts/titles-two/products/en~US~HG-017",
+                    "offerId": "HG-017",
+                    "contentLanguage": "en",
+                    "feedLabel": "US",
+                    "productAttributes": {
+                      "title": "Premium Long Staple Egyptian Cotton Sateen Sheet Set, Queen Size, 400 Thread Count, Deep Pocket Fitted Sheet, Flat Sheet and Two Pillowcases, Hotel Quality Bedding in Dove Grey",
+                      "description": "Premium Long Staple Egyptian Cotton Sateen Sheet Set, Queen Size, 400 Thread Count, Deep Pocket Fitted Sheet, Flat Sheet and Two Pillowcases, Hotel Quality Bedding in Dove Grey. Made for everyday use at home.",
+                      "link": "https://www.hearthandhollow.example/products/hg-017",
+                      "imageLink": "https://cdn.hearthandhollow.example/img/hg-017.jpg",
+                      "availability": "IN_STOCK",
+                      "brand": "Hearth & Hollow",
+                      "gtins": [
+                        "0850012345173"
+                      ],
+                      "productTypes": [
+                        "Home & Garden > Linens & Bedding > Bedding"
+                      ],
+                      "shipping": [
+                        {
+                          "country": "US",
+                          "price": {
+                            "amountMicros": "5950000",
+                            "currencyCode": "USD"
+                          }
+                        }
+                      ],
+                      "price": {
+                        "amountMicros": "110000000",
+                        "currencyCode": "USD"
+                      }
+                    },
+                    "productStatus": {
+                      "destinationStatuses": [
+                        {
+                          "reportingContext": "SHOPPING_ADS",
+                          "approvedCountries": [],
+                          "pendingCountries": [],
+                          "disapprovedCountries": [
+                            "US"
+                          ]
+                        }
+                      ],
+                      "itemLevelIssues": [
+                        {
+                          "code": "title_too_long",
+                          "severity": "DISAPPROVED",
+                          "resolution": "merchant_action",
+                          "attribute": "title",
+                          "reportingContext": "SHOPPING_ADS",
+                          "description": "Text too long [title]",
+                          "detail": "Title is 176 characters; the limit is 150.",
+                          "documentation": "https://support.google.com/merchants/answer/6324415",
+                          "applicableCountries": [
+                            "US"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "search_help_docs",
+              "args": {
+                "query": "title_too_long"
+              },
+              "response": {
+                "query": "title_too_long",
+                "results": [
+                  {
+                    "doc_id": "title",
+                    "title": "Product title",
+                    "source_url": "https://support.google.com/merchants/answer/6324415",
+                    "passage": "To fix a title that is too long, shorten it to 150 characters or less and keep the most important details near the start.",
+                    "score": 12
+                  },
+                  {
+                    "doc_id": "title",
+                    "title": "Product title",
+                    "source_url": "https://support.google.com/merchants/answer/6324415",
+                    "passage": "Every product needs a title, and it can be at most 150 characters long.",
+                    "score": 11
+                  },
+                  {
+                    "doc_id": "title",
+                    "title": "Product title",
+                    "source_url": "https://support.google.com/merchants/answer/6324415",
+                    "passage": "A good title says clearly what the product is, using specific words. Include the brand and key details such as size, color and material, especially when they tell variants apart.",
+                    "score": 10
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 3,
+            "input_tokens": 11304,
+            "cached_tokens": 0,
+            "output_tokens": 1595
+          },
+          "seconds": 11.0
+        },
+        {
+          "merchant": "Shortened both titles. Are they OK now?",
+          "fix": "title_too_long",
+          "fixed_product_ids": [
+            "HG-009",
+            "HG-017"
+          ],
+          "reply": "Yes, the issue is resolved! \n\nAll 4 of your products are now active, and there are no remaining disapprovals or warnings flagged on your account.",
+          "tool_calls": [
+            {
+              "name": "list_aggregate_product_statuses",
+              "args": {},
+              "response": {
+                "aggregateProductStatuses": [
+                  {
+                    "name": "accounts/titles-two/aggregateProductStatuses/SHOPPING_ADS~US",
+                    "reportingContext": "SHOPPING_ADS",
+                    "country": "US",
+                    "stats": {
+                      "activeCount": "4",
+                      "pendingCount": "0",
+                      "disapprovedCount": "0",
+                      "expiringCount": "0"
+                    },
+                    "itemLevelIssues": []
+                  }
+                ]
+              }
+            }
+          ],
+          "usage": {
+            "model_calls": 2,
+            "input_tokens": 12121,
+            "cached_tokens": 0,
+            "output_tokens": 325
+          },
+          "seconds": 4.41
+        }
+      ],
+      "handoff_cases": [],
+      "usage": {
+        "model_calls": 5,
+        "input_tokens": 23425,
+        "cached_tokens": 0,
+        "output_tokens": 1920
+      },
+      "cost_usd": 0.02476875,
+      "seconds": 15.5
+    }
+  },
+  "grades": {
+    "heldout-angry-many-images": {
+      "wrong_advice": {
+        "replies": [
+          {
+            "turn": 1,
+            "verdict": "supported",
+            "unsupported_claims": [],
+            "evidence": "All advice regarding image link requirements and re-review timings is directly supported by the retrieved documentation. Doc 'image-link': 'Every product needs a main image link... The link must be a full web address that starts with http:// or https://. The image must show the actual product. Placeholder images, generic images and graphics that do not show the product are not allowed.' Reply text: 'According to Product image link, every product needs a main image link showing the actual product. Placeholder images, generic graphics, or invalid web addresses are not allowed.' Doc 'after-a-fix': 'After you update your products, Google checks them again. These checks usually finish within 24 to 48 hours...' Reply text: 'According to What happens after you fix a product, these checks usually finish within 24 to 48 hours.'"
+          }
+        ]
+      },
+      "completeness": null,
+      "usage": {
+        "model_calls": 1,
+        "input_tokens": 3201,
+        "cached_tokens": 0,
+        "output_tokens": 705
+      },
+      "cost_usd": 0.0050445,
+      "error": ""
+    },
+    "heldout-appeal-hemp-oil": {
+      "wrong_advice": {
+        "replies": [
+          {
+            "turn": 1,
+            "verdict": "supported",
+            "unsupported_claims": [],
+            "evidence": "Agent reply 1 states: \"Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD), and products on this list are not allowed in Shopping ads or free listings. This is a policy decision, not a data problem, so it cannot be fixed by editing product details. Whether a specific product is allowed is decided by Google's policy team under the healthcare and medicines policy.\" This is supported by the `cbd-unapproved-substances` doc: \"Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD). Products on this list are not allowed in Shopping ads or free listings. This is a policy decision, not a data problem, so it cannot be fixed by editing product details. Whether a specific product is allowed is decided by Google's policy team under the healthcare and medicines policy.\" The statement \"You may only get one chance to disagree before a waiting period starts\" is supported by the `request-review` doc: \"You may only get one chance to disagree before a waiting period starts, so it is worth getting the request right.\""
+          },
+          {
+            "turn": 2,
+            "verdict": "no_advice",
+            "unsupported_claims": [],
+            "evidence": "The reply informs the merchant that the case has been handed over to a specialist and provides a case number. Passing the case to a specialist and restating what the merchant said are not advice under the rubric."
+          }
+        ]
+      },
+      "completeness": {
+        "verdict": "complete",
+        "missing": [],
+        "evidence": "Merchant said: \"It's a cosmetic oil for the skin and it's sold legally in every shop near me. Please get someone to look at this again.\" Case correctly recorded: \"reason\": \"policy_appeal\", \"issues_found\": [\"restricted_product (HG-040)\"], \"merchant_request\": \"Merchant wants an appeal/review for disapproved product HG-040.\", \"merchant_reasons\": [\"It's a cosmetic oil for the skin and it's sold legally in every shop near me.\", \"Wants someone to look at this again.\"], \"already_tried\": [\"Explained restricted product policy regarding hemp extract/CBD and shared policy and review documentation.\"], \"suggested_next_step\": \"Review product HG-040 under the healthcare and medicines policy appeal process.\""
+      },
+      "usage": {
+        "model_calls": 2,
+        "input_tokens": 3487,
+        "cached_tokens": 0,
+        "output_tokens": 1939
+      },
+      "cost_usd": 0.0098865,
+      "error": ""
+    },
+    "heldout-appeal-other-shops": {
+      "wrong_advice": {
+        "replies": [
+          {
+            "turn": 1,
+            "verdict": "supported",
+            "unsupported_claims": [],
+            "evidence": "The agent's statements regarding CBD policy and review requests match the retrieved docs. Reply: \"cannabidiol (CBD) is included on Google's list of unapproved pharmaceuticals and supplements, and products on this list are not allowed in Shopping ads or free listings. This is a policy decision rather than a product data issue, so it cannot be fixed by editing product details.\" Doc (cbd-unapproved-substances): \"Google's list of unapproved pharmaceuticals and supplements includes cannabidiol (CBD). Products on this list are not allowed in Shopping ads or free listings. This is a policy decision, not a data problem, so it cannot be fixed by editing product details.\" Reply: \"you may only get one chance to disagree before a waiting period starts.\" Doc (request-review): \"You may only get one chance to disagree before a waiting period starts\""
+          }
+        ]
+      },
+      "completeness": {
+        "verdict": "complete",
+        "missing": [],
+        "evidence": "Merchant stated: \"Other shops sell CBD candles on Google Shopping all the time, so why can't I? I want to challenge this decision.\" The case accurately captures the reason (\"policy_appeal\"), the merchant request (\"Merchant wants to challenge/appeal the policy disapproval for their CBD candle listing.\"), and the merchant's stated argument (\"Says other shops sell CBD candles on Google Shopping all the time, so they want to challenge the decision\")."
+      },
+      "usage": {
+        "model_calls": 2,
+        "input_tokens": 4183,
+        "cached_tokens": 0,
+        "output_tokens": 1992
+      },
+      "cost_usd": 0.01060725,
+      "error": ""
+    },
+    "heldout-suspended-asks-timeline": {
+      "wrong_advice": {
+        "replies": [
+          {
+            "turn": 1,
+            "verdict": "supported",
+            "unsupported_claims": [],
+            "evidence": "The agent states that listings cannot leave out important information or mislead shoppers, supported by the Misrepresentation doc ('Google's misrepresentation policy does not allow listings that leave out important information or mislead shoppers about the product or the business.'). The agent also states that a review can take up to 7 business days and ads may not show while under review, supported by the Requesting a review doc ('A review can take up to 7 business days. Your ads may not show while the account or products are under review.')."
+          }
+        ]
+      },
+      "completeness": {
+        "verdict": "complete",
+        "missing": [],
+        "evidence": "Conversation: \"Merchant: I've put a returns policy and a contact page on my site. How long until the suspension is lifted?\" Case: \"reason\": \"account_suspended\", \"account_issues\": [\"Misrepresentation: the website is missing a returns policy and business contact details.\"], \"merchant_request\": \"Merchant wants to know when their account suspension will be lifted after updating their site with a returns policy and contact page.\", \"merchant_reasons\": [\"Added a returns policy and contact page on site\"]"
+      },
+      "usage": {
+        "model_calls": 2,
+        "input_tokens": 2610,
+        "cached_tokens": 0,
+        "output_tokens": 1456
+      },
+      "cost_usd": 0.0074175,
+      "error": ""
+    },
+    "heldout-suspended-shipping-costs": {
+      "wrong_advice": {
+        "replies": [
+          {
+            "turn": 1,
+            "verdict": "supported",
+            "unsupported_claims": [],
+            "evidence": "The reply states: 'Google's policy does not allow listings that leave out important information or mislead shoppers about the product or business. Shipping costs, payment terms, and what happens after purchase must be clearly shown before a shopper commits to buy.' This is directly supported by the retrieved Misrepresentation doc: 'Google's misrepresentation policy does not allow listings that leave out important information or mislead shoppers about the product or the business. For example, payment terms, shipping costs and what happens after purchase must be shown clearly before the shopper commits to buy.'"
+          }
+        ]
+      },
+      "completeness": {
+        "verdict": "complete",
+        "missing": [],
+        "evidence": "Merchant said: \"Why did my account get suspended? I didn't do anything wrong.\" Case captures: \"Merchant states they didn't do anything wrong and asks why the account was suspended.\" and records account issue: \"Misrepresentation: shipping costs are not shown to shoppers before checkout.\""
+      },
+      "usage": {
+        "model_calls": 2,
+        "input_tokens": 2464,
+        "cached_tokens": 0,
+        "output_tokens": 1397
+      },
+      "cost_usd": 0.00708675,
+      "error": ""
+    },
+    "heldout-three-broken-images": {
+      "wrong_advice": {
+        "replies": [
+          {
+            "turn": 1,
+            "verdict": "supported",
+            "unsupported_claims": [],
+            "evidence": "All advice in reply 1 is supported by the retrieved docs. Reply: 'Every product needs a main image link pointing to a full web address that shows the actual product. Placeholder images, generic graphics, or incomplete URLs are not allowed... To fix a product issue, correct the product data and upload it again. After you update your products, Google checks them again. These checks usually finish within 24 to 48 hours, and products show as pending while they are reviewed.' Doc (image-link): 'Every product needs a main image link... The link must be a full web address that starts with http:// or https://. The image must show the actual product. Placeholder images, generic images and graphics that do not show the product are not allowed.' Doc (after-a-fix): 'To fix a product issue, correct the product data and upload it again... These checks usually finish within 24 to 48 hours, and products show as pending while they are reviewed.'"
+          },
+          {
+            "turn": 2,
+            "verdict": "no_advice",
+            "unsupported_claims": [],
+            "evidence": "The reply states store data facts about product statuses (0 disapproved products, 5 active products) and asks a closing question, with no rules, timings, or advice included."
+          }
+        ]
+      },
+      "completeness": null,
+      "usage": {
+        "model_calls": 1,
+        "input_tokens": 3382,
+        "cached_tokens": 0,
+        "output_tokens": 1187
+      },
+      "cost_usd": 0.00698775,
+      "error": ""
+    },
+    "heldout-two-long-titles": {
+      "wrong_advice": {
+        "replies": [
+          {
+            "turn": 1,
+            "verdict": "supported",
+            "unsupported_claims": [],
+            "evidence": "Agent reply 1 states: \"According to the [Product title](https://support.google.com/merchants/answer/6324415) documentation, a product title can be at most 150 characters long. To fix this issue, shorten the titles to 150 characters or less and keep the most important details near the start.\" This is supported by the retrieved Product title documentation: \"Every product needs a title, and it can be at most 150 characters long.\" and \"To fix a title that is too long, shorten it to 150 characters or less and keep the most important details near the start.\""
+          },
+          {
+            "turn": 2,
+            "verdict": "no_advice",
+            "unsupported_claims": [],
+            "evidence": "The agent states that all 4 products are now active with no remaining disapprovals or warnings. This is a statement of store fact based on the store data provided, not advice."
+          }
+        ]
+      },
+      "completeness": null,
+      "usage": {
+        "model_calls": 1,
+        "input_tokens": 2700,
+        "cached_tokens": 0,
+        "output_tokens": 1301
+      },
+      "cost_usd": 0.00690375,
+      "error": ""
+    }
+  }
+}

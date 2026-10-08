@@ -46,6 +46,12 @@ From SPEC, Evals (g):
 - **First draft:** the completeness clause flagged 6 handoffs. Five were about something else, for example a merchant asking for a person, with a mismatch merely listed. I narrowed it to handoffs about a mismatch. After that only `frustration-price-twice` is flagged, as intended, because v1 never recorded automation state.
 - **Wrong advice:** two v1 replies moved from unsupported to supported (`no-handoff-contact-support` and `off-topic-shopify-steps`). The two frozen v1 runs already disagreed on these same cases, so this is grader variance on borderline replies, not the new wording.
 
+### Known false positives, not changed
+
+| Case | Result | Why it isn't changed |
+|---|---|---|
+| `heldout-v2-opened-from-price-row` | Failed in E2 attempt 2 (`20261008-154506`): "said forbidden text matching `which (product\|item\|listing\|issue\|one)`" | The match is the help-doc phrase "during which products show as pending". The reply looked up HG-501 first and never asked which product. Held-out cases are never edited after they're committed, so the failure stands in the results and is disclosed here. |
+
 ## v1
 
 ### Changed after seeing results
