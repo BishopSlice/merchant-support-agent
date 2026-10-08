@@ -53,7 +53,7 @@ flowchart LR
 
 - **Google Agent Development Kit (ADK) with `gemini-3.6-flash`.** The agent has three tools, all plain, tested Python functions. The model only decides which tool to call.
 - **The store comes from the session, never from the model.** A merchant can't ask the agent to read another store's data.
-- **Streamlit app** with a guided demo, the merchant chat and the specialist inbox. Every piece of logic lives in `src/` and is unit-tested; the app is layout only.
+- **A web app** (FastAPI with a Material Web front end): a Needs attention page with an assistant side panel, and a separate specialist page. Every piece of logic lives in `src/` and is tested, including the API (v2, in progress).
 - **An eval harness** (`evals/`). It runs scripted conversations on throwaway copies of the data, scores them with rules plus an AI grader, and saves every run. It can resume interrupted runs and compare two runs.
 
 ## How it's measured
@@ -87,10 +87,10 @@ The evals earned their keep. The most useful findings, in order:
 uv sync                      # install dependencies
 cp .env.example .env         # then add a Gemini API key from Google AI Studio
 uv run pytest                # unit tests (no model calls)
-uv run streamlit run app/streamlit_app.py
+ACCESS_CODE=pick-one uv run uvicorn merchant_agent.web.api:app --port 8765
 ```
 
-The app opens on **Start here**. **Start the guided demo** walks you through the whole journey in about three minutes: you act as the merchant, then the demo operator applying a fix, then the specialist picking up the case. The app works on a copy of `data/` in `runtime/demo-data`, and **Reset demo** restores it.
+Open http://localhost:8765. The page shows the demo store's **Needs attention** issues. **Help me fix this** on a row opens the assistant already knowing that issue, and **Help** opens it without one. Live chat needs the access code you set; replay mode needs none. **Edit** changes a product, then the assistant can check again. The specialist page is linked from the left nav; its demo code is shown on the page. Each browser session works on its own copy of the demo store, so the original `data/` is never changed.
 
 Other entry points:
 
@@ -107,10 +107,10 @@ uv run python -m evals.compare RUN1.json RUN2.json          # compare two runs
 docs/                PRD, decisions, checkpoint reports, results, business case, responsible AI
 data/stores/         simulated stores: account status and a product feed with planted problems
 data/help_docs/      paraphrased Merchant Center help pages, each with its source link
-src/merchant_agent/  models, tools (feed checks, help search, handoff), agent, chat, demo, guide
-app/                 Streamlit app: guided demo, merchant chat, specialist inbox
+src/merchant_agent/  models, Merchant API shapes and mock data tools, help search, handoff, agent, chat, demo
+src/merchant_agent/web/  FastAPI app and the static front end (Material Web)
 evals/               case files (main and held-out), eval-only stores, runner, scorers, grader, rubrics, results
-tests/               unit tests, including app tests with a fake agent
+tests/               unit tests, including API tests with a fake agent
 scripts/             scripted end-to-end runs used at Checkpoint B
 ```
 
