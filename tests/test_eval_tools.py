@@ -113,3 +113,15 @@ def test_compare_refuses_runs_from_different_case_sets(tmp_path, monkeypatch):
     monkeypatch.setattr("sys.argv", ["compare", *paths])
     with pytest.raises(SystemExit, match="different case sets"):
         compare.main()
+
+
+def test_v2_hand_check_draws_from_several_runs_and_prefers_v2_categories():
+    from evals.hand_check import pick_from_runs
+
+    old = make_run("v1-case")
+    new = make_run("v2-case")
+    new.category = "automation_routing"
+    first = run_file({"v1-case": CaseGrade(wrong_advice=advice("supported"))}, {"v1-case": old})
+    second = run_file({"v2-case": CaseGrade(wrong_advice=advice("unsupported"))}, {"v2-case": new})
+    items = pick_from_runs([("run-a", first), ("run-b", second)], 2)
+    assert [item.case_id for item in items] == ["v2-case (run-b)", "v1-case (run-a)"]
