@@ -73,6 +73,7 @@ def make_client(env, runner=FakeRunner, **overrides) -> TestClient:
         "session_cap": 3,
         "daily_cap": 5,
         "replays_dir": env / "replays",
+        "grade_sample_rate": 0.0,  # tests that grade set it and pass a fake grader
     }
     config = WebConfig(**(fields | overrides))
     return TestClient(create_app(config, runner_factory=runner))
@@ -252,7 +253,9 @@ def test_specialist_cases_need_the_demo_login(client):
 # --- branding (SPEC, Evals f) ---
 
 
-@pytest.mark.parametrize("path", ["/", "/specialist.html", "/app.js", "/specialist.js"])
+@pytest.mark.parametrize(
+    "path", ["/", "/specialist.html", "/app.js", "/specialist.js", "/ops.html", "/ops.js"]
+)
 def test_pages_carry_the_concept_label_and_no_google_branding(client, path):
     import re
 
@@ -310,7 +313,9 @@ def test_feedback_is_stored_for_this_sessions_own_turns(env):
             turn_id = a.post("/api/chat", json={"message": "hi"}, headers=ACCESS).json()["turn_id"]
             assert a.post("/api/feedback", json={"turn_id": turn_id, "value": 1}).status_code == 200
             # Another session can't vote on this turn, and votes are 1 or -1.
-            assert b.post("/api/feedback", json={"turn_id": turn_id, "value": -1}).status_code == 404
+            assert (
+                b.post("/api/feedback", json={"turn_id": turn_id, "value": -1}).status_code == 404
+            )
             assert a.post("/api/feedback", json={"turn_id": turn_id, "value": 3}).status_code == 422
     with sqlite3.connect(env / "runtime" / "events.sqlite") as db:
         assert db.execute("select turn_id, value from feedback").fetchall() == [(turn_id, 1)]
@@ -356,3 +361,28 @@ def test_grading_respects_the_sample_rate_and_the_daily_budget(env):
         c.app.state.grade_generate = fake_generate(calls)
         c.post("/api/chat", json={"message": "hi"}, headers=ACCESS)
     assert calls == [] and grades(env) == []
+
+
+# --- /ops (Task 21d) ---
+
+
+def test_ops_needs_its_own_code_not_the_specialists(env):
+    with make_client(env, ops_code="ops-demo") as c:
+        assert c.get("/api/ops/summary").status_code == 401
+        assert c.post("/api/ops/login", json={"code": "specialist-demo"}).status_code == 401
+        assert c.post("/api/ops/login", json={"code": "ops-demo"}).status_code == 200
+        c.post("/api/chat", json={"message": "I want to appeal"}, headers=ACCESS)
+        data = c.get("/api/ops/summary?source=live").json()
+        assert data["conversations"] == 1 and data["outcomes"]["handoff_reasons"] == {
+            "policy_appeal": 1
+        }
+        [row] = c.get("/api/ops/conversations?source=live").json()["conversations"]
+        detail = c.get(f"/api/ops/conversations/{row['id']}").json()
+        assert detail["turns"][0]["merchant"] == "I want to appeal"
+        assert c.get("/api/ops/conversations/nope").status_code == 404
+        assert c.get("/api/ops/summary?source=replay").status_code == 422
+
+
+def test_ops_is_off_without_a_configured_code(env):
+    with make_client(env) as c:
+        assert c.post("/api/ops/login", json={"code": ""}).status_code == 403

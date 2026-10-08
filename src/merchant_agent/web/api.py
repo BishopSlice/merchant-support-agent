@@ -33,6 +33,7 @@ from google.genai.errors import APIError
 from pydantic import BaseModel, ConfigDict, StringConstraints
 
 from evals.records import TokenUsage, ToolCallRecord, TurnRecord
+from merchant_agent import ops
 from merchant_agent.agent import agent_version
 from merchant_agent.chat import describe_tool_call, new_runner, new_session, run_turn
 from merchant_agent.config import MODEL_PRICES, PROJECT_ROOT, cost_usd, get_settings
@@ -46,6 +47,7 @@ from merchant_agent.web.sampling import SampledGrader
 
 SESSION_COOKIE = "sid"
 SPECIALIST_COOKIE = "specialist"
+OPS_COOKIE = "ops"
 STATIC_DIR = Path(__file__).parent / "static"
 _REPLAY_ID = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 
@@ -61,6 +63,7 @@ class WebConfig(BaseModel):
     demo_store: str = "sample-store"
     replays_dir: Path = PROJECT_ROOT / "replays"
     secure_cookies: bool = False  # set true when served over HTTPS
+    ops_code: str | None = None  # the /ops dashboard's own code; None turns /ops off
     grade_sample_rate: float = 0.1  # share of live conversations graded by the AI grader
     grading_daily_budget_usd: float = 0.50
 
@@ -73,6 +76,7 @@ class WebConfig(BaseModel):
             session_cap=int(env.get("SESSION_CAP", 30)),
             daily_cap=int(env.get("DAILY_CAP", 400)),
             secure_cookies=env.get("SECURE_COOKIES", "") == "1",
+            ops_code=env.get("OPS_CODE") or None,
             grade_sample_rate=float(env.get("GRADE_SAMPLE_RATE", 0.1)),
             grading_daily_budget_usd=float(env.get("GRADING_DAILY_BUDGET_USD", 0.50)),
         )
@@ -147,6 +151,7 @@ class Sessions:
         self.by_token: dict[str, WebSession] = {}
         self.daily: dict[str, int] = {}
         self.specialists: set[str] = set()
+        self.operators: set[str] = set()
 
     def get_or_create(self, token: str | None) -> tuple[str, WebSession]:
         if token and token in self.by_token:
@@ -409,6 +414,40 @@ def create_app(
         if request.cookies.get(SPECIALIST_COOKIE) not in sessions.specialists:
             raise HTTPException(401, "Sign in with the demo specialist code.")
         return {"cases": [json.loads(c.model_dump_json()) for c in list_cases()]}
+
+    @app.post("/api/ops/login")
+    def ops_login(body: LoginIn, response: Response) -> dict:
+        if not config.ops_code:
+            raise HTTPException(403, "The ops dashboard is off: no OPS_CODE is set.")
+        if not secrets.compare_digest(body.code, config.ops_code):
+            raise HTTPException(401, "Wrong ops code.")
+        token = secrets.token_urlsafe(24)
+        sessions.operators.add(token)
+        response.set_cookie(
+            OPS_COOKIE, token, httponly=True, samesite="lax", secure=config.secure_cookies
+        )
+        return {"status": "signed in"}
+
+    def operator(request: Request) -> None:
+        if request.cookies.get(OPS_COOKIE) not in sessions.operators:
+            raise HTTPException(401, "Sign in with the ops code.")
+
+    Source = Literal["live", "eval"]
+
+    @app.get("/api/ops/summary", dependencies=[Depends(operator)])
+    def ops_summary(source: Source = "live", days: int = 30) -> dict:
+        return ops.summary(events, source=source, days=days)
+
+    @app.get("/api/ops/conversations", dependencies=[Depends(operator)])
+    def ops_conversations(source: Source = "live") -> dict:
+        return {"conversations": ops.conversations(events, source=source)}
+
+    @app.get("/api/ops/conversations/{conversation_id}", dependencies=[Depends(operator)])
+    def ops_trace(conversation_id: str) -> dict:
+        detail = ops.trace(events, conversation_id)
+        if detail is None:
+            raise HTTPException(404, "No such conversation.")
+        return detail
 
     if STATIC_DIR.is_dir():
         app.mount("/", StaticFiles(directory=STATIC_DIR, html=True), name="static")

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agent operations (concept prototype)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=block">
+  <link rel="stylesheet" href="app.css">
+  <style>
+    .ops { max-width: 1180px; }
+    .viz-root { --series-1: #2a78d6; --series-2: #eb6834; --grid: #e3e6ea; }
+    .controls { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin: 8px 0 16px; }
+    .controls label { display: flex; align-items: center; gap: 6px; }
+    .alerts { background: var(--md-sys-color-error-container); color: var(--md-sys-color-on-error-container); border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; }
+    .alerts ul { margin: 4px 0 0; padding-left: 20px; }
+    .notice { background: var(--warning-container); color: var(--on-warning-container); border-radius: 12px; padding: 10px 14px; margin-bottom: 16px; }
+    .panel-card { background: var(--md-sys-color-surface); border: 1px solid var(--md-sys-color-outline-variant); border-radius: 12px; padding: 16px 20px; margin-bottom: 16px; }
+    .panel-card h2 { margin: 0 0 12px; }
+    .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 12px; }
+    .tile { border: 1px solid var(--md-sys-color-outline-variant); border-radius: 10px; padding: 12px; }
+    .tile__value { font-size: 26px; }
+    .tile__label { color: var(--md-sys-color-on-surface-variant); font-size: 13px; }
+    .tile__note { color: var(--md-sys-color-on-surface-variant); font-size: 12px; margin-top: 4px; }
+    .tile--bad { border-color: var(--md-sys-color-error); }
+    .tile--bad .tile__value { color: var(--md-sys-color-error); }
+    .note { color: var(--md-sys-color-on-surface-variant); font-size: 12px; margin: 4px 0; }
+    .legend { display: flex; gap: 16px; font-size: 13px; margin: 4px 0; }
+    .legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; background: var(--c); vertical-align: -1px; }
+    .chart { position: relative; }
+    .chart svg { width: 100%; height: auto; display: block; }
+    .tooltip { position: absolute; pointer-events: none; background: #313033; color: #f4eff4; font-size: 12px; padding: 6px 8px; border-radius: 6px; white-space: nowrap; transform: translate(-50%, -110%); }
+    .hbar { display: grid; grid-template-columns: 220px 1fr 40px; gap: 8px; align-items: center; font-size: 13px; margin: 4px 0; }
+    .hbar__track { height: 10px; background: var(--md-sys-color-surface-container); border-radius: 0 4px 4px 0; }
+    .hbar__fill { height: 10px; background: var(--series-1); border-radius: 0 4px 4px 0; }
+    table.list { width: 100%; border-collapse: collapse; font-size: 13px; }
+    table.list th, table.list td { text-align: left; padding: 8px; border-bottom: 1px solid var(--md-sys-color-surface-container-high); vertical-align: top; }
+    table.list th { color: var(--md-sys-color-on-surface-variant); font-weight: 500; }
+    .trace-turn { border-top: 1px solid var(--md-sys-color-outline-variant); padding: 12px 0; }
+    .trace-turn pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12px; background: var(--md-sys-color-surface-container-low); padding: 8px; border-radius: 6px; max-height: 240px; overflow: auto; }
+    details summary { cursor: pointer; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 760px) { .grid-2 { grid-template-columns: 1fr; } .hbar { grid-template-columns: 120px 1fr 32px; } }
+  </style>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@material/web@2.5.0/all.js/+esm"></script>
+  <script type="module" src="ops.js"></script>
+</head>
+<body>
+  <header class="app-bar">
+    <span class="material-symbols-outlined app-bar__mark" aria-hidden="true">monitoring</span>
+    <span class="app-bar__title">Agent operations</span>
+    <span class="concept-label" role="note">Concept prototype, not a Google product</span>
+    <span class="app-bar__spacer"></span>
+    <a class="nav__specialist" href="./">Merchant view</a>
+  </header>
+  <main id="main" class="main ops viz-root">
+    <h1>Agent operations</h1>
+    <p class="lede">How the agent behaves on real conversations. Replays are never counted.</p>
+    <form id="login" class="login" style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap">
+      <md-outlined-text-field id="code" label="Ops code" type="password"></md-outlined-text-field>
+      <md-filled-button type="submit">Sign in</md-filled-button>
+      <p id="login-error" class="error" role="alert"></p>
+    </form>
+    <div id="dashboard" hidden>
+      <div class="controls">
+        <div role="radiogroup" aria-label="Traffic" style="display:flex;gap:16px">
+          <label><md-radio name="source" value="live" checked></md-radio> Live traffic</label>
+          <label><md-radio name="source" value="eval"></md-radio> Eval traffic</label>
+        </div>
+        <md-outlined-select id="days" label="Window">
+          <md-select-option value="7"><div slot="headline">Last 7 days</div></md-select-option>
+          <md-select-option value="30" selected><div slot="headline">Last 30 days</div></md-select-option>
+        </md-outlined-select>
+      </div>
+      <div id="alerts" class="alerts" role="alert" hidden></div>
+      <div id="sample-notice" class="notice" hidden></div>
+      <div id="panels"></div>
+      <section class="panel-card" aria-labelledby="conv-heading">
+        <h2 id="conv-heading">Conversations</h2>
+        <div id="conversations"></div>
+      </section>
+      <section id="trace" class="panel-card" aria-labelledby="trace-heading" hidden>
+        <h2 id="trace-heading">Trace</h2>
+        <div id="trace-body"></div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
