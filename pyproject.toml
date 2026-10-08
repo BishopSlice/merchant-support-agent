@@ -7,6 +7,8 @@ requires-python = ">=3.11"
 dependencies = [
     "fastapi>=0.141.1",
     "google-adk",
+    "opentelemetry-api==1.42.1",
+    "opentelemetry-sdk==1.42.1",
     "pydantic>=2",
     "python-dotenv",
     "uvicorn>=0.54.0",

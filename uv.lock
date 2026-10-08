@@ -627,6 +627,8 @@ source = { editable = "." }
 dependencies = [
     { name = "fastapi" },
     { name = "google-adk" },
+    { name = "opentelemetry-api" },
+    { name = "opentelemetry-sdk" },
     { name = "pydantic" },
     { name = "python-dotenv" },
     { name = "uvicorn" },
@@ -642,6 +644,8 @@ dev = [
 requires-dist = [
     { name = "fastapi", specifier = ">=0.141.1" },
     { name = "google-adk" },
+    { name = "opentelemetry-api", specifier = "==1.42.1" },
+    { name = "opentelemetry-sdk", specifier = "==1.42.1" },
     { name = "pydantic", specifier = ">=2" },
     { name = "python-dotenv" },
     { name = "uvicorn", specifier = ">=0.54.0" },
