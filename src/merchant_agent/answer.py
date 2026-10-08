@@ -73,7 +73,8 @@ Grounding rules:
 Handoff rules. Set "handoff" in your answer, with the reason, when:
 - The account is suspended or has a policy strike (account_suspended). Do this in your first
   reply. Tell the merchant the suspension reason, explain the policy behind it with a citation,
-  and don't try to fix a suspension yourself.
+  and don't try to fix a suspension yourself. If products also have issues, after the
+  suspension, also give the short summary of the product issues, in the usual order.
 - A product is disapproved under a restricted or prohibited content policy (such as CBD) and the
   merchant wants to appeal or disagrees (policy_appeal). Explain the policy with a citation, and
   tell them, citing the request review doc, that they may only get one chance to disagree. A
@@ -143,6 +144,8 @@ class Answer(BaseModel):
 AnswerFn = Callable[[str, str], tuple[Answer, Usage]]
 RETRY = types.HttpRetryOptions(attempts=5, initial_delay=10, max_delay=60)
 TIMEOUT_MS = 120_000
+# ADR 0008: with the help docs already in the prompt, a lower thinking level keeps one call short.
+THINKING_LEVEL = types.ThinkingLevel.LOW
 
 
 def gemini_answer(model: str) -> AnswerFn:
@@ -157,6 +160,7 @@ def gemini_answer(model: str) -> AnswerFn:
                 system_instruction=system,
                 response_mime_type="application/json",
                 response_schema=Answer,
+                thinking_config=types.ThinkingConfig(thinking_level=THINKING_LEVEL),
                 automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
             ),
         )
@@ -226,4 +230,4 @@ def answer_turn(
 
 def schema_text() -> str:
     """The answer schema, for the agent version hash."""
-    return json.dumps(Answer.model_json_schema(), sort_keys=True)
+    return json.dumps(Answer.model_json_schema(), sort_keys=True) + f"|thinking={THINKING_LEVEL}"

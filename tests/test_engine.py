@@ -164,3 +164,18 @@ def test_without_an_answer_function_every_turn_uses_the_tool_loop():
         Conversation("sample-store", runner_factory=FakeLoop, answer=None), "What's wrong?"
     )
     assert turn.path == "tool_loop" and FakeLoop.used == 1
+
+
+def test_one_call_answers_use_the_lower_thinking_level():
+    from google.genai import types
+
+    from merchant_agent import answer
+
+    assert answer.THINKING_LEVEL == types.ThinkingLevel.LOW
+
+
+def test_the_instructions_summarise_product_issues_after_a_suspension():
+    from merchant_agent.answer import ANSWER_INSTRUCTION
+
+    text = " ".join(ANSWER_INSTRUCTION.lower().split())
+    assert "after the suspension, also give the short summary of the product issues" in text

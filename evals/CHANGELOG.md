@@ -56,6 +56,15 @@ These follow from the design change, not from a result on it, but they come afte
 - **Tool calls are labelled.** Each one records whether the model or code made it (`by`), and each turn records its path (`one_call`, `fallback` or `tool_loop`).
 - **The agent model was tried** as `gemini-3.5-flash-lite` (Vikrant's choice) for one full E2. It missed targets, including the injection hard gate, so the agent is back on `gemini-3.6-flash` ([ADR 0008](../docs/decisions/0008-one-call-answers.md)). The grader stayed on `gemini-3.6-flash` throughout, and run files record both models.
 
+### Agent changes after seeing the one-call E2 (8 Oct, Vikrant's choice)
+
+These change the agent, not the cases, but they're made after seeing results, so they're logged here. No eval expectation changed.
+
+| Commit | Change | The result that led to it |
+|---|---|---|
+| (this commit) | The one-call path uses thinking level LOW | Median latency was 10.7 to 13.4 s on the main set (`20261008-165526`, `20261008-173540`) with one call per turn, because the single call used about 2,000 output tokens, mostly thinking |
+| (this commit) | After a suspension, the reply also summarises the product issues | `triage-suspended-then-products` failed in both runs: the first reply handed off on the suspension and never mentioned the product issues |
+
 ### Runs stopped
 
 | Run | Stopped at | Why |

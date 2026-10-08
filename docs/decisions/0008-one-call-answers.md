@@ -68,6 +68,12 @@ Wrong advice was 0% and case completeness 100%, and the held-out sets did better
 - **Targets and gates:** every quality target and hard gate was met, except triage on the main set (75%). In both runs `triage-suspended-then-products` handed off on the suspension without summarising the product issues.
 - **Latency:** still above 8 s. The single call does all the thinking, about 2,000 output tokens per turn.
 
+**Then (Vikrant's choice, 8 Oct):** two changes are made after seeing those results, and tested together in one full E2:
+- the one-call path uses thinking level LOW, because the help docs are already in the prompt, so the citation drop seen in the tool loop shouldn't recur
+- a rule that a suspension reply also summarises the product issues
+
+Both are logged in `evals/CHANGELOG.md`.
+
 **Not chosen:**
 - **Lower thinking level:** faster, but it dropped citations.
 - **Parallel tool calls in the loop:** measured with no gain (2.95 calls per turn instead of 3.15).
