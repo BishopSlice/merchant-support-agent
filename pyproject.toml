@@ -9,7 +9,6 @@ dependencies = [
     "google-adk",
     "pydantic>=2",
     "python-dotenv",
-    "streamlit",
     "uvicorn>=0.54.0",
 ]
 
