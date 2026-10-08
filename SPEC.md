@@ -16,7 +16,7 @@ Rebuild the merchant experience as a feature inside a Merchant Center-like shell
 
 | Layer | Choice | Notes |
 |---|---|---|
-| Agent | Python 3.13, Google ADK 2.x, `gemini-3.6-flash` | Unchanged from v1 |
+| Agent | Python 3.13, Google ADK 2.x, `gemini-3.5-flash-lite` | One model call per answer, with context loaded by code; the ADK tool loop is the fallback ([ADR 0008](docs/decisions/0008-one-call-answers.md)). The grader stays on `gemini-3.6-flash`. |
 | API | **FastAPI + Uvicorn** (approved 8 Oct) | JSON endpoints; serves the static front end |
 | Front end | **Material Web** (`@material/web`), pinned exact version, loaded from a CDN as ES modules; plain HTML and JS; no build step | Official Material 3 components; the library is in maintenance mode ([ADR 0003](docs/decisions/0003-ui-stack-material-web.md)) |
 | Data | `pydantic` models mirroring the Merchant API's documented resources | [ADR 0004](docs/decisions/0004-mcp-shaped-data-layer.md) |
@@ -52,6 +52,13 @@ FastAPI (merchant_agent.web)
         ├─ search_help_docs
         └─ create_handoff_case
 ```
+
+### Answering in one call ([ADR 0008](docs/decisions/0008-one-call-answers.md))
+
+- **Every turn,** `merchant_agent.preload` runs the five read tools through `merchant_data` (plus `get_product_by_name` for the issue row the panel was opened from). It then picks the help docs: the docs tagged with the store's issue codes, the automation docs, the policy doc behind an account issue, and help search on the message.
+- **One structured call:** `merchant_agent.answer` sends the instructions, that context and the conversation to the model once. The model returns the reply and, optionally, handoff fields. Code saves the case and fills in its number.
+- **Fallback:** `merchant_agent.engine.Conversation` uses the tool loop when the pre-step can't tie a free-text message to the store or a help doc. The turn's `path` records it.
+- **What's recorded:** each tool call records who made it (`by`: model or code). Each turn records its path and model calls. The scorecard and /ops show model calls per turn and the fallback rate.
 
 ### Data layer: the `MerchantData` interface
 
