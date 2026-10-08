@@ -23,7 +23,7 @@ Details for each task are in `tasks/plan.md`.
 ## v2 (draft plan, awaiting approval)
 
 - [x] Task 13: Merchant API models and mock, plus contract tests
-- [ ] Task 14: Port the agent's data tools
+- [x] Task 14: Port the agent's data tools
 - [ ] Checkpoint E1: 47 v1 cases pass on the port, twice
 - [ ] Task 15: Eval format and scorers
 - [ ] Task 16: v2 held-out set, written blind
