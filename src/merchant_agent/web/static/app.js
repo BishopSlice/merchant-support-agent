@@ -289,7 +289,15 @@ const pause = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 async function playReplay(id) {
   const replay = await api(`/api/replays/${encodeURIComponent(id)}`);
   $("#messages").replaceChildren();
+  const chip = $("#context-chip");
+  chip.hidden = !replay.entry_context;
+  if (replay.entry_context) {
+    chip.textContent = `Recorded from the issue row for ${replay.entry_context.product} (${replay.entry_context.issue_code.replaceAll("_", " ")})`;
+  }
   for (const turn of replay.turns) {
+    if (turn.fix) {
+      $("#messages").append(el("li", { class: "working" }, `The merchant edited the products to fix the ${turn.fix.replaceAll("_", " ")}.`));
+    }
     addMessage("merchant", turn.merchant);
     const working = addWorking();
     await pause(900);
