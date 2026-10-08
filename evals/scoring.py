@@ -253,6 +253,8 @@ PREVIEW_FIELDS = (
     "merchant_reasons",
     "suggested_next_step",
     "cited_doc_ids",
+    "account_issues",
+    "automation",
 )
 
 

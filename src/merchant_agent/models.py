@@ -118,6 +118,9 @@ class Case(BaseModel):
     merchant_reasons: list[str] = Field(default_factory=list)
     suggested_next_step: str
     cited_doc_ids: list[str] = Field(default_factory=list)
+    # Recorded from the store data when the case is created, not written by the model.
+    account_issues: list[str] = Field(default_factory=list)
+    automation: AutomationSettings | None = None
 
     @field_validator("merchant_request", "suggested_next_step")
     @classmethod

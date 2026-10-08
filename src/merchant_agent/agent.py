@@ -128,7 +128,9 @@ def create_handoff_case(
     found, what was already tried, what the merchant wants, every reason or detail the
     merchant gave in their own words (merchant_reasons), what the specialist should do next,
     and the doc_ids of all relevant help docs. Never include names, emails or phone numbers.
-    Returns the case_id, or an error message saying what to fix.
+    The account issues and automation settings are added from the store data automatically.
+    Returns the case_id and a preview of exactly what the specialist will see, or an error
+    message saying what to fix.
     """
     return handoff.create_handoff_case(
         store_id=tool_context.state["store_id"],

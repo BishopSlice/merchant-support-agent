@@ -170,3 +170,48 @@ def test_merchant_reasons_default_to_empty_for_older_case_files(runtime_dir):
 def test_merchant_reasons_reject_contact_details():
     result = make_case(merchant_reasons=["Call me on +1 415 555 0134"])
     assert result["status"] == "error"
+
+
+# --- v2: the case records data facts itself and returns a preview ---
+
+
+def test_created_case_returns_a_preview_equal_to_the_saved_case():
+    result = make_case(merchant_reasons=["Says the label marks it for external use only"])
+    saved = json.loads(get_case(result["case_id"]).model_dump_json())
+    preview = result["preview"]
+    for field in (
+        "reason",
+        "issues_found",
+        "already_tried",
+        "merchant_request",
+        "merchant_reasons",
+        "suggested_next_step",
+        "cited_doc_ids",
+        "account_issues",
+        "automation",
+    ):
+        assert preview[field] == saved[field], field
+
+
+def test_case_records_the_account_issue_detail_from_the_data():
+    result = make_case(store_id="suspended-store", reason="account_suspended", issues_found=[])
+    case = get_case(result["case_id"])
+    assert case.account_issues
+    assert "return" in case.account_issues[0].lower()
+
+
+def test_case_records_the_automation_state_from_the_data():
+    case = get_case(make_case()["case_id"])
+    assert case.automation is not None
+    assert case.automation.price_updates is False
+
+
+def test_case_is_still_saved_when_the_data_cannot_load(monkeypatch):
+    from merchant_agent.data import FailingMerchantData
+    from merchant_agent.tools import merchant_tools
+
+    failing = FailingMerchantData(merchant_tools.merchant_data, "get_automatic_improvements", "timeout")
+    monkeypatch.setattr(merchant_tools, "merchant_data", failing)
+    result = make_case()
+    assert result["status"] == "created"
+    assert get_case(result["case_id"]).automation is None
