@@ -40,7 +40,7 @@ Details for each task are in `tasks/plan.md`.
   | Thinking level LOW | 12 of 14 | 9.2 s | 13.3 s | $0.019 |
 
   Each model call takes about 4 to 5 s, and a turn needs about 3 calls (data, help search, reply). Only LOW thinking moves latency, and it dropped two citations. Even LOW misses the 8 s p50 target. Both changes are reverted. The trade-off (quality against speed, or re-targeting latency as time to the first progress update in the side panel) is for Vikrant to decide.
-- [ ] Checkpoint E2: all eval targets and hard gates, twice
+- [x] Checkpoint E2: run on the one-call design with lower thinking. Every target and hard gate was met except automation routing on the main set (93%, one suspected false alarm left as scored). Main ran once at Vikrant's request; the held-out sets ran once each (`docs/v2-results.md`)
 - [x] Task 19: FastAPI app
 - [x] Task 20: Material Web shell
 - [x] Task 21: Retire Streamlit
@@ -50,6 +50,6 @@ Details for each task are in `tasks/plan.md`.
 - [x] Task 21c: Feedback and sampled grading
 - [x] Task 21d: The /ops page, with plain SVG charts (no chart library needed). Panels 1 to 4 and traces; panel 5 (releases) not built
 - [ ] Checkpoint F2: /ops correct, definitions match the evals, no added wait
-- [ ] Task 22: Replays and hosting (hosting needs separate approval)
-- [ ] Task 23: Final evals and write-up
+- [ ] Task 22: Replays and hosting. Replays recorded and checked against the agent version; container setup ready. Hosting waits for Vikrant's choice of host
+- [ ] Task 23: Final evals and write-up. Done: `docs/v2-results.md`, README, business case, responsible AI. Waiting: Vikrant's review of `evals/hand-check-v2.md`
 - [ ] Checkpoint G: v2 release gates
