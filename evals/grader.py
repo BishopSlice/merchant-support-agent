@@ -100,7 +100,7 @@ def retrieved_doc_ids(run: CaseRun) -> list[str]:
 
 
 def wrong_advice_prompt(run: CaseRun) -> str:
-    """Rubric, the full text of every retrieved doc, the feed check data and the conversation."""
+    """Rubric, the full text of every retrieved doc, the store data and the conversation."""
     docs = {doc.doc_id: doc for doc in load_help_docs()}
     doc_ids = [doc_id for doc_id in retrieved_doc_ids(run) if doc_id in docs]
     doc_text = "\n\n".join(
@@ -119,7 +119,7 @@ def wrong_advice_prompt(run: CaseRun) -> str:
             _rubric("wrong_advice"),
             "## Help docs the agent retrieved",
             doc_text or "The agent retrieved no help docs in this conversation.",
-            "## Feed check data the agent received",
+            "## Store data the agent received",
             json.dumps(feed_data, indent=1) if feed_data else "None.",
             "## Conversation",
             _conversation(run),

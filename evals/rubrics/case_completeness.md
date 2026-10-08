@@ -5,7 +5,7 @@ You are checking a handoff case that a support agent wrote for a human specialis
 A case is **complete** when all of these are true:
 
 1. **Reason:** it is clear why the case needs a human (suspension, appeal, the merchant asked for a person, repeated failure, or no help doc covers the question).
-2. **Issues:** the relevant issues from the feed check are listed, with product ids or names where products are involved. For an account-level problem, the account issue is described.
+2. **Issues:** the relevant issues from the store data are listed, with product ids or names where products are involved. For an account-level problem, the account issue and its stated detail are described. When the handoff is about a price or availability mismatch (for example, repeated failed attempts to fix one), the case states whether automatic item updates are on. A mismatch that is only listed alongside an unrelated handoff reason doesn't need it.
 3. **Merchant's position:** what the merchant wants is stated. If the merchant gave a reason, an argument or a detail (for example why they disagree with a decision, what they already changed, or their exact question), that reason is recorded in the case itself.
    - Example: the merchant says "it's just a candle, I think the decision is wrong". A case that says only "merchant disagrees with the decision and wants to appeal" is **incomplete**, because the specialist would have to ask why they disagree. A case that records "merchant argues the product is just a candle" meets this point.
    - Only judge what the merchant actually said. If they gave no reason, the case can't record one.

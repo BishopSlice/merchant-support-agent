@@ -23,6 +23,16 @@ These follow from v2's switch to Merchant API-shaped data ([ADR 0004](../docs/de
 
 The cases are `fix-price-mismatch`, `fix-availability-mismatch`, `multi-fix-two-in-a-row`, `angry-fixable-price`, `no-handoff-fix-it-for-me` and `frustration-price-twice`. Their v1 expectations are unchanged.
 
+### Rubric changes, calibrated before any v2 run (8 Oct 2026)
+
+From SPEC, Evals (g):
+- **Wrong advice:** recommending or explaining an automation is advice and needs a retrieved doc. Whether a setting is on or off for this account is a store fact, and so is saying data couldn't load.
+- **Case completeness:** an account issue's stated detail must be described. When the handoff is about a price or availability mismatch, the case must state whether automatic item updates are on.
+
+**Calibration.** I regraded the frozen v1 main and held-out runs (`20261007-152441-*`, 47 cases) with the new rubrics, in memory, without changing the saved results. The cost was $0.36.
+- **First draft:** the completeness clause flagged 6 handoffs. Five were about something else, for example a merchant asking for a person, with a mismatch merely listed. I narrowed it to handoffs about a mismatch. After that only `frustration-price-twice` is flagged, as intended, because v1 never recorded automation state.
+- **Wrong advice:** two v1 replies moved from unsupported to supported (`no-handoff-contact-support` and `off-topic-shopify-steps`). The two frozen v1 runs already disagreed on these same cases, so this is grader variance on borderline replies, not the new wording.
+
 ## v1
 
 ### Changed after seeing results
