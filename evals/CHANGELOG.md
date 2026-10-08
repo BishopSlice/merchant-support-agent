@@ -33,6 +33,7 @@ The cases are `fix-price-mismatch`, `fix-availability-mismatch`, `multi-fix-two-
 
 | c28f65b | `warnings-gtin-only` (a v1 case) | The warning pattern also accepts "limit their visibility" | "you have 1 warning affecting 2 products due to a missing product barcode number (GTIN), which can limit their visibility" (baseline `20261008-121551`) |
 
+| (this commit) | the reply checks (all cases) | Required and forbidden patterns, and the order check, read replies with Markdown emphasis (`**`, `__`, backticks) removed | `auto-on-price-persists`, E2 attempt 1 (`20261008-132952`): "Automatic price updates are already turned **on** for your account." Re-scoring every saved run from 8 Oct changes this one verdict only. |
 The first row is a scorer bug fix, not a looser standard: a count that no successful product list supports is still flagged (tested).
 
 ### Rubric changes, calibrated before any v2 run (8 Oct 2026)

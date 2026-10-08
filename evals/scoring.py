@@ -55,6 +55,11 @@ def _matches(pattern: str, text: str) -> bool:
     return re.search(pattern, text, re.IGNORECASE | re.DOTALL) is not None
 
 
+def _plain(reply: str) -> str:
+    """A reply without Markdown emphasis, so "already turned **on**" reads as plain text."""
+    return re.sub(r"\*\*|__|`", "", reply)
+
+
 def _last_fix_index(run: CaseRun) -> int | None:
     fixes = [i for i, turn in enumerate(run.turns) if turn.fix]
     return fixes[-1] if fixes else None
@@ -116,7 +121,7 @@ def _issues_seen(call: ToolCallRecord) -> dict[str, bool]:
 
 
 def _reply_failures(case: EvalCase, run: CaseRun) -> list[str]:
-    replies = "\n\n".join(turn.reply for turn in run.turns)
+    replies = "\n\n".join(_plain(turn.reply) for turn in run.turns)
     urls = {doc.doc_id: doc.source_url for doc in load_help_docs()}
     failures = [
         f"did not mention {p!r}" for p in case.expect.must_mention if not _matches(p, replies)
@@ -181,7 +186,7 @@ def _order_failures(case: EvalCase, run: CaseRun) -> list[str]:
     """In the first reply, every pattern in a group must come after every pattern in earlier groups."""
     if not case.expect.first_reply_order or not run.turns:
         return []
-    reply = run.turns[0].reply
+    reply = _plain(run.turns[0].reply)
     positions: list[list[tuple[str, int]]] = []
     failures = []
     for group in case.expect.first_reply_order:

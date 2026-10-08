@@ -264,3 +264,10 @@ def test_latency_percentiles_use_nearest_rank_and_skip_unrecorded_turns():
     summary = summarize([score_case(case(), timed)], [timed])
     assert summary.latency_p50_seconds == 3.0  # the 0.0 turn (not recorded) is ignored
     assert summary.latency_p95_seconds == 10.0
+
+
+def test_markdown_emphasis_does_not_hide_a_required_phrase():
+    # Post-result fix (auto-on-price-persists, E2 attempt 1): bold split "already turned on".
+    reply = "Automatic price updates are already turned **on** for your account."
+    expect = {"must_mention": [r"(already|currently) (on|turned on|enabled|switched on)"]}
+    assert score_case(case(**expect), run(reply)).passed
